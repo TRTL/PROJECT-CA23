@@ -18,9 +18,9 @@ namespace PROJECT_CA23.Repositories
             _userService = userService;
         }
 
-        public virtual bool TryLogin(string userName, string password, out User? user)
+        public virtual bool TryLogin(string username, string password, out User? user)
         {
-            user = _context.Users.FirstOrDefault(x => x.UserName == userName);
+            user = _context.Users.FirstOrDefault(x => x.Username == username);
             if (user == null) return false;
             if (!_userService.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt)) return false;
             return true;
@@ -33,9 +33,13 @@ namespace PROJECT_CA23.Repositories
             return user.UserId;
         }
 
-        public bool Exist(string userName)
+        public bool Exist(string username)
         {
-            return _context.Users.Any(x => x.UserName == userName);
+            return _context.Users.Any(x => x.Username == username);
         }
+
+        public User Get(int id) => _context.Users.First(c => c.UserId == id);
+
+
     }
 }

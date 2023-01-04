@@ -25,15 +25,11 @@ namespace PROJECT_CA23
                 options.UseSqlite(builder.Configuration.GetConnectionString("ProjectCA23ConnectionString"));
             });
 
-
-
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IJwtService, JwtService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-
-            //builder.Services.AddHttpContextAccessor(); // TEMP DISABLED
-
+            builder.Services.AddHttpContextAccessor();
 
             var mySecretKey = builder.Configuration["MyApiSetting:MySecretKey"];
 
@@ -55,17 +51,12 @@ namespace PROJECT_CA23
                 };
             });
 
-            builder.Services.AddCors(options =>
+            builder.Services.AddCors(p => p.AddPolicy("corsforprojectca23", builder =>
             {
-                options.AddDefaultPolicy(builder =>
-                {
-                    builder.AllowAnyOrigin()
-                           .AllowAnyMethod()
-                           .AllowAnyHeader();
-                });
-            });
-
-
+                builder.WithOrigins("*")
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            }));
 
             builder.Services.AddControllers();
 
@@ -105,14 +96,15 @@ namespace PROJECT_CA23
                 app.UseSwaggerUI();
             }
 
+            // Cors naudojama pries CSRF/XSRF
+            app.UseCors("corsforprojectca23");
+
             app.UseHttpsRedirection();
 
             app.UseAuthentication();    // ORDER MATTERS
             app.UseAuthorization();
 
             app.MapControllers();
-
-            app.UseCors();
 
             app.Run();
         }

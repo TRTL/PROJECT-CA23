@@ -10,7 +10,7 @@ namespace PROJECT_CA23.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
         [MaxLength(100)]
-        public string UserName { get; set; }
+        public string Username { get; set; }
         [MaxLength(200)]
         public string FirstName { get; set; }
         [MaxLength(200)]

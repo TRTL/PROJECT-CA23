@@ -16,7 +16,7 @@ namespace PROJECT_CA23.Database
 
             users.HasKey(u => u.UserId);
 
-            users.Property(u => u.UserName)
+            users.Property(u => u.Username)
                  .HasMaxLength(100);
 
             users.Property(u => u.FirstName)

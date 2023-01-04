@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using PROJECT_CA23.Models.Dto.LoginDto;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting.Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace PROJECT_CA23.Repositories_Tests
 {
@@ -36,9 +37,9 @@ namespace PROJECT_CA23.Repositories_Tests
         public void TryLogin_Test()
         {
             // Arrange
-            var fake_username = "testas";
-            var fake_password = "testas";
-            var fake_user = new Models.User { UserId = 1, UserName = fake_username, Role = ERole.admin };
+            var fake_username = "test_username";
+            var fake_password = "test_password";
+            var fake_user = new Models.User { UserId = 1, Username = fake_username, Role = ERole.admin };
 
             Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
             mockUserRepository.Setup(x => x.TryLogin(fake_username, fake_password, out fake_user)).Returns(true); //grazinamas kazkoks useris ir nekvieciama db
@@ -49,9 +50,10 @@ namespace PROJECT_CA23.Repositories_Tests
 
             var loggerMock = new Mock<ILogger<UserController>>();
 
-            // Act
+            var httpContextAccessor = new Mock<IHttpContextAccessor>();
 
-            var sut = new UserController(mockUserRepository.Object, userService, jwtService, loggerMock.Object);
+            // Act
+            var sut = new UserController(mockUserRepository.Object, userService, jwtService, loggerMock.Object, httpContextAccessor.Object);
             var actual = sut.Login(new LoginRequest { Username = fake_username, Password = fake_password });
 
             // Assert

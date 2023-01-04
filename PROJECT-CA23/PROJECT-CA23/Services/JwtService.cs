@@ -12,9 +12,8 @@ namespace PROJECT_CA23.Services
 
         public JwtService(IConfiguration configuration)
         {
-            _secret = configuration.GetValue<string>("ApiSetting:Secret");
+            _secret = configuration.GetValue<string>("MyApiSetting:MySecretKey");
         }
-
 
         public virtual string GetJwtToken(int userId, string role)
         {

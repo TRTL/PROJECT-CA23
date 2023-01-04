@@ -1,11 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PROJECT_CA23.Models;
 using PROJECT_CA23.Models.Dto.LoginDto;
+using PROJECT_CA23.Models.Dto.UserDto;
 using PROJECT_CA23.Models.Enums;
 using PROJECT_CA23.Repositories.IRepositories;
 using PROJECT_CA23.Services;
 using PROJECT_CA23.Services.IServices;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Data;
 
 namespace PROJECT_CA23.Controllers
 {
@@ -17,24 +23,26 @@ namespace PROJECT_CA23.Controllers
         private readonly IUserService _userService;
         private readonly IJwtService _jwtService;
         private readonly ILogger<UserController> _logger;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
 
         public UserController(IUserRepository userRepository,
                               IUserService userService,
                               IJwtService jwtService,
-                              ILogger<UserController> logger)
+                              ILogger<UserController> logger,
+                              IHttpContextAccessor httpContextAccessor)
         {
             _userRepository = userRepository;
             _userService = userService;
             _jwtService = jwtService;
             _logger = logger;
+            _httpContextAccessor=httpContextAccessor;
         }
 
+        [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResponse))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Produces("application/json")]
-        [Consumes("application/json")]
-        [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest model)
         {
             _logger.LogInformation("Login atempt with username - {username}", model.Username);
@@ -44,14 +52,17 @@ namespace PROJECT_CA23.Controllers
 
             var token = _jwtService.GetJwtToken(user.UserId, user.Role.ToString());
 
-            return Ok(new LoginResponse { Username = model.Username, Token = token });
+            return Ok(new LoginResponse
+            {
+                Username = model.Username,
+                Token = token 
+            });
         }
 
+        [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Produces("application/json")]
-        [Consumes("application/json")]
-        [HttpPost("register")]
         public IActionResult Register([FromBody] RegisterUserRequest model)
         {
             if (_userRepository.Exist(model.Username)) return BadRequest("User already exists");
@@ -65,7 +76,7 @@ namespace PROJECT_CA23.Controllers
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                UserName = model.Username,
+                Username = model.Username,
                 Role = role,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
@@ -78,6 +89,35 @@ namespace PROJECT_CA23.Controllers
             var id = _userRepository.Register(user);
 
             return Created(nameof(Login), new { id = id });
+        }
+
+        //[Authorize]
+        [HttpGet("GetMyInfo")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
+        public IActionResult GetMyInfo()
+        {
+            var currentUserId = int.Parse(_httpContextAccessor.HttpContext.User.Identity.Name);
+            //if (currentUserId != key)
+            //{
+            //    _logger.LogWarning("User {currentUserId} tried to access user {key} cars", currentUserId, key);
+            //    return Forbid();
+            //}
+
+            var user = _userRepository.Get(currentUserId);
+
+            var userDto = new UserDto
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Username = user.Username,
+                Role = user.Role.ToString(),
+                Created = user.Created,
+                Updated = user.Updated,
+                LastLogin = user.LastLogin,
+                IsDeleted = user.IsDeleted
+            };
+
+            return Ok(userDto);
         }
     }
 }
