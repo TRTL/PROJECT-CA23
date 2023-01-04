@@ -5,30 +5,34 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration</title>
     <link rel="stylesheet" href="css/registration.css">
+    <title>Registration</title>
+    <link rel="shortcut icon" href="#">
 </head>
 
 <body>
     <div class="container-small">
-        <div class="container-login">
-            <form id="login-form">
+        <div class="container-registration">
+            <form id="registration_form">
                 <label for="firstname">First name:</label>
-                <input type="text" id="firstname" name="firstname">
+                <input type="text" id="login_firstname" name="FirstName">
                 <label for="lastname">Last name:</label>
-                <input type="text" id="lastname" name="lastname">
+                <input type="text" id="login_lastname" name="LastName">
                 <label for="role">Role:</label>
-                <input type="text" id="role" name="role">
+                <input type="text" id="login_role" name="Role">
                 <label for="user">Username:</label>
-                <input type="text" id="user" name="user" autocomplete=“off”>
+                <input type="text" id="login_username" name="Username" autocomplete=“off”>
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password">
-                <input type="submit" value="Register">
+                <input type="password" id="login_password" name="Password">
+                <input id="register_button" type="submit" value="Register">
             </form>
-            <a href="/index.html">Have an account? Log in here</a>
+            <a href="index.html">Have an account? Log in here.</a>
         </div>
         <div class="container-pic"></div>
     </div>
+
+    <!-- SCRIPTS -->
+    <script src="js/registration.js"></script>
 </body>
 
 </html>
