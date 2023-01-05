@@ -6,6 +6,7 @@ namespace PROJECT_CA23.Models
     public class Address
     {
         [Key]
+        [ForeignKey("User")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int AddressId { get; set; }
 

@@ -19,19 +19,21 @@ namespace PROJECT_CA23.Database
             user.HasKey(u => u.UserId);
 
             user.Property(u => u.Username)
-                 .HasMaxLength(100);
+                .HasMaxLength(100);
 
             user.Property(u => u.FirstName)
-                 .HasMaxLength(200);
+                .HasMaxLength(200);
 
             user.Property(u => u.LastName)
-                 .HasMaxLength(200);
+                .HasMaxLength(200);
 
             user.Property(u => u.Role)
-                 .HasConversion<string>()
-                 .HasMaxLength(50);
+                .HasConversion<string>()
+                .HasMaxLength(50);
 
-            user.HasOne(u => u.Address).WithOne(a => a.User); // User 1 - 1 Address
+            user.HasOne(u => u.Address)
+                .WithOne(a => a.User)
+                .HasForeignKey<Address>(a => a.AddressId); // User 1 - 1 Address
 
             var address = modelBuilder.Entity<Address>();
 
@@ -48,6 +50,7 @@ namespace PROJECT_CA23.Database
 
             address.Property(a => a.PostCode)
                    .HasMaxLength(20);
+
         }
     }
 }
