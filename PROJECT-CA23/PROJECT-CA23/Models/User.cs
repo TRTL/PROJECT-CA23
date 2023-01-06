@@ -33,8 +33,8 @@ namespace PROJECT_CA23.Models
 
         public bool IsDeleted { get; set; }
 
-        public int AddressId { get; set; }
+        public int? AddressId { get; set; }
 
-        public Address Address { get; set; }
+        public Address? Address { get; set; }
     }
 }
