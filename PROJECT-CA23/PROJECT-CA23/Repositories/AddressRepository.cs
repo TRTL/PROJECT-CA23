@@ -34,6 +34,11 @@ namespace PROJECT_CA23.Repositories
             return address;
         }
 
+        public IEnumerable<Address> Find(Expression<Func<Address, bool>> predicate)
+        {
+            return _context.Addresses.Where(predicate);
+        }
+
         public async Task<Address> Get(int id)
         {
             var address = await _context.Addresses.FindAsync(id);
@@ -57,5 +62,12 @@ namespace PROJECT_CA23.Repositories
             _context.Addresses.Update(address);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Address?> GetByUserId(int id)
+        {
+            var address = await _context.Addresses.FirstOrDefaultAsync(a => a.UserId == id);
+            return address;
+        }
+
     }
 }

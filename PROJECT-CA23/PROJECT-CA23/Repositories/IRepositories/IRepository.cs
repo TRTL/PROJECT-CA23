@@ -7,6 +7,7 @@ namespace PROJECT_CA23.Repositories.IRepositories
         Task<int> Count();
         int Create(T entity);
         Task<bool> Exist(int id);
+        IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
         Task<T> Get(int id);
         Task<IEnumerable<T>> GetAll();
         Task Remove(T entity);

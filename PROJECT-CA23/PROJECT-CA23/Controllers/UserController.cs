@@ -12,6 +12,7 @@ using PROJECT_CA23.Services;
 using PROJECT_CA23.Services.IServices;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Data;
+using System.Security.Claims;
 
 namespace PROJECT_CA23.Controllers
 {
@@ -91,22 +92,24 @@ namespace PROJECT_CA23.Controllers
             return Created(nameof(Login), new { id = id });
         }
 
-        //[Authorize]
-        [HttpGet("GetMyInfo")]
+        [Authorize(Roles = "admin,user")]
+        [HttpGet("GetUserInfo")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
-        public IActionResult GetMyInfo()
+        public IActionResult GetUserInfo(int id)
         {
+            var currentUserRole = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
             var currentUserId = int.Parse(_httpContextAccessor.HttpContext.User.Identity.Name);
-            //if (currentUserId != key)
-            //{
-            //    _logger.LogWarning("User {currentUserId} tried to access user {key} cars", currentUserId, key);
-            //    return Forbid();
-            //}
+            if (currentUserRole != "admin" && currentUserId != id)
+            {
+                _logger.LogWarning("User {currentUserId} tried to access user {id} info", currentUserId, id);
+                return Forbid();
+            }
 
-            var user = _userRepository.Get(currentUserId);
+            var user = _userRepository.Get(id);
 
             var userDto = new UserDto
             {
+                UserId = user.UserId,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Username = user.Username,
