@@ -15,30 +15,23 @@ namespace PROJECT_CA23.Repositories
             _context = context;
         }
 
-
         public async Task<int> Count()
         {
             var address = await _context.Addresses.CountAsync();
             return address;
         }
 
-        public int Create(Address address)
+        public int Create(Address address)  // NAUDOTI ASYNC AR NENAUDOTI ASYNC - STAI KUR KLAUSIMAS !
         {
             _context.Addresses.Add(address);
             _context.SaveChanges();
             return address.AddressId;
-
         }
 
         public async Task<bool> Exist(int id)
         {
             var address = await _context.Addresses.AnyAsync(a => a.AddressId == id);
             return address;
-        }
-
-        public IEnumerable<Address> Find(Expression<Func<Address, bool>> predicate)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<Address> Get(int id)
@@ -53,14 +46,16 @@ namespace PROJECT_CA23.Repositories
             return addresses;
         }
 
-        public void Remove(Address entity)
+        public async Task Remove(Address address)
         {
-            throw new NotImplementedException();
+            _context.Addresses.Remove(address);
+            await _context.SaveChangesAsync();
         }
 
-        public void Update(Address entity)
+        public async Task Update(Address address)
         {
-            throw new NotImplementedException();
+            _context.Addresses.Update(address);
+            await _context.SaveChangesAsync();
         }
     }
 }
