@@ -1,26 +1,37 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace PROJECTCA23.Migrations
 {
     /// <inheritdoc />
-    public partial class addedAddress : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "UserName",
-                table: "Users",
-                newName: "Username");
-
-            migrationBuilder.AddColumn<int>(
-                name: "AddressId",
-                table: "Users",
-                type: "INTEGER",
-                nullable: false,
-                defaultValue: 0);
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Username = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    FirstName = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
+                    LastName = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
+                    Role = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    PasswordHash = table.Column<byte[]>(type: "BLOB", nullable: false),
+                    PasswordSalt = table.Column<byte[]>(type: "BLOB", nullable: false),
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Updated = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    LastLogin = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.UserId);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Addresses",
@@ -52,14 +63,8 @@ namespace PROJECTCA23.Migrations
             migrationBuilder.DropTable(
                 name: "Addresses");
 
-            migrationBuilder.DropColumn(
-                name: "AddressId",
-                table: "Users");
-
-            migrationBuilder.RenameColumn(
-                name: "Username",
-                table: "Users",
-                newName: "UserName");
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

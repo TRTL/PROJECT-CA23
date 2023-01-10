@@ -1,5 +1,6 @@
 ﻿using PROJECT_CA23.Models;
 using PROJECT_CA23.Models.Dto.AddressDto;
+using PROJECT_CA23.Models.Dto.AddressDtos;
 using PROJECT_CA23.Models.Dto.UserDtos;
 using PROJECT_CA23.Services.Adapters.IAdapters;
 
@@ -7,18 +8,19 @@ namespace PROJECT_CA23.Services.Adapters
 {
     public class AddressAdapter : IAddressAdapter
     {
-        public Address Bind(AddressDto dto)
-        {
-            var newAddress = new Address()
-            {
-                UserId = dto.UserId,
-                City = dto.City,
-                Country = dto.Country,
-                AddressText = dto.AddressText,
-                PostCode = dto.PostCode
-            };
-            return newAddress;
-        }
+        //public Address Bind(AddressDto dto, User user)
+        //{
+        //    var newAddress = new Address()
+        //    {
+        //        UserId = dto.UserId,
+        //        User = user,
+        //        City = dto.City,
+        //        Country = dto.Country,
+        //        AddressText = dto.AddressText,
+        //        PostCode = dto.PostCode
+        //    };
+        //    return newAddress;
+        //}
 
         public AddressDto Bind(Address address)
         {
@@ -43,6 +45,19 @@ namespace PROJECT_CA23.Services.Adapters
                 }
             };
             return dto;
+        }
+        public Address Bind(AddressRequest req, User user)
+        {
+            var newAddress = new Address()
+            {
+                UserId = req.UserId,
+                User = user,
+                City = req.City,
+                Country = req.Country,
+                AddressText = req.AddressText,
+                PostCode = req.PostCode
+            };
+            return newAddress;
         }
     }
 }

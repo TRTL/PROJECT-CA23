@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PROJECT_CA23.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using PROJECT_CA23.Models.Dto.LoginDto;
+using PROJECT_CA23.Models.Dto.LoginDtos;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting.Logging;
 using Microsoft.AspNetCore.Http;

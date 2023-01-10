@@ -57,9 +57,6 @@ namespace PROJECTCA23.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("AddressId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("TEXT");
 

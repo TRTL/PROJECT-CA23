@@ -65,10 +65,10 @@ namespace PROJECT_CA23.Repositories
 
         public async Task<Address?> GetByUserId(int userId)
         {
-            var a = _context.Addresses.Include(a => a.User);
-
-            var address = await a.Where(a => a.UserId == userId)
-                                 .FirstOrDefaultAsync();
+            var address = await _context.Addresses
+                                        .Include(a => a.User)
+                                        .Where(a => a.UserId == userId)
+                                        .FirstOrDefaultAsync();
             return address;
         }
 

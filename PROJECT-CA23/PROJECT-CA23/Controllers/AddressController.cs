@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PROJECT_CA23.Models;
 using PROJECT_CA23.Models.Dto.AddressDto;
+using PROJECT_CA23.Models.Dto.AddressDtos;
 using PROJECT_CA23.Models.Dto.UserDtos;
 using PROJECT_CA23.Repositories;
 using PROJECT_CA23.Repositories.IRepositories;
@@ -73,26 +74,27 @@ namespace PROJECT_CA23.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public IActionResult AddAddress(AddressDto addressDto)
+        public IActionResult AddAddress(AddressRequest req)
         {
             // ISKELTI I ATSKIRA SERVISIUKA (su ten pakrautu _httpContextAccessor)
             var currentUserRole = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
             var currentUserId = int.Parse(_httpContextAccessor.HttpContext.User.Identity.Name);
-            if (currentUserRole != "admin" && currentUserId != addressDto.UserId)
+            if (currentUserRole != "admin" && currentUserId != req.UserId)
             {
-                _logger.LogWarning("User {currentUserId} tried to access user {id} info", currentUserId, addressDto.UserId);
+                _logger.LogWarning("User {currentUserId} tried to access user {id} info", currentUserId, req.UserId);
                 return Forbid();
             }
 
-            var newAddress = _addressAdapter.Bind(addressDto);
+            var user = _userRepo.Get(req.UserId);
+
+            Address newAddress = _addressAdapter.Bind(req, user);
             var newAddressId = _addressRepo.Create(newAddress);
 
-            var user = _userRepo.Get(addressDto.UserId);
             user.Address = newAddress;
-            user.AddressId = newAddressId;
+            //user.AddressId = newAddressId;
             _userRepo.Update(user);
 
-            return CreatedAtRoute(nameof(GetUserAddress), newAddressId);
+            return CreatedAtAction(nameof(GetUserAddress), newAddressId);
         }
 
 

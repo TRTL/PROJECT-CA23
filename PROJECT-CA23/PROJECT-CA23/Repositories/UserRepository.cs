@@ -44,7 +44,7 @@ namespace PROJECT_CA23.Repositories
         public void Update(User user)
         {
             _context.Users.Update(user);
-            _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
 

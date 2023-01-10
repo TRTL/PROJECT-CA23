@@ -12,7 +12,7 @@ namespace PROJECT_CA23.Models
 
         public int UserId { get; set; }
 
-        public User User { get; set; }
+        public virtual User User { get; set; }
 
         [MaxLength(100)]
         public string Country { get; set; }
