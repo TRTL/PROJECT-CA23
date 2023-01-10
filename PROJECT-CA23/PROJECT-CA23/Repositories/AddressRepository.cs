@@ -63,9 +63,12 @@ namespace PROJECT_CA23.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Address?> GetByUserId(int id)
+        public async Task<Address?> GetByUserId(int userId)
         {
-            var address = await _context.Addresses.FirstOrDefaultAsync(a => a.UserId == id);
+            var a = _context.Addresses.Include(a => a.User);
+
+            var address = await a.Where(a => a.UserId == userId)
+                                 .FirstOrDefaultAsync();
             return address;
         }
 
