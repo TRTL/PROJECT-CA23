@@ -1,4 +1,4 @@
-﻿namespace PROJECT_CA23.Models.Dto.UserDto
+﻿namespace PROJECT_CA23.Models.Dto.UserDtos
 {
     public class UserDto
     {
