@@ -41,13 +41,18 @@ namespace PROJECT_CA23.Repositories
 
         public async Task<Address> Get(int id)
         {
-            var address = await _context.Addresses.FindAsync(id);
+            var address = await _context.Addresses
+                                        .Include(a => a.User)
+                                        .Where(a => a.AddressId == id)
+                                        .FirstOrDefaultAsync();
             return address;
         }
 
         public async Task<IEnumerable<Address>> GetAll()
         {
-            var addresses = await _context.Addresses.ToListAsync();
+            var addresses = await _context.Addresses
+                                          .Include(a => a.User)
+                                          .ToListAsync();
             return addresses;
         }
 
