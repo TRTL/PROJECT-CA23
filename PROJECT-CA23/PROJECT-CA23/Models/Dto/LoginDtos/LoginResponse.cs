@@ -1,4 +1,4 @@
-﻿namespace PROJECT_CA23.Models.Dto.LoginDto
+﻿namespace PROJECT_CA23.Models.Dto.LoginDtos
 {
     public class LoginResponse
     {

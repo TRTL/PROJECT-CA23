@@ -9,25 +9,24 @@ namespace PROJECT_CA23.Database
         public CA23Context(DbContextOptions<CA23Context> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Address> Addresses { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var users = modelBuilder.Entity<User>();
+            var user = modelBuilder.Entity<User>();
 
-            users.HasKey(u => u.UserId);
+            user.Property(u => u.Role)
+                .HasConversion<string>()
+                .HasMaxLength(50);
 
-            users.Property(u => u.Username)
-                 .HasMaxLength(100);
+            user.HasOne(u => u.Address)
+                .WithOne(a => a.User)
+                .HasForeignKey<Address>(a => a.AddressId); // User 1 - 1 Address
 
-            users.Property(u => u.FirstName)
-                 .HasMaxLength(200);
+            //var address = modelBuilder.Entity<Address>();
 
-            users.Property(u => u.LastName)
-                 .HasMaxLength(200);
 
-            users.Property(u => u.Role)
-                 .HasConversion<string>()
-                 .HasMaxLength(50);
         }
     }
 }

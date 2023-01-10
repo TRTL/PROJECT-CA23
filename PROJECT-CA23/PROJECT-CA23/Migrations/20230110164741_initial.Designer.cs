@@ -11,14 +11,48 @@ using PROJECT_CA23.Database;
 namespace PROJECTCA23.Migrations
 {
     [DbContext(typeof(CA23Context))]
-    [Migration("20230104103559_initialMigration")]
-    partial class initialMigration
+    [Migration("20230110164741_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.1");
+
+            modelBuilder.Entity("PROJECT_CA23.Models.Address", b =>
+                {
+                    b.Property<int>("AddressId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AddressText")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PostCode")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("AddressId");
+
+                    b.ToTable("Addresses");
+                });
 
             modelBuilder.Entity("PROJECT_CA23.Models.User", b =>
                 {
@@ -61,7 +95,7 @@ namespace PROJECTCA23.Migrations
                     b.Property<DateTime>("Updated")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UserName")
+                    b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
@@ -69,6 +103,22 @@ namespace PROJECTCA23.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("PROJECT_CA23.Models.Address", b =>
+                {
+                    b.HasOne("PROJECT_CA23.Models.User", "User")
+                        .WithOne("Address")
+                        .HasForeignKey("PROJECT_CA23.Models.Address", "AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PROJECT_CA23.Models.User", b =>
+                {
+                    b.Navigation("Address");
                 });
 #pragma warning restore 612, 618
         }

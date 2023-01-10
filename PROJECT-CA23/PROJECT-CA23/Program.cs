@@ -10,6 +10,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using System.Text.Json.Serialization;
+using PROJECT_CA23.Services.Adapters.IAdapters;
+using PROJECT_CA23.Services.Adapters;
 
 namespace PROJECT_CA23
 {
@@ -27,7 +30,11 @@ namespace PROJECT_CA23
 
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IJwtService, JwtService>();
+                        
+            builder.Services.AddScoped<IAddressAdapter, AddressAdapter>();
+
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 
             builder.Services.AddHttpContextAccessor();
 
@@ -58,7 +65,8 @@ namespace PROJECT_CA23
                 .AllowAnyHeader();
             }));
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(option => option.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles); // IGNORES CYCLES
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

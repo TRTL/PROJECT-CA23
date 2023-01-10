@@ -41,5 +41,12 @@ namespace PROJECT_CA23.Repositories
         public User Get(int id) => _context.Users.First(c => c.UserId == id);
 
 
+        public void Update(User user)
+        {
+            _context.Users.Update(user);
+            _context.SaveChanges();
+        }
+
+
     }
 }
