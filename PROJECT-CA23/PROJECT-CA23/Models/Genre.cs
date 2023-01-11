@@ -5,7 +5,7 @@ namespace PROJECT_CA23.Models
 {
     public class Genre
     {
-        [Key]
+        public int GenreId { get; set; }
         public string Name { get; set; }
         public virtual List<Media> Medias { get; set; }
     }

@@ -7,8 +7,6 @@ namespace PROJECT_CA23.Models
 {
     public class User
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
 
         [MaxLength(100, ErrorMessage = "Username cannot be longer than 100 symbols")]
