@@ -6,6 +6,8 @@ namespace PROJECT_CA23.Models
 {
     public class UserMedia
     {
+        public int UserMediaId { get; set; }
+
         [Required(ErrorMessage = "UserId is required")]
         public int UserId { get; set; }
         public virtual User User { get; set; }

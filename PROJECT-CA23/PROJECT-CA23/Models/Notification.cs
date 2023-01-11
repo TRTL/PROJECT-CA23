@@ -6,8 +6,6 @@ namespace PROJECT_CA23.Models
 {
     public class Notification
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int NotificationId { get; set; }
 
         [Required(ErrorMessage = "UserId is required")]

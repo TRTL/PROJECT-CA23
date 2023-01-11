@@ -5,8 +5,6 @@ namespace PROJECT_CA23.Models
 {
     public class Media
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MediaId { get; set; }
         public string? Type { get; set; }
 
