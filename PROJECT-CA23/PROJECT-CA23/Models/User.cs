@@ -34,6 +34,8 @@ namespace PROJECT_CA23.Models
 
         public bool IsDeleted { get; set; } = false;
 
-        public virtual Address? Address { get; set; }
+        public virtual Address? Address { get; set; } = null;
+        public virtual List<UserMedia> UserMedias { get; set; } = new List<UserMedia>();
+        public virtual List<Notification> Notifications { get; set; }
     }
 }

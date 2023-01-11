@@ -7,5 +7,6 @@ namespace PROJECT_CA23.Models
     {
         [Key]
         public string Name { get; set; }
+        public virtual List<Media> Medias { get; set; }
     }
 }

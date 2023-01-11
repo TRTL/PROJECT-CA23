@@ -30,10 +30,10 @@ namespace PROJECT_CA23.Models
         public string? imdbId { get; set; }
 
         [Range(0.0, 10.0, ErrorMessage = "ImdbRating must be between 0.0 and 10.0")]
-        public double? imdbRating { get; set; } = 0.0;
+        public double? imdbRating { get; set; } = null;
 
         [Range(0, 10_000_000_000, ErrorMessage = "ImdbVotes must be between 0 and 10,000,000,000")]
-        public decimal? imdbVotes { get; set; } = 0;
+        public decimal? imdbVotes { get; set; } = null;
         public virtual List<Genre> Genres { get; set; } = new List<Genre>();
         public virtual List<Review> Reviews { get; set; } = new List<Review>();         
 
