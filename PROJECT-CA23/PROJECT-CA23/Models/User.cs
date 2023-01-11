@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using PROJECT_CA23.Models.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace PROJECT_CA23.Models
 {
@@ -10,16 +11,16 @@ namespace PROJECT_CA23.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(100, ErrorMessage = "Username cannot be longer than 100 symbols")]
         public string Username { get; set; }
 
-        [MaxLength(200)]
+        [MaxLength(200, ErrorMessage = "First name cannot be longer than 200 symbols")]
         public string FirstName { get; set; }
 
-        [MaxLength(200)]
+        [MaxLength(200, ErrorMessage = "Last name cannot be longer than 200 symbols")]
         public string LastName { get; set; }
 
-        public ERole Role { get; set; }
+        public ERole Role { get; set; } = ERole.user;
 
         public byte[] PasswordHash { get; set; }
 
@@ -31,8 +32,10 @@ namespace PROJECT_CA23.Models
 
         public DateTime LastLogin { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } = false;
 
-        public virtual Address? Address { get; set; }
+        public virtual Address? Address { get; set; } = null;
+        public virtual List<UserMedia> UserMedias { get; set; } = new List<UserMedia>();
+        public virtual List<Notification> Notifications { get; set; }
     }
 }
