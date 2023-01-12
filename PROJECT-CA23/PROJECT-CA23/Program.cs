@@ -31,7 +31,8 @@ namespace PROJECT_CA23
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IJwtService, JwtService>();
                         
-            builder.Services.AddScoped<IAddressAdapter, AddressAdapter>();
+            builder.Services.AddScoped<IAddressAdapter, AddressAdapter>(); 
+            builder.Services.AddScoped<IMediaAdapter, MediaAdapter>(); 
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IAddressRepository, AddressRepository>();

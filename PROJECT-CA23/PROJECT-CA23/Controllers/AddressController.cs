@@ -40,6 +40,7 @@ namespace PROJECT_CA23.Controllers
         /// <summary>
         /// Get address of a user by userId
         /// </summary>
+        /// <param name="id">User Id</param>
         /// <returns></returns>
         /// <response code="200">OK</response>
         /// <response code="400">Bad request</response>
