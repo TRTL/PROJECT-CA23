@@ -38,7 +38,7 @@ namespace PROJECT_CA23.Controllers
         /// <response code="400">Bad request</response>
         /// <response code="401">Client could not authenticate a request</response>
         /// <response code="500">Internal server error</response>
-        [HttpPost("Login")]
+        [HttpPost("/Login")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -82,7 +82,7 @@ namespace PROJECT_CA23.Controllers
         /// <response code="400">Bad request</response>
         /// <response code="401">Client could not authenticate a request</response>
         /// <response code="500">Internal server error</response>
-        [HttpPost("Register")]
+        [HttpPost("/Register")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

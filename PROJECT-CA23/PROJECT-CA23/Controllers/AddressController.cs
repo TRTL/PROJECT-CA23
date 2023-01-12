@@ -46,15 +46,15 @@ namespace PROJECT_CA23.Controllers
         /// <response code="401">Client could not authenticate a request</response>
         /// <response code="500">Internal server error</response>
         [Authorize(Roles = "admin,user")]
-        [HttpGet("/GetUserAddress", Name = "GetUserAddress")]
+        [HttpGet("/GetAddressbyId/{id:int}", Name = "GetAddress")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AddressDto))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult GetUserAddress(int id)
+        public IActionResult GetAddress(int id)
         {
-            _logger.LogInformation($"GetUserAddress atempt for userId - {id}");
+            _logger.LogInformation($"GetAddress atempt for userId - {id}");
 
             try
             {
@@ -75,7 +75,7 @@ namespace PROJECT_CA23.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{DateTime.Now} GetAllUsersAddresses exception error.");
+                _logger.LogError(ex, $"{DateTime.Now} GetAddress exception error.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -90,15 +90,15 @@ namespace PROJECT_CA23.Controllers
         /// <response code="401">Client could not authenticate a request</response>
         /// <response code="500">Internal server error</response>
         [Authorize(Roles = "admin")]
-        [HttpGet("/GetAllUsersAddresses")]
+        [HttpGet("/GetAllAddresses")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<AddressDto>))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAllUsersAddresses()
+        public async Task<IActionResult> GetAllAddresses()
         {
-            _logger.LogInformation($"GetAllUsersAddresses atempt");
+            _logger.LogInformation($"GetAllAddresses atempt");
 
             try
             {
@@ -119,7 +119,7 @@ namespace PROJECT_CA23.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{DateTime.Now} GetAllUsersAddresses exception error.");
+                _logger.LogError(ex, $"{DateTime.Now} GetAllAddresses exception error.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -135,14 +135,14 @@ namespace PROJECT_CA23.Controllers
         /// <response code="401">Client could not authenticate a request</response>
         /// <response code="500">Internal server error</response>
         [Authorize(Roles = "admin,user")]
-        [HttpPost("/AddUserAddress")]
+        [HttpPost("/AddAddress")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(AddressDto))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> AddUserAddress([FromBody] AddressRequest req)
+        public async Task<IActionResult> AddAddress([FromBody] AddressRequest req)
         {
-            _logger.LogInformation($"AddUserAddress atempt for userId - {req.UserId}");
+            _logger.LogInformation($"AddAddress atempt for userId - {req.UserId}");
 
             try
             {
@@ -160,11 +160,11 @@ namespace PROJECT_CA23.Controllers
 
                 await _addressRepo.CreateAsync(newAddress);
 
-                return CreatedAtRoute("GetUserAddress", new { id = newAddress.AddressId }, _addressAdapter.Bind(newAddress));
+                return CreatedAtRoute("GetAddress", new { id = newAddress.AddressId }, _addressAdapter.Bind(newAddress));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{DateTime.Now} AddUserAddress exception error.");
+                _logger.LogError(ex, $"{DateTime.Now} AddAddress exception error.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }

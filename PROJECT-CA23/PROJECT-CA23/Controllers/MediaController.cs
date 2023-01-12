@@ -2,22 +2,22 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PROJECT_CA23.Models.Dto.AddressDto;
+using PROJECT_CA23.Repositories;
 using PROJECT_CA23.Repositories.IRepositories;
-using PROJECT_CA23.Services.Adapters.IAdapters;
 
 namespace PROJECT_CA23.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class GenreController : ControllerBase
+    public class MediaController : ControllerBase
     {
-        private readonly IGenreRepository _genreRepo;
-        private readonly ILogger<GenreController> _logger;
-        //private readonly IGenreAdapter _genreAdapter;
+        private readonly IMediaRepository _mediaRepo;
+        private readonly ILogger<MediaController> _logger;
+        //private readonly IMediaAdapter _mediaAdapter;
 
-        public GenreController(IGenreRepository genreRepo, ILogger<GenreController> logger)
+        public MediaController(IMediaRepository mediaRepo, ILogger<MediaController> logger)
         {
-            _genreRepo = genreRepo;
+            _mediaRepo = mediaRepo;
             _logger = logger;
         }
 
@@ -30,28 +30,34 @@ namespace PROJECT_CA23.Controllers
         /// <response code="401">Client could not authenticate a request</response>
         /// <response code="500">Internal server error</response>
         [Authorize(Roles = "admin,user")]
-        [HttpGet("/GetAllMediaByGenreId/{id:int}")]
+        [HttpGet("/GetMediaById/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)] // , Type = typeof(AddressDto)
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult GetAllMediaByGenreId(int id)
+        public async Task<IActionResult> GetMediaById(int id)
         {
-            _logger.LogInformation($"GetAllMediasByGenreId atempt with GenreId - {id}");
-
+            _logger.LogInformation($"GetMediaById atempt with MediaId - {id}");
             try
             {
-                if (id == 0) { }
-
-                var genre = _genreRepo.GetAsync(g => g.GenreId == id, new List<string>() { "Medias" }).Result;
-                return Ok(genre);
+                var mediaExist = await _mediaRepo.ExistAsync(m => m.MediaId == id);
+                if (!mediaExist)
+                {
+                    _logger.LogInformation($"{DateTime.Now} Failed GetMediaById atempt with MediaId - {id}. MediaId does not exists.");
+                    return NotFound("MediaId does not exists");
+                }
+                var media = _mediaRepo.GetAsync(m => m.MediaId == id, new List<string>() { "Genres" }).Result;
+                return Ok(media);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"{DateTime.Now} GetAllMediasByGenreId exception error.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
+
         }
+
+
     }
 }
