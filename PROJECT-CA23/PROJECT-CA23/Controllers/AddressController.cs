@@ -58,7 +58,7 @@ namespace PROJECT_CA23.Controllers
                 return Forbid();
             }
 
-            var address = _addressRepo.GetByUserId(id).Result;
+            var address = _addressRepo.GetAsync(a => a.UserId == id, new List<string>() { "User" }).Result;
             if (address == null) return NotFound("User does not have an address");
 
             var addressDto = _addressAdapter.Bind(address);
@@ -82,7 +82,7 @@ namespace PROJECT_CA23.Controllers
                 return Forbid();
             }
 
-            var allAddresses = await _addressRepo.GetAll();
+            var allAddresses = await _addressRepo.GetAllAsync();
             var addressDtoList = allAddresses.Select(a => _addressAdapter.Bind(a))
                                              .ToList();
 
@@ -101,7 +101,7 @@ namespace PROJECT_CA23.Controllers
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(AddressDto))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public IActionResult AddAddress(AddressRequest req)
+        public async Task<IActionResult> AddAddress(AddressRequest req)
         {
             // ISKELTI I ATSKIRA SERVISIUKA (su ten pakrautu _httpContextAccessor) ???
             var currentUserRole = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
@@ -114,9 +114,10 @@ namespace PROJECT_CA23.Controllers
 
             var user = _userRepo.Get(req.UserId);
             var newAddress = _addressAdapter.Bind(req, user);
-            var newAddressId = _addressRepo.Create(newAddress);
 
-            return CreatedAtRoute("GetUserAddress", new { id = newAddressId }, _addressAdapter.Bind(newAddress));
+            await _addressRepo.CreateAsync(newAddress);
+
+            return CreatedAtRoute("GetUserAddress", new { id = newAddress.AddressId }, _addressAdapter.Bind(newAddress));
         }
 
 
