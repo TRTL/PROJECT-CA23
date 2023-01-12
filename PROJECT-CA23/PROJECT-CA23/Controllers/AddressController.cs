@@ -42,7 +42,7 @@ namespace PROJECT_CA23.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [Authorize(Roles = "admin,user")]
-        [HttpGet("/GetAddress", Name = "GetUserAddress")]
+        [HttpGet("/GetUserAddress", Name = "GetUserAddress")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AddressDto))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -66,12 +66,12 @@ namespace PROJECT_CA23.Controllers
         }
 
         [Authorize(Roles = "admin")]
-        [HttpGet("/GetAllAddresses")]
+        [HttpGet("/GetAllUsersAddresses")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<AddressDto>))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAllAddresses()
+        public async Task<IActionResult> GetAllUsersAddresses()
         {
             // ISKELTI I ATSKIRA SERVISIUKA (su ten pakrautu _httpContextAccessor) ???
             var currentUserRole = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
@@ -97,11 +97,11 @@ namespace PROJECT_CA23.Controllers
         /// <param name="addressDto"></param>
         /// <returns></returns>
         [Authorize(Roles = "admin,user")]
-        [HttpPost("/AddAddress")]
+        [HttpPost("/AddUserAddress")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(AddressDto))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> AddAddress(AddressRequest req)
+        public async Task<IActionResult> AddUserAddress([FromBody] AddressRequest req)
         {
             // ISKELTI I ATSKIRA SERVISIUKA (su ten pakrautu _httpContextAccessor) ???
             var currentUserRole = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;

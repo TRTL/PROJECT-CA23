@@ -2,7 +2,14 @@
 {
     public class LoginResponse
     {
+        /// <summary>
+        /// Username of logged in user
+        /// </summary>
         public string Username { get; set; }
+
+        /// <summary>
+        /// JWT
+        /// </summary>
         public string? Token { get; set; }
     }
 }

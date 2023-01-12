@@ -8,19 +8,19 @@ namespace PROJECT_CA23.Models
         public int MediaId { get; set; }
         public string? Type { get; set; }
 
-        [StringLength(1000, ErrorMessage = "Title text cannot be longer than 1000 symbols")]
+        [MaxLength(1000, ErrorMessage = "Title text cannot be longer than 1000 symbols")]
         public string Title { get; set; }
 
-        [StringLength(9, ErrorMessage = "Year text cannot be longer than 9 symbols")]
+        [MaxLength(9, ErrorMessage = "Year text cannot be longer than 9 symbols")]
         public string? Year { get; set; }
 
-        [StringLength(30, ErrorMessage = "Runtime text cannot be longer than 30 symbols")]
+        [MaxLength(30, ErrorMessage = "Runtime text cannot be longer than 30 symbols")]
         public string? Runtime { get; set; }
         public string? Director { get; set; }
         public string? Writer { get; set; }
         public string? Actors { get; set; }
 
-        [StringLength(2000, ErrorMessage = "Plot text cannot be longer than 2000 symbols")]
+        [MaxLength(2000, ErrorMessage = "Plot text cannot be longer than 2000 symbols")]
         public string? Plot { get; set; }
         public string? Language { get; set; }
         public string? Country { get; set; }
