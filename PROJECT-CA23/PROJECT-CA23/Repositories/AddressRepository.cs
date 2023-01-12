@@ -8,11 +8,11 @@ namespace PROJECT_CA23.Repositories
 {
     public class AddressRepository : Repository<Address>, IAddressRepository
     {
-        private readonly CA23Context _context;
+        private readonly CA23Context _db;
 
-        public AddressRepository(CA23Context context) : base(context)
+        public AddressRepository(CA23Context db) : base(db)
         {
-            _context = context;
+            _db = db;
         }
     }
 }

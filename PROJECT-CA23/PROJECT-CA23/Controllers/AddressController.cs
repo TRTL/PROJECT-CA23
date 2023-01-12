@@ -114,6 +114,7 @@ namespace PROJECT_CA23.Controllers
 
             var user = _userRepo.Get(req.UserId);
             var newAddress = _addressAdapter.Bind(req, user);
+
             await _addressRepo.CreateAsync(newAddress);
 
             return CreatedAtRoute("GetUserAddress", new { id = newAddress.AddressId }, _addressAdapter.Bind(newAddress));
