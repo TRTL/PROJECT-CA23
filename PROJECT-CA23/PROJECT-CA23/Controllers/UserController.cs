@@ -36,7 +36,7 @@ namespace PROJECT_CA23.Controllers
         /// <summary>
         /// Get user information
         /// </summary>
-        /// <param name="id">First name, last name, role, username and password</param>
+        /// <param name="id">Id of user</param>
         /// <returns></returns>
         /// <response code="200">OK</response>
         /// <response code="400">Bad request</response>
