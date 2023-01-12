@@ -7,15 +7,17 @@ namespace PROJECT_CA23.Models
 {
     public class User
     {
+        [Required]
         public int UserId { get; set; }
 
-        [MaxLength(100, ErrorMessage = "Username cannot be longer than 100 symbols")]
+        [Required]
+        [MaxLength(100)]
         public string Username { get; set; }
 
-        [MaxLength(200, ErrorMessage = "First name cannot be longer than 200 symbols")]
+        [MaxLength(200)]
         public string FirstName { get; set; }
 
-        [MaxLength(200, ErrorMessage = "Last name cannot be longer than 200 symbols")]
+        [MaxLength(200)]
         public string LastName { get; set; }
 
         public ERole Role { get; set; } = ERole.user;
@@ -24,16 +26,20 @@ namespace PROJECT_CA23.Models
 
         public byte[] PasswordSalt { get; set; }
 
+        [Required]
         public DateTime Created { get; set; }
 
+        [Required]
         public DateTime Updated { get; set; }
 
+        [Required]
         public DateTime LastLogin { get; set; }
 
+        [Required]
         public bool IsDeleted { get; set; } = false;
 
-        public virtual Address? Address { get; set; } = null;
-        public virtual List<UserMedia> UserMedias { get; set; } = new List<UserMedia>();
-        public virtual List<Notification> Notifications { get; set; }
+        public virtual Address? Address { get; set; }
+        public virtual List<UserMedia>? UserMedias { get; set; }
+        public virtual List<Notification>? Notifications { get; set; }
     }
 }
