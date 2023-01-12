@@ -53,7 +53,7 @@ namespace PROJECT_CA23.Repositories_Tests
             var httpContextAccessor = new Mock<IHttpContextAccessor>();
 
             // Act
-            var sut = new UserController(mockUserRepository.Object, userService, jwtService, loggerMock.Object, httpContextAccessor.Object);
+            var sut = new LoginController(mockUserRepository.Object, userService, jwtService, loggerMock.Object, httpContextAccessor.Object);
             var actual = sut.Login(new LoginRequest { Username = fake_username, Password = fake_password });
 
             // Assert
