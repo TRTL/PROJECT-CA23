@@ -1,30 +1,33 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PROJECT_CA23.Models.Dto.GenreDtos;
+using System.ComponentModel.DataAnnotations;
 
 namespace PROJECT_CA23.Models.Dto.MediaDtos
 {
-    public class MediaRequest
+    public class MediaDto
     {
         /// <summary>
-        /// Select a type for new media. Passible types: movie or series
+        /// Media Id
+        /// </summary>
+        public int MediaId { get; set; }
+
+        /// <summary>
+        /// Passible types: movie or series
         /// </summary>
         public string? Type { get; set; }
 
         /// <summary>
-        /// Title of new media
+        /// Title of media
         /// </summary>
-        [MaxLength(1000, ErrorMessage = "Title text cannot be longer than 1000 symbols")]
         public string Title { get; set; }
 
         /// <summary>
         /// Year of release or runyears. Examples: "2008–2013" / "2018–"
         /// </summary>
-        [MaxLength(9, ErrorMessage = "Year text cannot be longer than 9 symbols")]
         public string? Year { get; set; }
 
         /// <summary>
         /// Runtime in minutes
         /// </summary>
-        [MaxLength(30, ErrorMessage = "Runtime text cannot be longer than 30 symbols")]
         public string? Runtime { get; set; }
 
         /// <summary>
@@ -45,7 +48,6 @@ namespace PROJECT_CA23.Models.Dto.MediaDtos
         /// <summary>
         /// Movie or tv show summarized plot.
         /// </summary>
-        [MaxLength(2000, ErrorMessage = "Plot text cannot be longer than 2000 symbols")]
         public string? Plot { get; set; }
 
         /// <summary>
@@ -67,5 +69,15 @@ namespace PROJECT_CA23.Models.Dto.MediaDtos
         /// IMDB id
         /// </summary>
         public string? imdbId { get; set; }
+
+        /// <summary>
+        /// IMDB rating
+        /// </summary>
+        public double? imdbRating { get; set; }
+
+        /// <summary>
+        /// List of genres
+        /// </summary>
+        public List<GenreDto> Genres { get; set; }
     }
 }

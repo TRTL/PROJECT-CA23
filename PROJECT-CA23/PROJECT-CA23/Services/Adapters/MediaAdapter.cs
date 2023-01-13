@@ -1,6 +1,10 @@
-﻿using PROJECT_CA23.Models;
+﻿using PROJECT_CA23.Controllers;
+using PROJECT_CA23.Models;
 using PROJECT_CA23.Models.Dto.MediaDtos;
+using PROJECT_CA23.Models.Dto.GenreDtos;
+using PROJECT_CA23.Repositories.IRepositories;
 using PROJECT_CA23.Services.Adapters.IAdapters;
+using System.Diagnostics.Metrics;
 using System.IO;
 
 namespace PROJECT_CA23.Services.Adapters
@@ -25,5 +29,28 @@ namespace PROJECT_CA23.Services.Adapters
                 imdbId = req.imdbId
             };
         }
+
+        public MediaDto Bind(Media media)
+        {
+            return new MediaDto()
+            {
+                MediaId = media.MediaId,
+                Type  = media.Type,
+                Title = media.Title,
+                Year = media.Year,
+                Runtime = media.Runtime,
+                Director = media.Director,
+                Writer = media.Writer,
+                Actors = media.Actors,
+                Plot = media.Plot,
+                Language = media.Language,
+                Country = media.Country,
+                Poster = media.Poster,
+                imdbId = media.imdbId,
+                imdbRating = media.imdbRating,
+                Genres = media.Genres.Select(g => new GenreDto(g)).ToList()
+            };
+        }
+
     }
 }
