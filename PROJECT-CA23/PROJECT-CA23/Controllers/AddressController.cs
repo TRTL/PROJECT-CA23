@@ -7,8 +7,10 @@ using PROJECT_CA23.Models.Dto.AddressDtos;
 using PROJECT_CA23.Models.Dto.UserDtos;
 using PROJECT_CA23.Repositories;
 using PROJECT_CA23.Repositories.IRepositories;
+using PROJECT_CA23.Services.Adapters;
 using PROJECT_CA23.Services.Adapters.IAdapters;
 using System.Net;
+using System.Net.Mime;
 using System.Security.Claims;
 
 namespace PROJECT_CA23.Controllers
@@ -47,12 +49,13 @@ namespace PROJECT_CA23.Controllers
         /// <response code="401">Client could not authenticate a request</response>
         /// <response code="500">Internal server error</response>
         [Authorize(Roles = "admin,user")]
-        [HttpGet("/GetAddressbyId/{id:int}", Name = "GetAddress")]
+        [HttpGet("/GetAddress/{id:int}", Name = "GetAddress")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AddressDto))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Produces(MediaTypeNames.Application.Json)]
         public IActionResult GetAddress(int id)
         {
             _logger.LogInformation($"GetAddress atempt for userId - {id}");
@@ -95,8 +98,8 @@ namespace PROJECT_CA23.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<AddressDto>))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Produces(MediaTypeNames.Application.Json)]
         public async Task<IActionResult> GetAllAddresses()
         {
             _logger.LogInformation($"GetAllAddresses atempt");
@@ -112,9 +115,8 @@ namespace PROJECT_CA23.Controllers
                     return Forbid();
                 }
 
-                var allAddresses = await _addressRepo.GetAllAsync();
-                var addressDtoList = allAddresses.Select(a => _addressAdapter.Bind(a))
-                                                 .ToList();
+                var allAddresses = await _addressRepo.GetAllAsync(null, new List<string>() { "User" });
+                var addressDtoList = _addressAdapter.Bind(allAddresses);
 
                 return Ok(addressDtoList);
             }
@@ -141,7 +143,9 @@ namespace PROJECT_CA23.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> AddAddress([FromBody] AddressRequest req)
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        public async Task<IActionResult> AddAddress([FromBody] AddAddressRequest req)
         {
             _logger.LogInformation($"AddAddress atempt for userId - {req.UserId}");
 
@@ -171,8 +175,93 @@ namespace PROJECT_CA23.Controllers
         }
 
 
+        /// <summary>
+        /// Update address by addressId
+        /// </summary>
+        /// <param name="req">Updatable fields: first and last name</param>
+        /// <returns></returns>
+        /// <response code="204">Updated</response>
+        /// <response code="400">Bad request</response>
+        /// <response code="401">Client could not authenticate a request</response>
+        /// <response code="404">Not found</response>
+        /// <response code="500">Internal server error</response>
+        [HttpPut("{id:int}/Update")]
+        [Authorize(Roles = "admin,user")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Consumes(MediaTypeNames.Application.Json)]
+        public async Task<IActionResult> UpdateAddress([FromBody] UpdateAddressRequest req)
+        {
+            _logger.LogInformation($"UpdateAddress atempt for AddressId - {req.AddressId}");
 
+            try
+            {
+                if (req == null)
+                {
+                    _logger.LogInformation($"{DateTime.Now} Failed UpdateAddress attempt for AddressId - {req.AddressId}. UpdateAddress request data incorrect.");
+                    return BadRequest("UpdateAddress request data incorrect.");
+                }
 
+                if (!await _addressRepo.ExistAsync(a => a.AddressId == req.AddressId))
+                {
+                    _logger.LogInformation($"{DateTime.Now} Failed UpdateAddress attempt with AddressId - {req.AddressId}. AddressId not found.");
+                    return NotFound("AddressId not found");
+                }
+
+                var address = await _addressRepo.GetAsync(a => a.AddressId == req.AddressId);
+                await _addressRepo.UpdateAsync(address);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{DateTime.Now} UpdateAddress exception error.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Delete address by address id
+        /// </summary>
+        /// <param name="id">Address id that will be deleted</param>
+        /// <returns></returns>
+        [HttpDelete("{id:int}/Delete")]
+        [Authorize(Roles = "admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> DeleteAddress(int id)
+        {
+            _logger.LogInformation($"DeleteAddress atempt for AddressId - {id}");
+
+            try
+            {
+                if (id == 0)
+                {
+                    _logger.LogInformation($"{DateTime.Now} Failed DeleteAddress attempt for AddressId - {id}. DeleteAddress id is incorrect.");
+                    return BadRequest("DeleteAddress id is incorrect.");
+                }
+
+                var address = await _addressRepo.GetAsync(a => a.AddressId == id);
+                if (address == null)
+                {
+                    _logger.LogInformation($"{DateTime.Now} Failed DeleteAddress attempt with AddressId - {id}. AddressId not found.");
+                    return NotFound("AddressId not found");
+                }
+
+                await _addressRepo.RemoveAsync(address);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{DateTime.Now} DeleteAddress exception error.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
 
 
 

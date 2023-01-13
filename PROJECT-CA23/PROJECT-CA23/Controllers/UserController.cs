@@ -13,6 +13,9 @@ using PROJECT_CA23.Services.IServices;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Data;
 using System.Security.Claims;
+using PROJECT_CA23.Repositories;
+using PROJECT_CA23.Services.Adapters.IAdapters;
+using System.Net.Mime;
 
 namespace PROJECT_CA23.Controllers
 {
@@ -20,17 +23,20 @@ namespace PROJECT_CA23.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserRepository _userRepo;
+        private readonly IUserAdapter _userAdapter;
         private readonly ILogger<UserController> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UserController(IUserRepository userRepository,
+                              IUserAdapter userAdapter,
                               ILogger<UserController> logger,
                               IHttpContextAccessor httpContextAccessor)
         {
-            _userRepository = userRepository;
+            _userRepo = userRepository;
+            _userAdapter = userAdapter;
             _logger = logger;
-            _httpContextAccessor=httpContextAccessor;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
@@ -41,10 +47,15 @@ namespace PROJECT_CA23.Controllers
         /// <response code="200">OK</response>
         /// <response code="400">Bad request</response>
         /// <response code="401">Client could not authenticate a request</response>
+        /// <response code="404">Not found</response>
         /// <response code="500">Internal server error</response>
         [Authorize(Roles = "admin,user")]
-        [HttpGet("/GetUser/{id:int}/Info")]
+        [HttpGet("/GetUser/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Produces(MediaTypeNames.Application.Json)]
         public IActionResult GetUserInfo(int id)
         {
             try
@@ -57,20 +68,13 @@ namespace PROJECT_CA23.Controllers
                     return Forbid();
                 }
 
-                var user = _userRepository.Get(id);
-
-                var userDto = new UserDto
+                if (!_userRepo.Exist(id, out User? user))
                 {
-                    UserId = user.UserId,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Username = user.Username,
-                    Role = user.Role.ToString(),
-                    Created = user.Created,
-                    Updated = user.Updated,
-                    LastLogin = user.LastLogin,
-                    IsDeleted = user.IsDeleted
-                };
+                    _logger.LogInformation($"{DateTime.Now} Failed GetUserInfo attempt with userId - {id}. UserId not found.");
+                    return NotFound("UserId not found");
+                }
+
+                UserDto userDto = _userAdapter.Bind(user);
 
                 return Ok(userDto);
             }
@@ -80,5 +84,94 @@ namespace PROJECT_CA23.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        /// <summary>
+        /// Get information all users
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad request</response>
+        /// <response code="401">Client could not authenticate a request</response>
+        /// <response code="500">Internal server error</response>
+        [Authorize(Roles = "admin")]
+        [HttpGet("/GetAllUsers")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserDto>))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Produces(MediaTypeNames.Application.Json)]
+        public IActionResult GetAllUsers()
+        {
+            try
+            {
+                var users = _userRepo.GetAll();
+                var listOfUserDto = _userAdapter.Bind(users);
+
+                return Ok(listOfUserDto);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{DateTime.Now} Login exception error.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Update user information
+        /// </summary>
+        /// <param name="id">User id that will be updated</param>
+        /// <param name="updateUserDto">Updatable fields: first and last name</param>
+        /// <returns></returns>
+        /// <response code="204">Updated</response>
+        /// <response code="400">Bad request</response>
+        /// <response code="401">Client could not authenticate a request</response>
+        /// <response code="404">Not found</response>
+        /// <response code="500">Internal server error</response>
+        [HttpPut("{id:int}/Update/")]
+        [Authorize(Roles = "admin,user")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Consumes(MediaTypeNames.Application.Json)]
+        public IActionResult UpdateUser(int id, [FromBody] UpdateUserDto updateUserDto)
+        {
+            _logger.LogInformation($"UpdateUser atempt for userId - {id}");
+
+            try
+            {
+                if (id == 0 || updateUserDto == null)
+                {
+                    _logger.LogInformation($"{DateTime.Now} Failed UpdateUser attempt with userId - {id}. UpdateUser request data incorrect.");
+                    return BadRequest("UpdateUser request data incorrect.");
+                }
+
+                if (!_userRepo.Exist(id, out User? user))
+                {
+                    _logger.LogInformation($"{DateTime.Now} Failed UpdateUser attempt with userId - {id}. UserId not found.");
+                    return NotFound("UserId not found");
+                }
+
+                var updatedUser = _userAdapter.Bind(user, updateUserDto);
+                _userRepo.Update(updatedUser);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{DateTime.Now} AddAddress exception error.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+
+
+
+
+
+
+
+
     }
 }

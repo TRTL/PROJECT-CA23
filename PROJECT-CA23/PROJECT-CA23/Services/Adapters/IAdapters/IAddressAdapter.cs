@@ -8,6 +8,7 @@ namespace PROJECT_CA23.Services.Adapters.IAdapters
     {
         //Address Bind(AddressDto dto, User user);
         AddressDto Bind(Address address);
-        Address Bind(AddressRequest req, User user);
+        Address Bind(AddAddressRequest req, User user);
+        IEnumerable<AddressDto> Bind(IEnumerable<Address> addresses);
     }
 }

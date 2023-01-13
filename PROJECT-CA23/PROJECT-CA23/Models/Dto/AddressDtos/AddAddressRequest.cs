@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PROJECT_CA23.Models.Dto.AddressDtos
 {
-    public class AddressRequest
+    public class AddAddressRequest
     {
         /// <summary>
         /// Id of user that address belongs to

@@ -23,7 +23,7 @@ namespace PROJECT_CA23.Services.Adapters
             return dto;
         }
 
-        public Address Bind(AddressRequest req, User user)
+        public Address Bind(AddAddressRequest req, User user)
         {
             var newAddress = new Address()
             {
@@ -35,6 +35,16 @@ namespace PROJECT_CA23.Services.Adapters
                 PostCode = req.PostCode
             };
             return newAddress;
+        }
+
+        public IEnumerable<AddressDto> Bind(IEnumerable<Address> addresses)
+        {
+            var listOfAddressDto = new List<AddressDto>();
+            foreach (var address in addresses)
+            {
+                listOfAddressDto.Add(Bind(address));
+            }
+            return listOfAddressDto;
         }
     }
 }
