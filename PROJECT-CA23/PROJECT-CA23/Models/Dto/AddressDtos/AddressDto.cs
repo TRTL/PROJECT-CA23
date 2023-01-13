@@ -18,10 +18,6 @@ namespace PROJECT_CA23.Models.Dto.AddressDto
         /// </summary>
         public string LastName { get; set; }
         /// <summary>
-        /// Username of user that this address belongs to
-        /// </summary>
-        public string Username { get; set; }
-        /// <summary>
         /// Country users lives in
         /// </summary>
         public string Country { get; set; }

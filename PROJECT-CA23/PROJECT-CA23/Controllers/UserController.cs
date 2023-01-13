@@ -47,9 +47,10 @@ namespace PROJECT_CA23.Controllers
         /// <response code="200">OK</response>
         /// <response code="400">Bad request</response>
         /// <response code="401">Client could not authenticate a request</response>
+        /// <response code="404">Not found</response>
         /// <response code="500">Internal server error</response>
         [Authorize(Roles = "admin,user")]
-        [HttpGet("{id:int}/Info")]
+        [HttpGet("/GetUser/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -115,11 +116,22 @@ namespace PROJECT_CA23.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Update user information
+        /// </summary>
+        /// <param name="id">User id that will be updated</param>
+        /// <param name="updateUserDto">Updatable fields: first and last name</param>
+        /// <returns></returns>
+        /// <response code="204">Updated</response>
+        /// <response code="400">Bad request</response>
+        /// <response code="401">Client could not authenticate a request</response>
+        /// <response code="404">Not found</response>
+        /// <response code="500">Internal server error</response>
         [HttpPut("{id:int}/Update/")]
         [Authorize(Roles = "admin,user")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
