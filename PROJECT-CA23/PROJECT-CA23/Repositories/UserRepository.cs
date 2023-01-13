@@ -38,8 +38,17 @@ namespace PROJECT_CA23.Repositories
             return _context.Users.Any(x => x.Username == username);
         }
 
+        public bool Exist(int id, out User? user)
+        {
+            user = null;
+            if (!_context.Users.Any(x => x.UserId == id)) return false;
+            user = _context.Users.FirstOrDefault(x => x.UserId == id);
+            return true;
+        }
+
         public User Get(int id) => _context.Users.First(c => c.UserId == id);
 
+        public IEnumerable<User> GetAll() => _context.Users.ToList();
 
         public void Update(User user)
         {

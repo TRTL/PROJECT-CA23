@@ -9,6 +9,7 @@ using PROJECT_CA23.Repositories;
 using PROJECT_CA23.Repositories.IRepositories;
 using PROJECT_CA23.Services.Adapters.IAdapters;
 using System.Net;
+using System.Net.Mime;
 using System.Security.Claims;
 
 namespace PROJECT_CA23.Controllers
@@ -53,6 +54,7 @@ namespace PROJECT_CA23.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Produces(MediaTypeNames.Application.Json)]
         public IActionResult GetAddress(int id)
         {
             _logger.LogInformation($"GetAddress atempt for userId - {id}");
@@ -97,6 +99,7 @@ namespace PROJECT_CA23.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Produces(MediaTypeNames.Application.Json)]
         public async Task<IActionResult> GetAllAddresses()
         {
             _logger.LogInformation($"GetAllAddresses atempt");
@@ -141,6 +144,8 @@ namespace PROJECT_CA23.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
         public async Task<IActionResult> AddAddress([FromBody] AddressRequest req)
         {
             _logger.LogInformation($"AddAddress atempt for userId - {req.UserId}");
