@@ -61,7 +61,7 @@ namespace PROJECT_CA23.Controllers
 
                 return Ok(new LoginResponse
                 {
-                    Username = model.Username,
+                    UserId = user.UserId,
                     Token = token
                 });
             }
