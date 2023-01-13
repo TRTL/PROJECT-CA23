@@ -38,7 +38,7 @@ const clearForm = () => {
     login_password.value = '';
 };
 
-const goToHomePage = () => window.location.href = "home.html";
+const goToMyList = () => window.location.href = "mylist.html";
 
 const saveToLocalStorage = (obj) => localStorage.setItem('USER', JSON.stringify(obj));
 
@@ -71,7 +71,7 @@ const login = () => {
                         localhost: login_localhost.value
                     }
                     saveToLocalStorage(userObj);
-                    goToHomePage();
+                    goToMyList();
                 });
             }
             else message('Klaida: ' + res.status);

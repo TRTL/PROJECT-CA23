@@ -48,20 +48,20 @@ header {
 #sub-menu {
     display: flex;
     flex-flow: row nowrap;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
     height: 25px;
     width: 1000px;
-    background: #ffffff;
+    background: #fff;
     border-left: 1px solid black;
     border-right: 1px solid black;
 }
 
 #main-container {
     display: flex;
-    flex-flow: column nowrap;
+    flex-flow: row wrap;
     justify-content: start;
-    align-items: center;
+    align-items: flex-start;
     width: 1000px;
     margin-left: 20px;
     margin-right: 20px;
@@ -91,19 +91,19 @@ header {
 }
 
 
-/**************************************************************************************/
+/******************************************** MENU ******************************************/
 
-a:link {
+nav a:link {
     color: #fff;
     text-decoration: none;
 }
 
-a:visited {
+nav a:visited {
     color: #fff;
 }
 
-a:hover {
-    color: #831010 !important;
+nav a:hover {
+    color: #000 !important;
 }
 
 nav a:link {
@@ -117,18 +117,63 @@ nav span {
     color: #fff;
 }
 
-a.active {
-    font-weight: 700;
+nav a.active {
+    font-weight: 600;
     color: #000;
 }
+
+#sub-menu a:link {
+    color: #db0000;
+    text-decoration: none;
+}
+
+#sub-menu a:hover {
+    color: #000 !important;
+}
+
+#sub-menu a:link {
+    margin-right: 30px;
+    margin-top: 5px;
+}
+
+#sub-menu a:visited {
+    color: #db0000;
+}
+
 
 /****************************************** FOOTER ******************************************/
 
 #footer {
-    color: #999;
+    color: #ccc;
 }
 
-#footer #logout_label:hover {
+#footer #footer__logout_label:hover {
     cursor: pointer;
     color: #db0000;
+}
+
+/****************************************** MESSENGER ******************************************/
+
+#messenger {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: flex-end;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    z-index: 100;
+}
+
+#messenger>div {
+    display: inline-block;
+    border-radius: 5px;
+    padding: 8px;
+    margin-top: 5px;
+    white-space: nowrap;
+    border: solid 1px #db0000;
+    color: #000;
+    background-color: #fff;
 }
