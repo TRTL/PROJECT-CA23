@@ -2,18 +2,17 @@ const user = JSON.parse(localStorage.getItem('USER'));
 window.onload = function () {
     if (!user) {
         alert('Jūs nesate prisijungę! Prisijunkite, jei norite tęsti darbą.');
-        window.location.href = "index.html";
+        window.location.href = "login.html";
     } else {
-        username_label.innerHTML = user.username;
         getMyInfo();
     };
 };
 
 const logout = () => {
     localStorage.clear();
-    window.location.href = "index.html";
+    window.location.href = "login.html";
 }
-//user_logout.addEventListener('click', logout);
+logout_label.addEventListener('click', logout);
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -43,32 +42,36 @@ const getOptions = {
 }
 
 const getMyInfo = () => {
-    fetch('https://localhost:' + LocalHost.value + '/GetMyInfo/' + user.UserId + '/Info', getOptions)
+    fetch('https://localhost:' + user.localhost + '/GetUser/' + user.userId + '/Info', getOptions)
         .then(obj => {
             console.log(obj)
+
             obj.json()
+                .then(userdata => {
+                    console.log(userdata)
+                    userid_label.innerHTML = "ID: " + userdata.userId;
+                    role_label.innerHTML = "Role: " + userdata.role;
+                    username_label.innerHTML = "Username: " + userdata.username;
+                    fullname_label.innerHTML = userdata.firstName + ' ' + userdata.lastName;
+
+                    // for (const todo of userTodoData.data) {
+                    //     if (todo.UserID === user.ID) {
+                    //         userTodosArr.push({
+                    //             ID: todo.id,
+                    //             Completed: todo.Completed,
+                    //             Type: todo.Type,
+                    //             Content: todo.Content,
+                    //             EndDate: todo.EndDate,
+                    //             Created: todo.createdAt.slice(0, 10) + ' ' + todo.createdAt.slice(11, 19),
+                    //             Updated: todo.updatedAt.slice(0, 10) + ' ' + todo.updatedAt.slice(11, 19)
+                    //         });
+                    //     }
+                    // }
+                    //saveToLocalStorage(userTodosArr)
+                    //searchLocalToDos();
+                })
         })
-        /*.then(userTodoData => {
-            const userTodosArr = [];
-
-            for (const todo of userTodoData.data) {
-                if (todo.UserID === user.ID) {
-                    userTodosArr.push({
-                        ID: todo.id,
-                        Completed: todo.Completed,
-                        Type: todo.Type,
-                        Content: todo.Content,
-                        EndDate: todo.EndDate,
-                        Created: todo.createdAt.slice(0, 10) + ' ' + todo.createdAt.slice(11, 19),
-                        Updated: todo.updatedAt.slice(0, 10) + ' ' + todo.updatedAt.slice(11, 19)
-                    });
-                }
-            }
-
-            saveToLocalStorage(userTodosArr)
-            searchLocalToDos();
-        })*/
-        .catch((err) => message(`Klaida - ${err}`));
+        .catch((err) => message(`Klaida: ${err}`));
 }
 
 
