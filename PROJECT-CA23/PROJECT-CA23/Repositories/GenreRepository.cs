@@ -1,4 +1,5 @@
-﻿using PROJECT_CA23.Database;
+﻿using Microsoft.EntityFrameworkCore;
+using PROJECT_CA23.Database;
 using PROJECT_CA23.Models;
 using PROJECT_CA23.Repositories.IRepositories;
 

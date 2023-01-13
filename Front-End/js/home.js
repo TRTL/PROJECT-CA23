@@ -33,7 +33,6 @@ const message = (text) => {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-const getURL = 'https://localhost:44307/User/GetMyInfo';
 const getOptions = {
     method: 'get',
     headers: {
@@ -44,7 +43,7 @@ const getOptions = {
 }
 
 const getMyInfo = () => {
-    fetch(getURL, getOptions)
+    fetch('https://localhost:' + LocalHost.value + '/User/GetMyInfo', getOptions)
         .then(obj => {
             console.log(obj)
             obj.json()

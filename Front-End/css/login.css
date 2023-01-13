@@ -28,15 +28,15 @@ body {
     border: solid 1px #db0000;
 }
 
-.container-registration {
+.container-login {
     width: 300px;
     height: 100%;
 }
 
 form {
-    margin-top: 0px;
+    margin-top: 100px;
     text-align: left;
-    padding: 0px 20px 14px 20px;
+    padding: 20px;
 }
 
 label {
@@ -76,13 +76,13 @@ input[type="submit"]:hover {
 .container-pic {
     width: 500px;
     height: 100%;
-    background-image: url("../img/register_bg.jpg");
+    background-image: url("../img/login_bg.jpg");
     border-left: solid 1px #db0000;
     border-top-right-radius: 9px;
     border-bottom-right-radius: 9px;
 }
 
 a {
-    padding: 0 0 0 45px;
+    padding: 0 0 0 72px;
     color: #831010;
 }

@@ -43,9 +43,9 @@ namespace PROJECT_CA23.Controllers
         /// <response code="401">Client could not authenticate a request</response>
         /// <response code="500">Internal server error</response>
         [Authorize(Roles = "admin,user")]
-        [HttpGet("GetUserInfo")]
+        [HttpGet("/GetUser/{id:int}/Info")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
-        public IActionResult GetUserInfo([FromQuery] int id)
+        public IActionResult GetUserInfo(int id)
         {
             try
             {
