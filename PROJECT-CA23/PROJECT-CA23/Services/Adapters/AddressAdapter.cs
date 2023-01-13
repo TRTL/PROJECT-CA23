@@ -36,15 +36,5 @@ namespace PROJECT_CA23.Services.Adapters
             };
             return newAddress;
         }
-
-        public IEnumerable<AddressDto> Bind(IEnumerable<Address> addresses)
-        {
-            var listOfAddressDto = new List<AddressDto>();
-            foreach (var address in addresses)
-            {
-                listOfAddressDto.Add(Bind(address));
-            }
-            return listOfAddressDto;
-        }
     }
 }

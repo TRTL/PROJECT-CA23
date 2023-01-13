@@ -28,15 +28,5 @@ namespace PROJECT_CA23.Services.Adapters
                 IsDeleted = user.IsDeleted
             };
         }
-
-        public IEnumerable<UserDto> Bind(IEnumerable<User> users)
-        {
-            var listOfUserDto = new List<UserDto>();
-            foreach (var user in users)
-            {
-                listOfUserDto.Add(Bind(user));
-            }
-            return listOfUserDto;
-        }
     }
 }

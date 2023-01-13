@@ -59,7 +59,6 @@ namespace PROJECT_CA23.Controllers
         public IActionResult GetAddress(int id)
         {
             _logger.LogInformation($"GetAddress atempt for userId - {id}");
-
             try
             {
                 // ISKELTI I ATSKIRA SERVISIUKA (su ten pakrautu _httpContextAccessor) ???
@@ -103,7 +102,6 @@ namespace PROJECT_CA23.Controllers
         public async Task<IActionResult> GetAllAddresses()
         {
             _logger.LogInformation($"GetAllAddresses atempt");
-
             try
             {
                 // ISKELTI I ATSKIRA SERVISIUKA (su ten pakrautu _httpContextAccessor) ???
@@ -116,7 +114,7 @@ namespace PROJECT_CA23.Controllers
                 }
 
                 var allAddresses = await _addressRepo.GetAllAsync(null, new List<string>() { "User" });
-                var addressDtoList = _addressAdapter.Bind(allAddresses);
+                var addressDtoList = allAddresses.Select(a => _addressAdapter.Bind(a)).ToList();
 
                 return Ok(addressDtoList);
             }
@@ -148,7 +146,6 @@ namespace PROJECT_CA23.Controllers
         public async Task<IActionResult> AddAddress([FromBody] AddAddressRequest req)
         {
             _logger.LogInformation($"AddAddress atempt for userId - {req.UserId}");
-
             try
             {
                 // ISKELTI I ATSKIRA SERVISIUKA (su ten pakrautu _httpContextAccessor) ???
@@ -162,9 +159,7 @@ namespace PROJECT_CA23.Controllers
 
                 var user = _userRepo.Get(req.UserId);
                 var newAddress = _addressAdapter.Bind(req, user);
-
                 await _addressRepo.CreateAsync(newAddress);
-
                 return CreatedAtRoute("GetAddress", new { id = newAddress.AddressId }, _addressAdapter.Bind(newAddress));
             }
             catch (Exception ex)
@@ -197,7 +192,6 @@ namespace PROJECT_CA23.Controllers
         public async Task<IActionResult> UpdateAddress([FromBody] UpdateAddressRequest req)
         {
             _logger.LogInformation($"UpdateAddress atempt for AddressId - {req.AddressId}");
-
             try
             {
                 if (req == null)
@@ -228,16 +222,21 @@ namespace PROJECT_CA23.Controllers
         /// </summary>
         /// <param name="id">Address id that will be deleted</param>
         /// <returns></returns>
+        /// <response code="204">Updated</response>
+        /// <response code="400">Bad request</response>
+        /// <response code="401">Client could not authenticate a request</response>
+        /// <response code="404">Not found</response>
+        /// <response code="500">Internal server error</response>
         [HttpDelete("{id:int}/Delete")]
         [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> DeleteAddress(int id)
         {
             _logger.LogInformation($"DeleteAddress atempt for AddressId - {id}");
-
             try
             {
                 if (id == 0)

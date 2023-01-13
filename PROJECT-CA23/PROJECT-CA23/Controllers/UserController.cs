@@ -58,6 +58,7 @@ namespace PROJECT_CA23.Controllers
         [Produces(MediaTypeNames.Application.Json)]
         public IActionResult GetUserInfo(int id)
         {
+            _logger.LogInformation($"GetUserInfo atempt with UserId - {id}");
             try
             {
                 var currentUserRole = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
@@ -75,12 +76,11 @@ namespace PROJECT_CA23.Controllers
                 }
 
                 UserDto userDto = _userAdapter.Bind(user);
-
                 return Ok(userDto);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{DateTime.Now} Login exception error.");
+                _logger.LogError(ex, $"{DateTime.Now} GetUserInfo exception error.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -102,16 +102,16 @@ namespace PROJECT_CA23.Controllers
         [Produces(MediaTypeNames.Application.Json)]
         public IActionResult GetAllUsers()
         {
+            _logger.LogInformation($"GetAllUsers atempt");
             try
             {
                 var users = _userRepo.GetAll();
-                var listOfUserDto = _userAdapter.Bind(users);
-
+                var listOfUserDto = users.Select(u => _userAdapter.Bind(u)).ToList();
                 return Ok(listOfUserDto);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{DateTime.Now} Login exception error.");
+                _logger.LogError(ex, $"{DateTime.Now} GetAllUsers exception error.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -160,7 +160,7 @@ namespace PROJECT_CA23.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{DateTime.Now} AddAddress exception error.");
+                _logger.LogError(ex, $"{DateTime.Now} UpdateUser exception error.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
