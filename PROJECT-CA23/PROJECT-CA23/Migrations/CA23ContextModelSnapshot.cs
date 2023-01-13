@@ -94,7 +94,7 @@ namespace PROJECTCA23.Migrations
 
                     b.HasKey("AddressId");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
 
                     b.HasData(
                         new
@@ -122,7 +122,7 @@ namespace PROJECTCA23.Migrations
 
                     b.HasAlternateKey("Name");
 
-                    b.ToTable("Genres");
+                    b.ToTable("Genres", (string)null);
 
                     b.HasData(
                         new
@@ -207,7 +207,7 @@ namespace PROJECTCA23.Migrations
 
                     b.HasKey("MediaId");
 
-                    b.ToTable("Medias");
+                    b.ToTable("Medias", (string)null);
 
                     b.HasData(
                         new
@@ -271,7 +271,7 @@ namespace PROJECTCA23.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("PROJECT_CA23.Models.Review", b =>
@@ -295,7 +295,7 @@ namespace PROJECTCA23.Migrations
 
                     b.HasIndex("MediaId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("PROJECT_CA23.Models.User", b =>
@@ -348,7 +348,7 @@ namespace PROJECTCA23.Migrations
 
                     b.HasAlternateKey("Username");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
 
                     b.HasData(
                         new
@@ -392,7 +392,7 @@ namespace PROJECTCA23.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserMedias");
+                    b.ToTable("UserMedias", (string)null);
                 });
 
             modelBuilder.Entity("GenreMedia", b =>
