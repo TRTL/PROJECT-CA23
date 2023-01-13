@@ -30,35 +30,35 @@ const message = (text) => {
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 const validateForm = () => {
-    if (!login_firstname.value) return false;
-    if (!login_lastname.value) return false;
-    if (!login_role.value) return false;
-    if (!login_username.value) return false;
-    if (!login_password.value) return false;
+    if (!registration_firstname.value) return false;
+    if (!registration_lastname.value) return false;
+    if (!registration_role.value) return false;
+    if (!registration_username.value) return false;
+    if (!registration_password.value) return false;
     return true;
 };
 
 const clearForm = () => {
-    login_firstname.value = '';
-    login_lastname.value = '';
-    login_role.value = '';
-    login_username.value = '';
-    login_password.value = '';
+    registration_firstname.value = '';
+    registration_lastname.value = '';
+    registration_role.value = '';
+    registration_username.value = '';
+    registration_password.value = '';
 };
 
-const goLandingPage = () => window.location.href = "landing-page.html";
+const goToHomePage = () => window.location.href = "home.html";
 
 const saveToLocalStorage = (obj) => localStorage.setItem('USER', JSON.stringify(obj));
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-const login = () => {
+const register = () => {
     let form = new FormData(registration_form);
     let newObject = {};
 
     form.forEach((value, key) => { newObject[key] = value });
 
-    fetch('https://localhost:' + LocalHost.value + '/Register', {
+    fetch('https://localhost:' + registration_localhost.value + '/Register', {
         method: 'post',
         headers: {
             'Accept': 'application/json',
@@ -71,19 +71,18 @@ const login = () => {
             //console.log(res.json());
             if (res.ok) {
                 clearForm();
-                return res.json();
+                return res.json()
+                // .then(u => {
+                //     const userObj = {
+                //         ID: u.id,
+                //         FirstName: u.FirstName,
+                //         LastName: u.LastName
+                //     }
+                //     saveToLocalStorage(userObj);
+                //     //goToHomePage();
+                // });
             }
             else message('Klaida 1: ' + res.status);
-
-        })
-        .then(u => {
-            const userObj = {
-                ID: u.id,
-                FirstName: u.FirstName,
-                LastName: u.LastName
-            }
-            saveToLocalStorage(userObj);
-            goLandingPage();
         })
         .catch((err) => message('Klaida 2: ' + err));
 }
@@ -92,7 +91,7 @@ const register_button = document.querySelector('#register_button');
 register_button.addEventListener('click', (e) => {
     e.preventDefault(); // Breaks manual refresh after submit
     if (validateForm())
-        login();
+        register();
     else {
         message('Visi laukai turi būti užpildyti!');
     }

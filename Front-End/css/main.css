@@ -21,32 +21,29 @@ body {
     align-items: center;
 }
 
-#page-title {
-    color: #db0000;
-    display: block;
-    width: 200px;
-    text-align: center;
+.container-logo {
     position: absolute;
     top: 10px;
-    left: calc(50% - 100px);
-    margin: 0;
-    padding: 0;
+    left: calc(50% - 200px);
+    width: 400px;
+    height: 80px;
+    background-image: url("../img/logo_400x80.png");
+    background-repeat: no-repeat;
 }
 
-.header {
+header {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-evenly;
     align-items: center;
     height: 40px;
-    margin-top: 50px;
+    margin-top: 95px;
     width: 1000px;
     background: #db0000;
     border: 1px solid black;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
 }
-
 
 #sub-menu {
     display: flex;
@@ -68,7 +65,7 @@ body {
     width: 1000px;
     margin-left: 20px;
     margin-right: 20px;
-    height: calc(100% - 160px);
+    height: calc(100% - 200px);
     padding: 0px;
     top: -1px;
     margin-top: 0px;
@@ -114,8 +111,24 @@ nav a:link {
     margin-top: 20px;
 }
 
-a.active {
-    font-size: 20px;
-    font-weight: 700;
+nav span {
+    margin-right: 30px;
+    margin-top: 20px;
     color: #fff;
+}
+
+a.active {
+    font-weight: 700;
+    color: #000;
+}
+
+/****************************************** FOOTER ******************************************/
+
+#footer {
+    color: #999;
+}
+
+#footer #logout_label:hover {
+    cursor: pointer;
+    color: #db0000;
 }

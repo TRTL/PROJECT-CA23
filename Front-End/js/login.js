@@ -5,7 +5,7 @@ const login_password = document.querySelector('#login_password');
 document.addEventListener("keypress", (event) => {
     if (event.key === "Enter") {
         event.preventDefault();
-        document.getElementById("login-button").click();
+        document.getElementById("login_button").click();
     }
 });
 
@@ -38,7 +38,7 @@ const clearForm = () => {
     login_password.value = '';
 };
 
-const goLandingPage = () => window.location.href = "landing-page.html";
+const goToHomePage = () => window.location.href = "home.html";
 
 const saveToLocalStorage = (obj) => localStorage.setItem('USER', JSON.stringify(obj));
 
@@ -50,7 +50,7 @@ const login = () => {
 
     form.forEach((value, key) => { newObject[key] = value });
 
-    fetch('https://localhost:' + LocalHost.value + '/Login', {
+    fetch('https://localhost:' + login_localhost.value + '/Login', {
         method: 'post',
         headers: {
             'Accept': 'application/json',
@@ -63,21 +63,20 @@ const login = () => {
             //console.log(res.json());
             if (res.ok) {
                 clearForm();
-                return res.json();
+                return res.json().then(u => {
+                    //console.log(u);
+                    const userObj = {
+                        userId: u.userId,
+                        token: u.token,
+                        localhost: login_localhost.value
+                    }
+                    saveToLocalStorage(userObj);
+                    goToHomePage();
+                });
             }
             else message('Klaida: ' + res.status);
-
         })
-        .then(u => {
-            console.log(u);
-            const userObj = {
-                username: u.username,
-                token: u.token
-            }
-            saveToLocalStorage(userObj);
-            goLandingPage();
-        })
-        .catch((err) => message('Klaida - ' + err));
+        .catch((err) => message('Klaida: ' + err));
 }
 
 
