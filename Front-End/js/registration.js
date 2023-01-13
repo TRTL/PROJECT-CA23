@@ -46,7 +46,7 @@ const clearForm = () => {
     registration_password.value = '';
 };
 
-const goToHomePage = () => window.location.href = "home.html";
+//const goToHomePage = () => window.location.href = "home.html";
 
 const saveToLocalStorage = (obj) => localStorage.setItem('USER', JSON.stringify(obj));
 

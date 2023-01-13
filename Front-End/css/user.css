@@ -1,0 +1,34 @@
+#container_user_info,
+#container_update_user_info,
+#container_address,
+#container_add_address,
+#container_update_address,
+#container_delete_address {
+    padding: 50px;
+    display: flex;
+    flex-flow: column;
+    align-items: flex-start;
+}
+
+#add_address_form,
+#update_address_form {
+    /* display: none; */
+    padding-top: 15px;
+    /* width: 950px; */
+    display: flex;
+    flex-flow: column;
+    align-items: flex-start;
+}
+
+#container_user_info div,
+#container_update_user_info form div {
+    margin: 5px 0px;
+}
+
+#address_form label {
+    margin: 0px 0px 1px 0px;
+}
+
+#address_form input {
+    margin: 0px 0px 5px 0px;
+}
