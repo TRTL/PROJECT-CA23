@@ -6,10 +6,22 @@ body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    background: #564d4d;
+    background: #111;
 }
 
-.container-small {
+.container-logo {
+    position: absolute;
+    top: calc(50% - 350px);
+    left: calc(50% - 200px);
+    width: 400px;
+    height: 100%;
+    background-image: url("../img/logo_400x80.png");
+    background-repeat: no-repeat;
+
+}
+
+.container-small-login,
+.container-small-registration {
     display: flex;
     flex-flow: row nowrap;
     justify-content: left;
@@ -28,15 +40,22 @@ body {
     border: solid 1px #db0000;
 }
 
-.container-login {
+.container-login,
+.container-registration {
     width: 300px;
     height: 100%;
 }
 
-form {
+#login_form {
     margin-top: 100px;
     text-align: left;
     padding: 20px;
+}
+
+#registration_form {
+    margin-top: 10px;
+    text-align: left;
+    padding: 0px 20px 12px 20px;
 }
 
 label {
@@ -76,13 +95,18 @@ input[type="submit"]:hover {
 .container-pic {
     width: 500px;
     height: 100%;
-    background-image: url("../img/login_bg.jpg");
+    background-image: url("../img/login_pic.jpg");
     border-left: solid 1px #db0000;
     border-top-right-radius: 9px;
     border-bottom-right-radius: 9px;
 }
 
-a {
+a.login-link {
+    padding: 0 0 0 42px;
+    color: #831010;
+}
+
+a.registration-link {
     padding: 0 0 0 72px;
     color: #831010;
 }
