@@ -5,7 +5,7 @@
         /// <summary>
         /// Username of logged in user
         /// </summary>
-        public string Username { get; set; }
+        public int UserId { get; set; }
 
         /// <summary>
         /// JWT
