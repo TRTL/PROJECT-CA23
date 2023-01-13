@@ -43,7 +43,7 @@ const getOptions = {
 }
 
 const getMyInfo = () => {
-    fetch('https://localhost:' + LocalHost.value + '/User/GetMyInfo', getOptions)
+    fetch('https://localhost:' + LocalHost.value + '/GetMyInfo/' + user.UserId + '/Info', getOptions)
         .then(obj => {
             console.log(obj)
             obj.json()

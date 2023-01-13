@@ -58,7 +58,7 @@ const login = () => {
 
     form.forEach((value, key) => { newObject[key] = value });
 
-    fetch('https://localhost:' + LocalHost.value + '/User/Register', {
+    fetch('https://localhost:' + LocalHost.value + '/Register', {
         method: 'post',
         headers: {
             'Accept': 'application/json',
