@@ -52,14 +52,13 @@ const saveToLocalStorage = (obj) => localStorage.setItem('USER', JSON.stringify(
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-const postURL = 'https://localhost:44307/User/Register';
 const login = () => {
     let form = new FormData(registration_form);
     let newObject = {};
 
     form.forEach((value, key) => { newObject[key] = value });
 
-    fetch(postURL, {
+    fetch('https://localhost:' + LocalHost.value + '/User/Register', {
         method: 'post',
         headers: {
             'Accept': 'application/json',

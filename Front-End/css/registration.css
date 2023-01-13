@@ -6,7 +6,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    background: linear-gradient(#6eaa6b, #b4d3b2);
+    background: #564d4d;
 }
 
 .container-small {
@@ -25,7 +25,7 @@ body {
     box-sizing: border-box;
     box-shadow: 0 15px 25px rgba(0, 0, 0, .5);
     border-radius: 10px;
-    border: solid 1px #243b55;
+    border: solid 1px #db0000;
 }
 
 .container-registration {
@@ -34,9 +34,9 @@ body {
 }
 
 form {
-    margin-top: 10px;
+    margin-top: 0px;
     text-align: left;
-    padding: 20px;
+    padding: 0px 20px 14px 20px;
 }
 
 label {
@@ -59,7 +59,7 @@ input[type="password"] {
 
 input[type="submit"] {
     width: 100%;
-    background-color: #b4d3b2;
+    background-color: #db0000;
     color: #000000;
     padding: 14px 20px;
     margin-top: 18px;
@@ -70,19 +70,19 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-    background-color: #6eaa6b;
+    background-color: #831010;
 }
 
 .container-pic {
     width: 500px;
     height: 100%;
     background-image: url("../img/register_bg.jpg");
-
+    border-left: solid 1px #db0000;
     border-top-right-radius: 9px;
     border-bottom-right-radius: 9px;
 }
 
 a {
     padding: 0 0 0 45px;
-    color: #6eaa6b;
+    color: #831010;
 }
