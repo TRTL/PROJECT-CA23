@@ -1,14 +1,19 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using PROJECT_CA23.Models;
+using PROJECT_CA23.Models.Api;
 using PROJECT_CA23.Models.Dto.AddressDto;
 using PROJECT_CA23.Models.Dto.AddressDtos;
 using PROJECT_CA23.Models.Dto.MediaDtos;
 using PROJECT_CA23.Repositories;
 using PROJECT_CA23.Repositories.IRepositories;
+using PROJECT_CA23.Services.Adapters;
 using PROJECT_CA23.Services.Adapters.IAdapters;
+using PROJECT_CA23.Services.IServices;
 using System.Net.Mime;
 using System.Security.Claims;
 
@@ -42,9 +47,8 @@ namespace PROJECT_CA23.Controllers
         /// <response code="500">Internal server error</response>
         [Authorize(Roles = "admin,user")]
         [HttpGet("/GetMediaById/{id:int}", Name = "GetMediaById")]
-        [ProducesResponseType(StatusCodes.Status200OK)] // , Type = typeof(AddressDto)
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Produces(MediaTypeNames.Application.Json)]
@@ -70,39 +74,77 @@ namespace PROJECT_CA23.Controllers
 
         }
 
+
         /// <summary>
-        /// Add media by mediaId
+        /// Get list of all medias
         /// </summary>
-        /// <param name="id">Media Id</param>
         /// <returns></returns>
         /// <response code="200">OK</response>
         /// <response code="400">Bad request</response>
         /// <response code="401">Client could not authenticate a request</response>
         /// <response code="500">Internal server error</response>
         [Authorize(Roles = "admin")]
-        [HttpPost("/AddMedia")]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Media))]
+        [HttpGet("/GetAllMedias")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<MediaDto>))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Produces(MediaTypeNames.Application.Json)]
+        public async Task<IActionResult> GetAllMedias()
+        {
+            _logger.LogInformation($"GetAllMedias atempt");
+            try
+            {
+                var allMedia = await _mediaRepo.GetAllAsync(null, new List<string>() { "Genres" });
+                var mediaDtoList = allMedia.Select(m => _mediaAdapter.Bind(m)).ToList();
+                return Ok(mediaDtoList);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{DateTime.Now} GetAllMedias exception error.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+
+        /// <summary>
+        /// Add media by entering fields of media
+        /// </summary>
+        /// <param name="req">Media fields. Type and title are required</param>
+        /// <returns></returns>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad request</response>
+        /// <response code="401">Client could not authenticate a request</response>
+        /// <response code="500">Internal server error</response>
+        [Authorize(Roles = "admin")]
+        [HttpPost("/AddMediaManually")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Media))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
-        public async Task<IActionResult> AddMedia([FromBody] MediaRequest req)
+        public async Task<IActionResult> AddMediaManually([FromBody] MediaRequest req)
         {
-            _logger.LogInformation("AddMedia atempt with data: {req}", JsonConvert.SerializeObject(req));
-
+            _logger.LogInformation("AddMediaManually atempt with data: {req}", JsonConvert.SerializeObject(req));
             try
             {
+                if (req.Type.IsNullOrEmpty() || req.Title.IsNullOrEmpty())
+                {
+                    _logger.LogInformation($"{DateTime.Now} AddMediaManually required fields are missing.");
+                    return BadRequest("Type and title are required fields");
+                }
+
                 var newMedia = _mediaAdapter.Bind(req);
                 await _mediaRepo.CreateAsync(newMedia);
                 return CreatedAtRoute("GetMediaById", new { id = newMedia.MediaId }, newMedia);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{DateTime.Now} AddMedia exception error.");
+                _logger.LogError(ex, $"{DateTime.Now} AddMediaManually exception error.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
 
         /// <summary>
         /// Deleting Media by mediaId
@@ -112,7 +154,9 @@ namespace PROJECT_CA23.Controllers
         [Authorize(Roles = "admin")]
         [HttpDelete("/DeleteMedia/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteMedia(int id)
         {
             _logger.LogInformation($"DeleteMedia atempt with id - {id}");
@@ -136,7 +180,6 @@ namespace PROJECT_CA23.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-
 
     }
 }
