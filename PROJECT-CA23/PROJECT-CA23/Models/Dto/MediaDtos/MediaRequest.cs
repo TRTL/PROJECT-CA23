@@ -7,11 +7,14 @@ namespace PROJECT_CA23.Models.Dto.MediaDtos
         /// <summary>
         /// Select a type for new media. Passible types: movie or series
         /// </summary>
-        public string? Type { get; set; }
+        [Required]
+        [MaxLength(30, ErrorMessage = "Type text cannot be longer than 30 symbols")]
+        public string Type { get; set; }
 
         /// <summary>
         /// Title of new media
         /// </summary>
+        [Required]
         [MaxLength(1000, ErrorMessage = "Title text cannot be longer than 1000 symbols")]
         public string Title { get; set; }
 

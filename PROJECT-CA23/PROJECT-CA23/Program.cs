@@ -30,6 +30,7 @@ namespace PROJECT_CA23
 
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IJwtService, JwtService>();
+            builder.Services.AddScoped<IMediaService, MediaService>();
                         
             builder.Services.AddScoped<IAddressAdapter, AddressAdapter>(); 
             builder.Services.AddScoped<IMediaAdapter, MediaAdapter>();
@@ -42,6 +43,15 @@ namespace PROJECT_CA23
 
             builder.Services.AddHttpContextAccessor();
 
+            // External Services
+            builder.Services.AddHttpClient("OmdbApiComServiceApi", client =>
+            {
+                client.BaseAddress = new Uri(builder.Configuration["OmdbApiCom:ServiceUrl"]);
+                client.Timeout = TimeSpan.FromSeconds(10);
+                client.DefaultRequestHeaders.Clear();
+            });
+
+            // JWT key
             var mySecretKey = builder.Configuration["MyApiSetting:MySecretKey"];
 
             builder.Services.AddAuthentication(x =>
