@@ -4,7 +4,7 @@ window.onload = function () {
         alert('Jūs nesate prisijungę! Prisijunkite, jei norite tęsti darbą.');
         window.location.href = "login.html";
     } else {
-        getMyUserInfo();
+        getMyInfo();
     };
 };
 
@@ -41,7 +41,7 @@ $('.tab_link').click(function () {
 })
 
 
-////////////////////////////////////////// Fetch //////////////////////////////////////////
+////////////////////////////////////////// getMyInfo //////////////////////////////////////////
 
 
 const getOptions = {
@@ -53,8 +53,8 @@ const getOptions = {
     }
 }
 
-const getMyUserInfo = () => {
-    fetch('https://localhost:' + user.localhost + '/GetUser/' + user.userId + '/Info', getOptions)
+const getMyInfo = () => {
+    fetch('https://localhost:' + user.localhost + '/GetUser/' + user.userId, getOptions)
         .then(obj => {
             console.log(obj)
 
@@ -78,28 +78,15 @@ const getMyUserInfo = () => {
                     get_user_info_created.innerHTML = userdata.created;
                     get_user_info_updated.innerHTML = userdata.updated;
                     get_user_info_lastlogin.innerHTML = userdata.lastLogin;
-
-
-                    // userId: 2                    ​
-                    // username: "user"    
-                    // role: "user"                ​
-                    // firstName: "Egle"                     ​                    ​
-                    // lastName: "Eglaite"  
-
-                    // created: "2023-01-12T13:36:57.6586161"
-                    // updated: "2023-01-12T13:36:57.6586162"     
-                    // lastLogin: "2023-01-12T13:36:57.6586163"  
-
-
-
-
                 })
         })
         .catch((err) => message(`Klaida: ${err}`));
 }
 
-get_user_info_button.addEventListener('click', getMyUserInfo);
+get_user_info_button.addEventListener('click', getMyInfo);
 
+
+//////////////////////////////////////////  //////////////////////////////////////////
 
 
 

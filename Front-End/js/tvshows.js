@@ -4,7 +4,7 @@ window.onload = function () {
         alert('Jūs nesate prisijungę! Prisijunkite, jei norite tęsti darbą.');
         window.location.href = "login.html";
     } else {
-        getMyInfo();
+        getUser();
     };
 };
 
@@ -14,7 +14,9 @@ const logout = () => {
 }
 footer_logout_label.addEventListener('click', logout);
 
-///////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////// Messages //////////////////////////////////////////
+
 
 let messageID = 0;
 const clearMessage = (id) => {
@@ -29,19 +31,20 @@ const message = (text) => {
     messageID++;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
 
-const getOptions = {
-    method: 'get',
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': "Bearer " + user.token
-    }
-}
+////////////////////////////////////////// getUser //////////////////////////////////////////
 
-const getMyInfo = () => {
-    fetch('https://localhost:' + user.localhost + '/GetUser/' + user.userId + '/Info', getOptions)
+
+const getUser = () => {
+    fetch('https://localhost:' + user.localhost + '/GetUser/' + user.userId,
+        {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + user.token
+            }
+        })
         .then(obj => {
             console.log(obj)
 

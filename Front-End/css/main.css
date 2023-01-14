@@ -78,7 +78,7 @@ header {
 #footer {
     display: flex;
     flex-flow: row nowrap;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
     height: 25px;
     width: 1000px;
@@ -88,6 +88,10 @@ header {
     border-right: 1px solid black;
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
+}
+
+#footer label {
+    padding: 0 20px;
 }
 
 
@@ -147,7 +151,7 @@ nav a.active {
     color: #ccc;
 }
 
-#footer #footer__logout_label:hover {
+#footer #footer_logout_label:hover {
     cursor: pointer;
     color: #db0000;
 }
