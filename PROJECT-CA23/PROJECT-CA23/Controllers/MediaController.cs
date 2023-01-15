@@ -94,7 +94,7 @@ namespace PROJECT_CA23.Controllers
             _logger.LogInformation($"GetAllMedias atempt");
             try
             {
-                var allMedia = await _mediaRepo.GetAllAsync(null, new List<string>() { "Genres" });
+                var allMedia = await _mediaRepo.GetAllAsync(includeTables: new List<string>() { "Genres" }, orderByColumn: o => o.Title);
                 var mediaDtoList = allMedia.Select(m => _mediaAdapter.Bind(m)).ToList();
                 return Ok(mediaDtoList);
             }
