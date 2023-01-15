@@ -68,11 +68,6 @@ const getMyInfo = () => {
                     if (userdata.role === 'admin') {
                         a_link_admin.style.display = "inline";
                     }
-                    else {
-                        message('You are not administrator. Go away!')
-                        alert('Redirecting to homepage')
-                        window.location.href = "mylist.html";
-                    }
                 })
         })
         .catch((err) => message(`Klaida: ${err}`));

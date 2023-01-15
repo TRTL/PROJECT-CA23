@@ -41,9 +41,21 @@
 .media_container {
     display: inline-block;
     margin: 15px 0px 0px 15px;
-    max-width: 160px;
-    max-height: 260px;
+    max-width: 120px;
+    max-height: 216px;
     /* pic = 240px */
+}
+
+.media_container:hover .m_c_mask {
+    display: block;
+}
+
+.m_c_mask {
+    display: none;
+    position: absolute;
+    width: 120px;
+    height: 178px;
+    background-color: #00000099;
 }
 
 .m_c_title {
@@ -53,6 +65,17 @@
     text-overflow: ellipsis;
     white-space: wrap;
     overflow: hidden;
+}
+
+.m_c_star {
+    margin: 36% 23%;
+    font-size: 50px;
+}
+
+.m_c_star:hover {
+    cursor: pointer;
+    text-shadow: 0px 0px 20px gold;
+
 }
 
 .m_c_pic {

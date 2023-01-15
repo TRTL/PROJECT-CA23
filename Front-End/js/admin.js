@@ -65,13 +65,13 @@ const getUser = () => {
                     footer_username_label.innerHTML = "Username: " + userdata.username;
                     footer_fullname_label.innerHTML = userdata.firstName + ' ' + userdata.lastName;
 
-                    if (userdata.role === 'admin') {
-                        a_link_admin.style.display = "inline";
-                    }
-                    else {
-                        message('You are not administrator. Go away!')
-                        alert('Redirecting to homepage')
-                        window.location.href = "mylist.html";
+                    if (userdata.role != 'admin') {
+                        message('You are not admin! Go away!')
+                        setTimeout(function () { message('3') }, 1000);
+                        setTimeout(function () { message('2') }, 2000);
+                        setTimeout(function () { message('1') }, 3000);
+                        setTimeout(function () { window.location.href = "mylist.html" }, 4000);
+
                     }
                 })
         })
