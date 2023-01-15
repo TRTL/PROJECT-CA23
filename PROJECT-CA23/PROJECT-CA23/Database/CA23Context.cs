@@ -20,8 +20,8 @@ namespace PROJECT_CA23.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var user = modelBuilder.Entity<User>();
-            user.HasKey(u => u.UserId);
-            user.HasAlternateKey(u => u.Username);
+            user.HasKey(user => user.UserId);
+            user.HasAlternateKey(user => user.Username);
             user.Property(user => user.Role)
                 .HasConversion<string>()
                 .HasMaxLength(50);
@@ -38,7 +38,7 @@ namespace PROJECT_CA23.Database
 
 
             var address = modelBuilder.Entity<Address>();
-            address.HasKey(a => a.AddressId);
+            address.HasKey(adr => adr.AddressId);
             address.HasData(CA23InitialData.addressInitialDataSeed);
 
 
@@ -57,25 +57,30 @@ namespace PROJECT_CA23.Database
                  .WithMany(genr => genr.Medias)
                  .UsingEntity(ent => ent.ToTable("MediaGenre")); // Media 100 - 100 Genre
             media.HasData(CA23InitialData.mediaInitialDataSeed);
+            media.HasMany(med => med.Genres)
+                 .WithMany(genr => genr.Medias)
+                 .UsingEntity(ent => ent.HasData(CA23InitialData.mediaGenreInitialDataSeed));
 
-            modelBuilder.Entity<Media>()
-                        .HasMany(med => med.Genres)
-                        .WithMany(genr => genr.Medias)
-                        .UsingEntity(ent => ent.HasData(CA23InitialData.mediaGenreInitialDataSeed));
+
+            var userMedia = modelBuilder.Entity<UserMedia>();
+            userMedia.HasKey(usrMed => usrMed.UserMediaId);
+            userMedia.HasOne(usrMed => usrMed.Review)
+                     .WithOne(rev => rev.UserMedia)
+                     .HasForeignKey<Review>(rev => rev.ReviewId); // UserMedia 1 - 1 Review
 
 
             var review = modelBuilder.Entity<Review>();
-            review.HasKey(r => new { r.UserId, r.MediaId });
-            review.Property(r => r.UserRating)
+            review.HasKey(rev => rev.ReviewId);
+            review.Property(rev => rev.UserRating)
                   .HasConversion<string>()
-                  .HasMaxLength(50);
+                  .HasMaxLength(50); 
 
 
             var notification = modelBuilder.Entity<Notification>();
-            notification.HasKey(n => n.NotificationId);
-            notification.HasOne(n => n.User)
-                        .WithMany(u => u.Notifications)
-                        .HasForeignKey(n => n.UserId); // User 1 - 100 Notifications
+            notification.HasKey(noti => noti.NotificationId);
+            notification.HasOne(noti => noti.User)
+                        .WithMany(user => user.Notifications)
+                        .HasForeignKey(noti => noti.UserId); // User 1 - 100 Notifications
         }
     }
 }

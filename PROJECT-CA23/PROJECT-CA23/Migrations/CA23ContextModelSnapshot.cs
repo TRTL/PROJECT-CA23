@@ -94,7 +94,7 @@ namespace PROJECTCA23.Migrations
 
                     b.HasKey("AddressId");
 
-                    b.ToTable("Addresses", (string)null);
+                    b.ToTable("Addresses");
 
                     b.HasData(
                         new
@@ -116,13 +116,14 @@ namespace PROJECTCA23.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.HasKey("GenreId");
 
                     b.HasAlternateKey("Name");
 
-                    b.ToTable("Genres", (string)null);
+                    b.ToTable("Genres");
 
                     b.HasData(
                         new
@@ -207,7 +208,7 @@ namespace PROJECTCA23.Migrations
 
                     b.HasKey("MediaId");
 
-                    b.ToTable("Medias", (string)null);
+                    b.ToTable("Medias");
 
                     b.HasData(
                         new
@@ -271,12 +272,12 @@ namespace PROJECTCA23.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications", (string)null);
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("PROJECT_CA23.Models.Review", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("ReviewId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("MediaId")
@@ -286,16 +287,21 @@ namespace PROJECTCA23.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("UserRating")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.HasKey("UserId", "MediaId");
+                    b.HasKey("ReviewId");
 
                     b.HasIndex("MediaId");
 
-                    b.ToTable("Reviews", (string)null);
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("PROJECT_CA23.Models.User", b =>
@@ -348,21 +354,21 @@ namespace PROJECTCA23.Migrations
 
                     b.HasAlternateKey("Username");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
                             UserId = 1,
-                            Created = new DateTime(2023, 1, 12, 1, 21, 21, 217, DateTimeKind.Local).AddTicks(2016),
+                            Created = new DateTime(2023, 1, 15, 18, 45, 26, 336, DateTimeKind.Local).AddTicks(3741),
                             FirstName = "Jonas",
                             IsDeleted = false,
-                            LastLogin = new DateTime(2023, 1, 12, 1, 21, 21, 219, DateTimeKind.Local).AddTicks(5485),
+                            LastLogin = new DateTime(2023, 1, 15, 18, 45, 26, 338, DateTimeKind.Local).AddTicks(8789),
                             LastName = "Jonaitis",
-                            PasswordHash = new byte[] { 81, 194, 178, 166, 87, 220, 172, 52, 31, 158, 181, 137, 164, 100, 124, 13, 209, 73, 122, 99, 166, 199, 128, 190, 251, 76, 252, 67, 219, 152, 144, 227 },
-                            PasswordSalt = new byte[] { 172, 141, 58, 93, 231, 246, 35, 168, 108, 216, 246, 10, 21, 208, 36, 196, 58, 216, 29, 128, 254, 84, 118, 118, 104, 60, 201, 102, 251, 131, 246, 157, 216, 100, 156, 81, 101, 139, 200, 88, 216, 129, 211, 153, 250, 207, 18, 44, 157, 172, 103, 55, 17, 55, 98, 218, 62, 216, 106, 0, 121, 19, 213, 137 },
+                            PasswordHash = new byte[] { 183, 204, 49, 40, 127, 146, 21, 85, 179, 167, 202, 172, 61, 190, 141, 253, 67, 214, 182, 47, 185, 125, 92, 58, 207, 218, 29, 3, 223, 188, 49, 183 },
+                            PasswordSalt = new byte[] { 247, 19, 62, 220, 24, 203, 10, 48, 183, 92, 18, 109, 184, 229, 178, 52, 171, 210, 57, 212, 135, 179, 218, 6, 118, 248, 144, 144, 68, 253, 235, 104, 142, 185, 253, 8, 226, 30, 104, 45, 184, 151, 3, 27, 196, 216, 249, 121, 221, 119, 53, 125, 35, 125, 226, 188, 193, 123, 138, 130, 244, 225, 70, 137 },
                             Role = "admin",
-                            Updated = new DateTime(2023, 1, 12, 1, 21, 21, 219, DateTimeKind.Local).AddTicks(5069),
+                            Updated = new DateTime(2023, 1, 15, 18, 45, 26, 338, DateTimeKind.Local).AddTicks(8370),
                             Username = "admin"
                         });
                 });
@@ -383,6 +389,9 @@ namespace PROJECTCA23.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("ReviewId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
@@ -392,7 +401,7 @@ namespace PROJECTCA23.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserMedias", (string)null);
+                    b.ToTable("UserMedias");
                 });
 
             modelBuilder.Entity("GenreMedia", b =>
@@ -440,6 +449,12 @@ namespace PROJECTCA23.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("PROJECT_CA23.Models.UserMedia", "UserMedia")
+                        .WithOne("Review")
+                        .HasForeignKey("PROJECT_CA23.Models.Review", "ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PROJECT_CA23.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -449,6 +464,8 @@ namespace PROJECTCA23.Migrations
                     b.Navigation("Media");
 
                     b.Navigation("User");
+
+                    b.Navigation("UserMedia");
                 });
 
             modelBuilder.Entity("PROJECT_CA23.Models.UserMedia", b =>
@@ -482,6 +499,11 @@ namespace PROJECTCA23.Migrations
                     b.Navigation("Notifications");
 
                     b.Navigation("UserMedias");
+                });
+
+            modelBuilder.Entity("PROJECT_CA23.Models.UserMedia", b =>
+                {
+                    b.Navigation("Review");
                 });
 #pragma warning restore 612, 618
         }

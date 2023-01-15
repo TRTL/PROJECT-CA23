@@ -15,9 +15,13 @@ namespace PROJECT_CA23.Models
         [Required]
         public int MediaId { get; set; }
         public virtual Media Media { get; set; }
+
         public EMediaStatus MediaStatus { get; set; } = EMediaStatus.Wishlist;
 
         [MaxLength(1000)]
         public string? Note { get; set; }
+
+        public int? ReviewId { get; set; }
+        public virtual Review? Review { get; set; }
     }
 }
