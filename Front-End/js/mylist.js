@@ -5,6 +5,7 @@ window.onload = function () {
         window.location.href = "login.html";
     } else {
         getUser();
+        getAllUserMedias();
     };
 };
 
@@ -44,21 +45,19 @@ $('.tab_link').click(function () {
 ////////////////////////////////////////// getUser //////////////////////////////////////////
 
 
-const getOptions = {
-    method: 'get',
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': "Bearer " + user.token
-    }
-}
-
 const getUser = () => {
-    fetch('https://localhost:' + user.localhost + '/GetUser/' + user.userId, getOptions)
-        .then(obj => {
-            //console.log(obj)
-
-            obj.json()
+    fetch('https://localhost:' + user.localhost + '/GetUser/' + user.userId,
+        {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + user.token
+            }
+        })
+        .then(res => {
+            //console.log(res)
+            res.json()
                 .then(userdata => {
                     //console.log(userdata)
                     footer_userid_label.innerHTML = "ID: " + userdata.userId;
@@ -69,16 +68,46 @@ const getUser = () => {
                     if (userdata.role === 'admin') {
                         a_link_admin.style.display = "inline";
                     }
-                    else {
-                        message('You are not administrator. Go away!')
-                        alert('Redirecting to homepage')
-                        window.location.href = "mylist.html";
-                    }
                 })
         })
         .catch((err) => message(`Klaida: ${err}`));
 }
 
+////////////////////////////////////////// getAllUserMedias //////////////////////////////////////////
+
+
+const getAllUserMedias = () => {
+    fetch('https://localhost:' + user.localhost + '/GetAllUserMedias?UserId=' + user.userId,
+        {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + user.token
+            }
+        })
+        .then(res => {
+            console.log(res)
+            res.json()
+                .then(usermediadata => {
+                    console.log(usermediadata)
+                    usermediadata.forEach(media => {
+                        all_movies_table_body.innerHTML +=
+                            '<tr id="all_users_table_user_"' + media.userMediaId + '>' +
+                            '<td>' + media.userMediaStatus + '</td>' +
+                            '<td>' + media.type + '</td>' +
+                            '<td>' + media.title + '</td>' +
+                            '<td>' + media.year + '</td>' +
+                            '<td>' + media.imdbId + '</td>' +
+                            '<td>' + media.imdbRating + '</td>' +
+                            '<td>' + media.userRating + '</td>' +
+                            '<td></td>' +
+                            '</tr>';
+                    });
+                })
+        })
+        .catch((err) => message(`Klaida: ${err}`));
+}
 
 
 
