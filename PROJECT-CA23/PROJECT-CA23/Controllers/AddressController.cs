@@ -47,6 +47,7 @@ namespace PROJECT_CA23.Controllers
         /// <response code="200">OK</response>
         /// <response code="400">Bad request</response>
         /// <response code="401">Client could not authenticate a request</response>
+        /// <response code="404">Not found</response>
         /// <response code="500">Internal server error</response>
         [Authorize(Roles = "admin,user")]
         [HttpGet("/GetAddress/{id:int}", Name = "GetAddress")]
