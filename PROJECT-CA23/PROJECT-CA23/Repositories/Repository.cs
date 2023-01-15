@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.OpenApi.Any;
 using PROJECT_CA23.Database;
 using PROJECT_CA23.Repositories.IRepositories;
 using System.Linq.Expressions;
@@ -29,22 +31,21 @@ namespace PROJECT_CA23.Repositories
             return await query.AnyAsync(filter);
         }
 
-        public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null)
-        {
-            IQueryable<TEntity> query = _dbSet;
-            if (filter != null) query = query.Where(filter);
-            return await query.ToListAsync();
-        }
-
-        public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter, ICollection<string> includeTables)
+        public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null, 
+                                                     ICollection<string>? includeTables = null,
+                                                     Expression<Func<TEntity, dynamic>>? orderByColumn = null)
         {
             IQueryable<TEntity> query = _dbSet;
             if (filter != null) query = query.Where(filter);
 
+            if (includeTables != null)
             foreach (var tableName in includeTables)
             {
                 query = query.Include(tableName);
             }
+
+            query = query.OrderBy(orderByColumn);
+
             return await query.ToListAsync();
         }
 

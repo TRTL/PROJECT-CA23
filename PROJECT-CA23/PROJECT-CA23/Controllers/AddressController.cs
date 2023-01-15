@@ -113,7 +113,7 @@ namespace PROJECT_CA23.Controllers
                     return Forbid();
                 }
 
-                var allAddresses = await _addressRepo.GetAllAsync(null, new List<string>() { "User" });
+                var allAddresses = await _addressRepo.GetAllAsync(includeTables: new List<string>() { "User" });
                 var addressDtoList = allAddresses.Select(a => _addressAdapter.Bind(a)).ToList();
 
                 return Ok(addressDtoList);
