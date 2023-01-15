@@ -23,5 +23,16 @@ namespace PROJECT_CA23.Services.Adapters
                 ReviewId = userMedia.ReviewId ?? null
             };
         }
+
+        public UserMedia Bind(User user, Media media)
+        {
+            return new UserMedia()
+            {
+                UserId= user.UserId,
+                MediaId = media.MediaId,
+                Note = null,
+                ReviewId = null
+            };
+        }
     }
 }

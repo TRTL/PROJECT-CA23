@@ -16,7 +16,7 @@ namespace PROJECT_CA23.Models
         public int MediaId { get; set; }
         public virtual Media Media { get; set; }
 
-        public EMediaStatus MediaStatus { get; set; } = EMediaStatus.Wishlist;
+        public EUserMediaStatus UserMediaStatus { get; set; } = EUserMediaStatus.Wishlist;
 
         [MaxLength(1000)]
         public string? Note { get; set; }

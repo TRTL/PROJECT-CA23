@@ -5,7 +5,7 @@
         /// <summary>
         /// User media Id
         /// </summary>
-        public int UserMediaId { get; set; }
+        public int? UserMediaId { get; set; }
 
         /// <summary>
         /// User Id

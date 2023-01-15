@@ -64,6 +64,9 @@ namespace PROJECT_CA23.Database
 
             var userMedia = modelBuilder.Entity<UserMedia>();
             userMedia.HasKey(usrMed => usrMed.UserMediaId);
+            userMedia.Property(usrMed => usrMed.UserMediaStatus)
+                     .HasConversion<string>()
+                     .HasMaxLength(50);
             userMedia.HasOne(usrMed => usrMed.Review)
                      .WithOne(rev => rev.UserMedia)
                      .HasForeignKey<Review>(rev => rev.ReviewId); // UserMedia 1 - 1 Review
