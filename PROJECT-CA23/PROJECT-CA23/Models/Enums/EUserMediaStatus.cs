@@ -1,6 +1,6 @@
 ﻿namespace PROJECT_CA23.Models.Enums
 {
-    public enum EMediaStatus
+    public enum EUserMediaStatus
     {
         Wishlist,
         Watching,

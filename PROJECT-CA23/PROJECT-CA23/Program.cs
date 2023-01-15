@@ -34,7 +34,8 @@ namespace PROJECT_CA23
                         
             builder.Services.AddScoped<IAddressAdapter, AddressAdapter>(); 
             builder.Services.AddScoped<IMediaAdapter, MediaAdapter>();
-            builder.Services.AddScoped<IUserAdapter, UserAdapter>(); 
+            builder.Services.AddScoped<IUserAdapter, UserAdapter>();
+            builder.Services.AddScoped<IUserMediaAdapter, UserMediaAdapter>();
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IAddressRepository, AddressRepository>();

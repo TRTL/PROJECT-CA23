@@ -19,7 +19,7 @@ namespace PROJECTCA23.Migrations
                 {
                     GenreId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -145,32 +145,6 @@ namespace PROJECTCA23.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Reviews",
-                columns: table => new
-                {
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    MediaId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserRating = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    ReviewText = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Reviews", x => new { x.UserId, x.MediaId });
-                    table.ForeignKey(
-                        name: "FK_Reviews_Medias_MediaId",
-                        column: x => x.MediaId,
-                        principalTable: "Medias",
-                        principalColumn: "MediaId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Reviews_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "UserMedias",
                 columns: table => new
                 {
@@ -179,7 +153,8 @@ namespace PROJECTCA23.Migrations
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
                     MediaId = table.Column<int>(type: "INTEGER", nullable: false),
                     MediaStatus = table.Column<int>(type: "INTEGER", nullable: false),
-                    Note = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true)
+                    Note = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
+                    ReviewId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -192,6 +167,39 @@ namespace PROJECTCA23.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserMedias_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reviews",
+                columns: table => new
+                {
+                    ReviewId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    MediaId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserRating = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    ReviewText = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reviews", x => x.ReviewId);
+                    table.ForeignKey(
+                        name: "FK_Reviews_Medias_MediaId",
+                        column: x => x.MediaId,
+                        principalTable: "Medias",
+                        principalColumn: "MediaId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reviews_UserMedias_ReviewId",
+                        column: x => x.ReviewId,
+                        principalTable: "UserMedias",
+                        principalColumn: "UserMediaId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reviews_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
@@ -222,7 +230,7 @@ namespace PROJECTCA23.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "Created", "FirstName", "IsDeleted", "LastLogin", "LastName", "PasswordHash", "PasswordSalt", "Role", "Updated", "Username" },
-                values: new object[] { 1, new DateTime(2023, 1, 12, 1, 21, 21, 217, DateTimeKind.Local).AddTicks(2016), "Jonas", false, new DateTime(2023, 1, 12, 1, 21, 21, 219, DateTimeKind.Local).AddTicks(5485), "Jonaitis", new byte[] { 81, 194, 178, 166, 87, 220, 172, 52, 31, 158, 181, 137, 164, 100, 124, 13, 209, 73, 122, 99, 166, 199, 128, 190, 251, 76, 252, 67, 219, 152, 144, 227 }, new byte[] { 172, 141, 58, 93, 231, 246, 35, 168, 108, 216, 246, 10, 21, 208, 36, 196, 58, 216, 29, 128, 254, 84, 118, 118, 104, 60, 201, 102, 251, 131, 246, 157, 216, 100, 156, 81, 101, 139, 200, 88, 216, 129, 211, 153, 250, 207, 18, 44, 157, 172, 103, 55, 17, 55, 98, 218, 62, 216, 106, 0, 121, 19, 213, 137 }, "admin", new DateTime(2023, 1, 12, 1, 21, 21, 219, DateTimeKind.Local).AddTicks(5069), "admin" });
+                values: new object[] { 1, new DateTime(2023, 1, 15, 18, 45, 26, 336, DateTimeKind.Local).AddTicks(3741), "Jonas", false, new DateTime(2023, 1, 15, 18, 45, 26, 338, DateTimeKind.Local).AddTicks(8789), "Jonaitis", new byte[] { 183, 204, 49, 40, 127, 146, 21, 85, 179, 167, 202, 172, 61, 190, 141, 253, 67, 214, 182, 47, 185, 125, 92, 58, 207, 218, 29, 3, 223, 188, 49, 183 }, new byte[] { 247, 19, 62, 220, 24, 203, 10, 48, 183, 92, 18, 109, 184, 229, 178, 52, 171, 210, 57, 212, 135, 179, 218, 6, 118, 248, 144, 144, 68, 253, 235, 104, 142, 185, 253, 8, 226, 30, 104, 45, 184, 151, 3, 27, 196, 216, 249, 121, 221, 119, 53, 125, 35, 125, 226, 188, 193, 123, 138, 130, 244, 225, 70, 137 }, "admin", new DateTime(2023, 1, 15, 18, 45, 26, 338, DateTimeKind.Local).AddTicks(8370), "admin" });
 
             migrationBuilder.InsertData(
                 table: "Addresses",
@@ -258,6 +266,11 @@ namespace PROJECTCA23.Migrations
                 column: "MediaId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Reviews_UserId",
+                table: "Reviews",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserMedias_MediaId",
                 table: "UserMedias",
                 column: "MediaId");
@@ -284,10 +297,10 @@ namespace PROJECTCA23.Migrations
                 name: "Reviews");
 
             migrationBuilder.DropTable(
-                name: "UserMedias");
+                name: "Genres");
 
             migrationBuilder.DropTable(
-                name: "Genres");
+                name: "UserMedias");
 
             migrationBuilder.DropTable(
                 name: "Medias");
