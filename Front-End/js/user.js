@@ -4,7 +4,7 @@ window.onload = function () {
         alert('Jūs nesate prisijungę! Prisijunkite, jei norite tęsti darbą.');
         window.location.href = "login.html";
     } else {
-        getMyUserInfo();
+        getMyInfo();
     };
 };
 
@@ -41,20 +41,19 @@ $('.tab_link').click(function () {
 })
 
 
-////////////////////////////////////////// Fetch //////////////////////////////////////////
+////////////////////////////////////////// getMyInfo //////////////////////////////////////////
 
 
-const getOptions = {
-    method: 'get',
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': "Bearer " + user.token
-    }
-}
-
-const getMyUserInfo = () => {
-    fetch('https://localhost:' + user.localhost + '/GetUser/' + user.userId + '/Info', getOptions)
+const getMyInfo = () => {
+    fetch('https://localhost:' + user.localhost + '/GetUser/' + user.userId,
+        {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + user.token
+            }
+        })
         .then(obj => {
             console.log(obj)
 
@@ -69,7 +68,35 @@ const getMyUserInfo = () => {
                     if (userdata.role === 'admin') {
                         a_link_admin.style.display = "inline";
                     }
+                    else {
+                        message('You are not administrator. Go away!')
+                        alert('Redirecting to homepage')
+                        window.location.href = "mylist.html";
+                    }
+                })
+        })
+        .catch((err) => message(`Klaida: ${err}`));
+}
 
+
+////////////////////////////////////////// getUserInfo //////////////////////////////////////////
+
+
+const getUserInfo = () => {
+    fetch('https://localhost:' + user.localhost + '/GetUser/' + user.userId,
+        {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + user.token
+            }
+        })
+        .then(obj => {
+            console.log(obj)
+
+            obj.json()
+                .then(userdata => {
                     get_user_info_userId.innerHTML = userdata.userId;
                     get_user_info_username.innerHTML = userdata.username;
                     get_user_info_role.innerHTML = userdata.role;
@@ -78,30 +105,84 @@ const getMyUserInfo = () => {
                     get_user_info_created.innerHTML = userdata.created;
                     get_user_info_updated.innerHTML = userdata.updated;
                     get_user_info_lastlogin.innerHTML = userdata.lastLogin;
-
-
-                    // userId: 2                    ​
-                    // username: "user"    
-                    // role: "user"                ​
-                    // firstName: "Egle"                     ​                    ​
-                    // lastName: "Eglaite"  
-
-                    // created: "2023-01-12T13:36:57.6586161"
-                    // updated: "2023-01-12T13:36:57.6586162"     
-                    // lastLogin: "2023-01-12T13:36:57.6586163"  
-
-
-
-
                 })
         })
         .catch((err) => message(`Klaida: ${err}`));
 }
 
-get_user_info_button.addEventListener('click', getMyUserInfo);
+get_user_info_button.addEventListener('click', getUserInfo);
 
 
+////////////////////////////////////////// getAddress //////////////////////////////////////////
 
+
+const getAddress = () => {
+    fetch('https://localhost:' + user.localhost + '/GetAddress/' + user.userId,
+        {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + user.token
+            }
+        })
+        .then(res => {
+            console.log(res)
+            if (res.ok) {
+                message(res);
+                res.json()
+                    .then(addressdata => {
+                        get_address_address_id.innerHTML = addressdata.addressId;
+                        get_address_country.innerHTML = addressdata.country;
+                        get_address_city.innerHTML = addressdata.city;
+                        get_address_address.innerHTML = addressdata.addressText;
+                        get_address_postcode.innerHTML = addressdata.postCode;
+                    })
+            }
+            else {
+                //message('Klaida: ' + res.status + ' ' + res.statusText);
+                res.text()
+                    .then(text => {
+                        message('Klaida: ' + res.status + ' ' + res.statusText + ' ' + text);
+                    })
+            }
+        })
+        .catch((err) => message(`Klaida: ${err}`));
+}
+
+get_address_button.addEventListener('click', getAddress);
+
+
+////////////////////////////////////////// updateAddress //////////////////////////////////////////
+
+
+const updateAddress = () => {
+    let form_UpdateAddress = new FormData(update_address_form);
+    let newObject_UpdateAddress = {};
+    newObject_UpdateAddress['addressId'] = get_address_address_id.innerHTML;
+    form_UpdateAddress.forEach((value, key) => { newObject_UpdateAddress[key] = value });
+
+    fetch('https://localhost:' + user.localhost + '/UpdateAddress',
+        {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + user.token
+            },
+            body: JSON.stringify(newObject_UpdateAddress)
+        })
+        .then(res => {
+            console.log(res)
+            if (res.ok) {
+                message('Address updated successfully')
+            }
+            else message('Klaida: ' + res.status + ' ' + res.statusText);
+        })
+        .catch((err) => message(`Klaida: ${err}`));
+}
+
+update_address_button.addEventListener('click', updateAddress);
 
 
 

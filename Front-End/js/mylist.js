@@ -4,7 +4,7 @@ window.onload = function () {
         alert('Jūs nesate prisijungę! Prisijunkite, jei norite tęsti darbą.');
         window.location.href = "login.html";
     } else {
-        getMyInfo();
+        getUser();
     };
 };
 
@@ -14,7 +14,9 @@ const logout = () => {
 }
 footer_logout_label.addEventListener('click', logout);
 
-///////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////// Messages //////////////////////////////////////////
+
 
 let messageID = 0;
 const clearMessage = (id) => {
@@ -29,7 +31,18 @@ const message = (text) => {
     messageID++;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////// Tab links //////////////////////////////////////////
+
+
+$('.tab_link').click(function () {
+    var contClass = $(this).data('div');
+    $('.hidable').hide().filter('.' + contClass).show();
+})
+
+
+////////////////////////////////////////// getUser //////////////////////////////////////////
+
 
 const getOptions = {
     method: 'get',
@@ -40,8 +53,8 @@ const getOptions = {
     }
 }
 
-const getMyInfo = () => {
-    fetch('https://localhost:' + user.localhost + '/GetUser/' + user.userId + '/Info', getOptions)
+const getUser = () => {
+    fetch('https://localhost:' + user.localhost + '/GetUser/' + user.userId, getOptions)
         .then(obj => {
             //console.log(obj)
 
@@ -55,6 +68,11 @@ const getMyInfo = () => {
 
                     if (userdata.role === 'admin') {
                         a_link_admin.style.display = "inline";
+                    }
+                    else {
+                        message('You are not administrator. Go away!')
+                        alert('Redirecting to homepage')
+                        window.location.href = "mylist.html";
                     }
                 })
         })

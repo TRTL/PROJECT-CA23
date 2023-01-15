@@ -6,6 +6,10 @@ namespace PROJECT_CA23.Models.Dto.AddressDto
     public class AddressDto
     {
         /// <summary>
+        /// Address Id
+        /// </summary>
+        public int AddressId { get; set; }
+        /// <summary>
         /// Id of user that this address belongs to
         /// </summary>
         public int UserId { get; set; }

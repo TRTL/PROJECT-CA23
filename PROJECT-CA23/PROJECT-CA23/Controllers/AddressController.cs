@@ -134,12 +134,14 @@ namespace PROJECT_CA23.Controllers
         /// <response code="200">OK</response>
         /// <response code="400">Bad request</response>
         /// <response code="401">Client could not authenticate a request</response>
+        /// <response code="404">Not found</response>
         /// <response code="500">Internal server error</response>
         [Authorize(Roles = "admin,user")]
         [HttpPost("/AddAddress")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(AddressDto))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
@@ -156,8 +158,10 @@ namespace PROJECT_CA23.Controllers
                     _logger.LogWarning("User {currentUserId} tried to access user {id} info", currentUserId, req.UserId);
                     return Forbid();
                 }
-
+                
                 var user = _userRepo.Get(req.UserId);
+                if (user.Address != null) return NotFound("User already has an address");
+
                 var newAddress = _addressAdapter.Bind(req, user);
                 await _addressRepo.CreateAsync(newAddress);
                 return CreatedAtRoute("GetAddress", new { id = newAddress.AddressId }, _addressAdapter.Bind(newAddress));
@@ -173,19 +177,18 @@ namespace PROJECT_CA23.Controllers
         /// <summary>
         /// Update address by addressId
         /// </summary>
-        /// <param name="req">Updatable fields: first and last name</param>
+        /// <param name="req">Updatable fields</param>
         /// <returns></returns>
         /// <response code="204">Updated</response>
         /// <response code="400">Bad request</response>
         /// <response code="401">Client could not authenticate a request</response>
         /// <response code="404">Not found</response>
         /// <response code="500">Internal server error</response>
-        [HttpPut("{id:int}/Update")]
+        [HttpPut("/UpdateAddress")]
         [Authorize(Roles = "admin,user")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Consumes(MediaTypeNames.Application.Json)]
@@ -207,6 +210,7 @@ namespace PROJECT_CA23.Controllers
                 }
 
                 var address = await _addressRepo.GetAsync(a => a.AddressId == req.AddressId);
+                address = _addressAdapter.Bind(address, req);
                 await _addressRepo.UpdateAsync(address);
                 return NoContent();
             }
@@ -218,9 +222,9 @@ namespace PROJECT_CA23.Controllers
         }
 
         /// <summary>
-        /// Delete address by address id
+        /// Delete address by user id
         /// </summary>
-        /// <param name="id">Address id that will be deleted</param>
+        /// <param name="id">User id whos address will be deleted</param>
         /// <returns></returns>
         /// <response code="204">Updated</response>
         /// <response code="400">Bad request</response>
@@ -245,7 +249,7 @@ namespace PROJECT_CA23.Controllers
                     return BadRequest("DeleteAddress id is incorrect.");
                 }
 
-                var address = await _addressRepo.GetAsync(a => a.AddressId == id);
+                var address = await _addressRepo.GetAsync(a => a.UserId == id);
                 if (address == null)
                 {
                     _logger.LogInformation($"{DateTime.Now} Failed DeleteAddress attempt with AddressId - {id}. AddressId not found.");

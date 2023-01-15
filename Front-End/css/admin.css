@@ -1,0 +1,18 @@
+h3 {
+    padding-left: 20px;
+}
+
+#omdb_search_media_container,
+#omdb_result_media_container {
+    margin-top: 30px;
+    margin-left: 50px;
+}
+
+#omdb_search_media_container div {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+#search_for_media_at_omdb_input {
+    width: 400px;
+}

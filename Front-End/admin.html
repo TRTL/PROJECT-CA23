@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <title>Admin</title>
     <link rel="shortcut icon" href="#">
 </head>
@@ -24,14 +26,84 @@
         </nav>
     </header>
     <section id="sub-menu">
-
-
+        <a href="#" class="tab_link" data-div="1" id="get_all_users_button">All users</a>
+        <a href="#" class="tab_link" data-div="2" id="get_all_addresses_button">All addresses</a>
+        <a href="#" class="tab_link" data-div="3" id="search_for_media_button">Search for media</a>
+        <a href="#" class="tab_link" data-div="4" id="get_all_media_button">All medias</a>
+        <a href="#" class="tab_link" data-div="5">All genres</a>
 
     </section>
     <section id="main-container">
+        <div class="hidable 1" style="display: none;">
+            <h3>All users:</h3>
+            <table>
+                <thead>
+                    <th>User Id</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Created</th>
+                    <th>Updated</th>
+                    <th>Last login</th>
+                    <th>Deleted</th>
+                    <th>Actions</th>
+                </thead>
+                <tbody id="all_users_table_body">
+                </tbody>
+            </table>
+        </div>
+        <div class="hidable 2" style="display: none;">
+            <h3>All addresses:</h3>
+            <table>
+                <thead>
+                    <th>User Id</th>
+                    <th>Name</th>
+                    <th>Country</th>
+                    <th>City</th>
+                    <th>Address</th>
+                    <th>Post code</th>
+                    <th>Actions</th>
+                </thead>
+                <tbody id="all_addresses_table_body">
+                </tbody>
+            </table>
+        </div>
+        <div class="hidable 3" style="display: none;">
+            <div id="omdb_search_media_container">
+                <div>
+                    <label>Search:</label>
+                    <input type="text" id="search_for_media_at_omdb_input">
+                </div>
+                <div>
+                    <input id="search_for_media_at_omdb_button" type="submit" value="Search">
+                </div>
+                <div>
+                    <input id="add_media_from_omdb_button" type="submit" value="Add">
+                </div>
+                </form>
+            </div>
+            <div id="omdb_result_media_container">
 
-
-
+            </div>
+        </div>
+        <div class="hidable 4" style="display: none;">
+            <h3>All media:</h3>
+            <table>
+                <thead>
+                    <th>mediaId</th>
+                    <th>Type</th>
+                    <th>Title</th>
+                    <th>year</th>
+                    <th>Genres</th>
+                    <th>IMDB Id</th>
+                    <th>Rating</th>
+                    <th>Actions</th>
+                </thead>
+                <tbody id="all_media_table_body">
+                </tbody>
+            </table>
+        </div>
     </section>
     <section id="footer">
         <label id="footer_userid_label"></label>

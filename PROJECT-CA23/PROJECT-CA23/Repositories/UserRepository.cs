@@ -46,7 +46,10 @@ namespace PROJECT_CA23.Repositories
             return true;
         }
 
-        public User Get(int id) => _context.Users.First(c => c.UserId == id);
+        public User Get(int id)
+        { 
+            return _context.Users.Include("Address").First(c => c.UserId == id); 
+        }
 
         public IEnumerable<User> GetAll() => _context.Users.ToList();
 

@@ -12,6 +12,7 @@ namespace PROJECT_CA23.Services.Adapters
         {
             var dto = new AddressDto()
             {
+                AddressId = address.AddressId,
                 UserId = address.UserId,
                 FirstName = address.User.FirstName,
                 LastName = address.User.FirstName,
@@ -35,6 +36,15 @@ namespace PROJECT_CA23.Services.Adapters
                 PostCode = req.PostCode
             };
             return newAddress;
+        }
+
+        public Address Bind(Address address, UpdateAddressRequest req)
+        {
+            address.Country = req.Country;
+            address.City = req.City;
+            address.AddressText = req.AddressText;
+            address.PostCode = req.PostCode;
+            return address;
         }
     }
 }

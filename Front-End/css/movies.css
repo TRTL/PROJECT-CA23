@@ -1,0 +1,69 @@
+#container_user_info,
+#container_update_user_info,
+#container_address,
+#container_add_address,
+#container_update_address,
+#container_delete_address {
+    padding: 50px;
+    display: flex;
+    flex-flow: column;
+    align-items: flex-start;
+}
+
+#add_address_form,
+#update_address_form {
+    /* display: none; */
+    padding-top: 15px;
+    /* width: 950px; */
+    display: flex;
+    flex-flow: column;
+    align-items: flex-start;
+}
+
+#container_user_info div,
+#container_update_user_info form div {
+    margin: 5px 0px;
+}
+
+#address_form label {
+    margin: 0px 0px 1px 0px;
+}
+
+#address_form input {
+    margin: 0px 0px 5px 0px;
+}
+
+#all_movies {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.media_container {
+    display: inline-block;
+    margin: 15px 0px 0px 15px;
+    max-width: 160px;
+    max-height: 260px;
+    /* pic = 240px */
+}
+
+.m_c_title {
+    margin-top: 2px;
+    max-width: 120px;
+    height: 38px;
+    text-overflow: ellipsis;
+    white-space: wrap;
+    overflow: hidden;
+}
+
+.m_c_pic {
+    width: 120px;
+    height: 178px;
+    background-image: url("/img/no_image_300x450.jpg");
+    background-size: 120px 178px;
+    background-repeat: no-repeat;
+}
+
+.m_c_pic img {
+    width: 120px;
+    height: 178px;
+}
