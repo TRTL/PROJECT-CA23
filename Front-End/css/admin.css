@@ -12,3 +12,7 @@ h3 {
     display: inline-block;
     margin-right: 5px;
 }
+
+#search_for_media_at_omdb_input {
+    width: 400px;
+}

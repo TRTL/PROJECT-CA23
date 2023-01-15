@@ -90,18 +90,16 @@ const getAllMedias = () => {
         })
         .then(obj => {
             //console.log(obj)
-
             obj.json()
                 .then(mediadata => {
                     //console.log(mediadata)
                     mediadata.forEach(media => {
-                        console.log(media)
+                        //console.log(media)
                         all_movies.innerHTML +=
                             '<div class="media_container">' +
-                            '<div class="m_c_pic"><img src="' + media.poster + '"width="120"></div>' +
+                            '<div class="m_c_pic"><img src="' + media.poster + '"></div>' +
                             '<div class="m_c_title" title="' + media.title + '">' + media.title + '</div>' +
                             '</div>';
-
                     });
                 })
         })

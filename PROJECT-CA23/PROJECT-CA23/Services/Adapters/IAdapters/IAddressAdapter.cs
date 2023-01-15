@@ -9,5 +9,6 @@ namespace PROJECT_CA23.Services.Adapters.IAdapters
         //Address Bind(AddressDto dto, User user);
         AddressDto Bind(Address address);
         Address Bind(AddAddressRequest req, User user);
+        Address Bind(Address address, UpdateAddressRequest req);
     }
 }

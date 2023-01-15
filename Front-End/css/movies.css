@@ -62,3 +62,8 @@
     background-size: 120px 178px;
     background-repeat: no-repeat;
 }
+
+.m_c_pic img {
+    width: 120px;
+    height: 178px;
+}

@@ -206,6 +206,7 @@ get_all_media_button.addEventListener('click', getAllMedias);
 
 const searchForMediaAtOmdb = () => {
     localStorage.removeItem('OmdbApiMedia');
+    omdb_result_media_container.innerHTML = '';
     fetch('https://localhost:' + user.localhost + '/SearchForMediaAtOmdb?mediaTitle=' + search_for_media_at_omdb_input.value,
         {
             method: 'get',
@@ -216,24 +217,29 @@ const searchForMediaAtOmdb = () => {
             }
         })
         .then(obj => {
-            //console.log(obj)
+            console.log(obj)
             obj.json()
                 .then(media => {
-                    //console.log(media)
-                    omdb_result_media_container.innerHTML = '';
-                    omdb_result_media_container.innerHTML +=
-                        '<div>' +
-                        '<div><img src="' + media.poster + '"width="120"></div>' +
-                        '<div><b>Title:</b> ' + media.title + '</div>' +
-                        '<div><b>Year:</b> ' + media.year + '</div>' +
-                        '<div><b>Genre:</b> ' + media.genre + '</div>' +
-                        '<div><b>Director:</b> ' + media.director + '</div>' +
-                        '<div><b>Writer:</b>' + media.writer + '</div>' +
-                        '<div><b>Actors:</b> ' + media.actors + '</div>' +
-                        '<div><b>Plot:</b> ' + media.plot + '</div>' +
-                        '</div>';
-                    localStorage.setItem('OmdbApiMedia', JSON.stringify(media));
+                    console.log(media)
+                    if (media.title === null) {
+                        message(`Not found`);
+                    }
+                    else {
+                        omdb_result_media_container.innerHTML +=
+                            '<div>' +
+                            '<div><img src="' + media.poster + '"width="120"></div>' +
+                            '<div><b>Title:</b> ' + media.title + '</div>' +
+                            '<div><b>Year:</b> ' + media.year + '</div>' +
+                            '<div><b>Genre:</b> ' + media.genre + '</div>' +
+                            '<div><b>Director:</b> ' + media.director + '</div>' +
+                            '<div><b>Writer:</b>' + media.writer + '</div>' +
+                            '<div><b>Actors:</b> ' + media.actors + '</div>' +
+                            '<div><b>Plot:</b> ' + media.plot + '</div>' +
+                            '</div>';
+                        localStorage.setItem('OmdbApiMedia', JSON.stringify(media));
+                    }
                 })
+
         })
         .catch((err) => message(`Klaida: ${err}`));
 }
@@ -245,29 +251,35 @@ search_for_media_at_omdb_button.addEventListener('click', searchForMediaAtOmdb);
 
 
 const addMediaFromOmdb = () => {
-    fetch('https://localhost:' + user.localhost + '/AddMediaFromOmdb',
-        {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': "Bearer " + user.token
-            },
-            body: localStorage.getItem('OmdbApiMedia')
-        })
-        .then(res => {
-            console.log(res)
-            if (res.ok) {
-                localStorage.removeItem('OmdbApiMedia');
-            }
-            else message('Klaida: ' + res.status + ' ' + res.statusText);
-            res.json()
-                .then(obj => {
-                    console.log(obj)
-                })
-        })
-        .catch((err) => message(`Klaida: ${err}`));
+    let movieInStorage = localStorage.getItem('OmdbApiMedia');
+    if (movieInStorage === null) {
+        message(`No media found. Search for media, before adding.`)
+    }
+    else {
+        fetch('https://localhost:' + user.localhost + '/AddMediaFromOmdb',
+            {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + user.token
+                },
+                body: localStorage.getItem('OmdbApiMedia')
+            })
+            .then(res => {
+                //console.log(res)
+                if (res.ok) {
+                    search_for_media_at_omdb_input.value = '';
+                    omdb_result_media_container.innerHTML = '';
+                    localStorage.removeItem('OmdbApiMedia');
+                    message(`Media added to the library successfully`);
+                }
+                else message('Klaida: ' + res.status + ' ' + res.statusText);
+            })
+            .catch((err) => message(`Klaida: ${err}`));
+    }
 }
+
 
 add_media_from_omdb_button.addEventListener('click', addMediaFromOmdb);
 
