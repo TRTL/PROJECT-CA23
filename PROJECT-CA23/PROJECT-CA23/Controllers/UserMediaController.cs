@@ -51,12 +51,12 @@ namespace PROJECT_CA23.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Produces(MediaTypeNames.Application.Json)]
-        public async Task<IActionResult> GetAllUserMedias([FromBody] GetUserMediaRequest req)
+        public async Task<IActionResult> GetAllUserMedias([FromQuery] GetUserMediaRequest req)
         {
-            _logger.LogInformation("GetAllUserMedias atempt with data: {req}", JsonConvert.SerializeObject(req));
+            _logger.LogInformation($"GetAllUserMedias atempt for userId: {req.UserId}");
             try
             {
-                var allMedia = await _userMediaRepo.GetAllAsync(filter: um => um.UserId == req.UserId, includeTables: new List<string>() { "Medias" });
+                var allMedia = await _userMediaRepo.GetAllAsync(filter: um => um.UserId == req.UserId, includeTables: new List<string>() { "Media" });
                 var userMediaDtoList = allMedia.Select(userMedia => _userMediaAdapter.Bind(userMedia)).ToList();
                 return Ok(userMediaDtoList);
             }

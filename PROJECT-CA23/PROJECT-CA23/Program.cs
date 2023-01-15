@@ -41,6 +41,7 @@ namespace PROJECT_CA23
             builder.Services.AddScoped<IAddressRepository, AddressRepository>();
             builder.Services.AddScoped<IGenreRepository, GenreRepository>();
             builder.Services.AddScoped<IMediaRepository, MediaRepository>(); 
+            builder.Services.AddScoped<IUserMediaRepository, UserMediaRepository>();
 
             builder.Services.AddHttpContextAccessor();
 

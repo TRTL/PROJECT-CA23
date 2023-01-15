@@ -44,7 +44,7 @@ namespace PROJECT_CA23.Repositories
                 query = query.Include(tableName);
             }
 
-            query = query.OrderBy(orderByColumn);
+            if (orderByColumn != null)  query = query.OrderBy(orderByColumn);
 
             return await query.ToListAsync();
         }

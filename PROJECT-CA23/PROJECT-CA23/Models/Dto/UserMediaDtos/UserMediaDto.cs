@@ -1,4 +1,6 @@
-﻿namespace PROJECT_CA23.Models.Dto.UserMediaDtos
+﻿using PROJECT_CA23.Models.Enums;
+
+namespace PROJECT_CA23.Models.Dto.UserMediaDtos
 {
     public class UserMediaDto
     {
@@ -46,5 +48,25 @@
         /// Optional review Id
         /// </summary>
         public int? ReviewId { get; set; }
+
+        /// <summary>
+        /// UserMediaStatus
+        /// </summary>
+        public EUserMediaStatus UserMediaStatus { get; set; }
+
+        /// <summary>
+        /// UserRating
+        /// </summary>
+        public EUserRating? UserRating { get; set; }
+
+        /// <summary>
+        /// ReviewText
+        /// </summary>
+        public string? ReviewText { get; set; }
+
+        /// <summary>
+        /// Note
+        /// </summary>
+        public string? Note { get; set; }
     }
 }

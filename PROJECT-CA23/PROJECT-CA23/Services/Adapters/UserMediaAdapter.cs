@@ -3,6 +3,7 @@ using PROJECT_CA23.Models.Dto.MediaDtos;
 using PROJECT_CA23.Models;
 using PROJECT_CA23.Services.Adapters.IAdapters;
 using PROJECT_CA23.Models.Dto.UserMediaDtos;
+using PROJECT_CA23.Models.Enums;
 
 namespace PROJECT_CA23.Services.Adapters
 {
@@ -10,6 +11,15 @@ namespace PROJECT_CA23.Services.Adapters
     {
         public UserMediaDto Bind(UserMedia userMedia)
         {
+            EUserRating? nullabe_UserRating = null;
+            string? nullabe_ReviewText = null;
+
+            if (userMedia.Review != null)
+            {
+                nullabe_UserRating = userMedia.Review.UserRating;
+                nullabe_ReviewText = userMedia.Review.ReviewText;
+            }
+
             return new UserMediaDto()
             {
                 UserMediaId = userMedia.MediaId,
@@ -20,7 +30,11 @@ namespace PROJECT_CA23.Services.Adapters
                 Year = userMedia.Media.Year,
                 imdbId = userMedia.Media.imdbId,
                 imdbRating = userMedia.Media.imdbRating,
-                ReviewId = userMedia.ReviewId ?? null
+                UserMediaStatus = userMedia.UserMediaStatus,
+                Note = userMedia.Note,
+                ReviewId = userMedia.ReviewId ?? null,
+                UserRating = nullabe_UserRating,
+                ReviewText = nullabe_ReviewText
             };
         }
 
@@ -29,9 +43,12 @@ namespace PROJECT_CA23.Services.Adapters
             return new UserMedia()
             {
                 UserId= user.UserId,
+                User = user,
                 MediaId = media.MediaId,
+                Media = media,
                 Note = null,
-                ReviewId = null
+                ReviewId = null,
+                Review = null
             };
         }
     }

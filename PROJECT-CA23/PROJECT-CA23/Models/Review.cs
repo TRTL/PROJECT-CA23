@@ -11,8 +11,9 @@ namespace PROJECT_CA23.Models
         public virtual User User { get; set; }
         public int MediaId { get; set; }
         public virtual Media Media { get; set; }
+        public int UserMediaId { get; set; }
         public virtual UserMedia UserMedia { get; set; }
-        public EUserRating UserRating { get; set; }
+        public EUserRating? UserRating { get; set; }
 
         [MaxLength(1000)]
         public string? ReviewText { get; set; }
