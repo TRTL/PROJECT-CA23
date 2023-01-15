@@ -8,16 +8,16 @@ namespace PROJECT_CA23.Models
     {
         public int UserMediaId { get; set; }
 
-        [Required(ErrorMessage = "UserId is required")]
+        [Required]
         public int UserId { get; set; }
         public virtual User User { get; set; }
 
-        [Required(ErrorMessage = "MediaId is required")]
+        [Required]
         public int MediaId { get; set; }
         public virtual Media Media { get; set; }
         public EMediaStatus MediaStatus { get; set; } = EMediaStatus.Wishlist;
 
-        [MaxLength(1000, ErrorMessage = "Note text cannot be longer than 1000 symbols")]
+        [MaxLength(1000)]
         public string? Note { get; set; }
     }
 }
