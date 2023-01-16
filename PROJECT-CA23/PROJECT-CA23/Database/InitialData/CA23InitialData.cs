@@ -35,9 +35,7 @@ namespace PROJECT_CA23.Database.InitialData
                 PasswordHash = CreateInitialPassword(out byte[] passwordSalt),
                 PasswordSalt = passwordSalt,
                 Created = DateTime.Now,
-                Updated = DateTime.Now,
-                LastLogin = DateTime.Now,
-                IsDeleted = false
+                Updated = DateTime.Now
             }
         };
 
