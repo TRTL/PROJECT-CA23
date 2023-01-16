@@ -123,6 +123,12 @@ namespace PROJECT_CA23.Controllers
                     return NotFound($"Media with mediaId {req.MediaId} was not found");
                 }
 
+                if (await _userMediaRepo.ExistAsync(m => m.UserId == req.UserId && m.MediaId == req.MediaId))
+                {
+                    _logger.LogInformation($"{DateTime.Now} AddUserMedia. Media ({req.MediaId}) is already in user's ({req.UserId}) list.");
+                    return NotFound($"Media is already in user's list.");
+                }
+
                 var newUserMedia = _userMediaAdapter.Bind(user, media);
                 await _userMediaRepo.CreateAsync(newUserMedia);
                 return Created("", newUserMedia);
