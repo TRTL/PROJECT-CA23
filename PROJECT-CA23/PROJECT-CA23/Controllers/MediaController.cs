@@ -78,6 +78,7 @@ namespace PROJECT_CA23.Controllers
         /// <summary>
         /// Get list of all medias
         /// </summary>
+        /// <param name="tyte">Media type: movie or series</param>
         /// <returns></returns>
         /// <response code="200">OK</response>
         /// <response code="400">Bad request</response>
@@ -89,12 +90,18 @@ namespace PROJECT_CA23.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Produces(MediaTypeNames.Application.Json)]
-        public async Task<IActionResult> GetAllMedias()
+        public async Task<IActionResult> GetAllMedias([FromQuery] string type)
         {
-            _logger.LogInformation($"GetAllMedias atempt");
+            _logger.LogInformation($"GetAllMedias atempt with filter type - {type}");
             try
             {
-                var allMedia = await _mediaRepo.GetAllAsync(includeTables: new List<string>() { "Genres" }, orderByColumn: o => o.Title);
+                if (type != "movie" && type != "series")
+                {
+                    _logger.LogInformation($"{DateTime.Now} GetAllMedias filter type is invalid.");
+                    return BadRequest("Media type is invalid");
+                }
+
+                var allMedia = await _mediaRepo.GetAllAsync(filter: m => m.Type == type, includeTables: new List<string>() { "Genres" }, orderByColumn: o => o.Title);
                 var mediaDtoList = allMedia.Select(m => _mediaAdapter.Bind(m)).ToList();
                 return Ok(mediaDtoList);
             }

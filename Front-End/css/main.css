@@ -181,3 +181,34 @@ nav a.active {
     color: #000;
     background-color: #fff;
 }
+
+/****************************************** TABLE ******************************************/
+
+table,
+#all_movies {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+    font-family: sans-serif;
+}
+
+
+tbody tr:hover {
+    background-color: #eeeeee;
+}
+
+table,
+th,
+td {
+    padding: 5px 0 5px 5px;
+}
+
+
+.table-actions div {
+    display: inline-block;
+    margin: 0 8px 0 0;
+}
+
+.table-actions div:hover {
+    cursor: pointer;
+}

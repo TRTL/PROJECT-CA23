@@ -217,10 +217,10 @@ const searchForMediaAtOmdb = () => {
             }
         })
         .then(obj => {
-            console.log(obj)
+            //console.log(obj)
             obj.json()
                 .then(media => {
-                    console.log(media)
+                    //console.log(media)
                     if (media.title === null) {
                         message(`Not found`);
                     }

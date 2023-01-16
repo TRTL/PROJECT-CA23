@@ -67,7 +67,7 @@ namespace PROJECT_CA23.Controllers
             _logger.LogInformation($"GetAllUserMedias atempt for userId: {req.UserId}");
             try
             {
-                var allMedia = await _userMediaRepo.GetAllAsync(filter: um => um.UserId == req.UserId, includeTables: new List<string>() { "Media" });
+                var allMedia = await _userMediaRepo.GetAllAsync(filter: um => um.UserId == req.UserId, includeTables: new List<string>() { "Media", "Review" });
                 var userMediaDtoList = allMedia.Select(userMedia => _userMediaAdapter.Bind(userMedia)).ToList();
                 return Ok(userMediaDtoList);
             }

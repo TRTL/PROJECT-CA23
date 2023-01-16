@@ -5,7 +5,7 @@ window.onload = function () {
         window.location.href = "login.html";
     } else {
         getUser();
-        getAllMedias();
+        getAllMediasTypeMovie();
     };
 };
 
@@ -75,11 +75,11 @@ const getUser = () => {
 }
 
 
-////////////////////////////////////////// getAllMedias //////////////////////////////////////////
+////////////////////////////////////////// getAllMediasTypeMovie //////////////////////////////////////////
 
 
-const getAllMedias = () => {
-    fetch('https://localhost:' + user.localhost + '/GetAllMedias',
+const getAllMediasTypeMovie = () => {
+    fetch('https://localhost:' + user.localhost + '/GetAllMedias?type=movie',
         {
             method: 'get',
             headers: {
@@ -98,7 +98,7 @@ const getAllMedias = () => {
                         all_movies.innerHTML +=
                             '<div class="media_container">' +
                             '<div class="m_c_mask">' +
-                            '<div class="m_c_star" onclick="addUserMedia(' + media.mediaId + ')">⭐</div></div>' +
+                            '<div class="m_c_star" onclick="addUserMedia(' + media.mediaId + ')" title="Add ' + media.title + ' to your list">⭐</div></div>' +
                             '<div class="m_c_pic"><img src="' + media.poster + '"></div>' +
                             '<div class="m_c_title" title="' + media.title + '">' + media.title + '</div>' +
                             '</div>';
@@ -128,14 +128,14 @@ const addUserMedia = (mediaId) => {
             body: JSON.stringify(newObject_AddUserMedia)
         })
         .then(res => {
-            console.log(res)
+            //console.log(res)
             if (res.ok) {
                 message('Media added to my list successfully')
             }
             else {
                 res.text()
                     .then(text => {
-                        message('Klaida: ' + res.status + ' ' + res.statusText + ' ' + text);
+                        message(text);
                     })
             }
         })

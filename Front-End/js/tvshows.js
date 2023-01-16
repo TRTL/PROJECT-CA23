@@ -5,6 +5,7 @@ window.onload = function () {
         window.location.href = "login.html";
     } else {
         getUser();
+        getAllMediasTypeSeries();
     };
 };
 
@@ -46,11 +47,11 @@ const getUser = () => {
             }
         })
         .then(obj => {
-            console.log(obj)
+            //console.log(obj)
 
             obj.json()
                 .then(userdata => {
-                    console.log(userdata)
+                    //console.log(userdata)
                     footer_userid_label.innerHTML = "ID: " + userdata.userId;
                     footer_role_label.innerHTML = "Role: " + userdata.role;
                     footer_username_label.innerHTML = "Username: " + userdata.username;
@@ -64,6 +65,73 @@ const getUser = () => {
         .catch((err) => message(`Klaida: ${err}`));
 }
 
+
+////////////////////////////////////////// GetAllMediasTypeSeries //////////////////////////////////////////
+
+
+const getAllMediasTypeSeries = () => {
+    fetch('https://localhost:' + user.localhost + '/GetAllMedias?type=series',
+        {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + user.token
+            }
+        })
+        .then(obj => {
+            //console.log(obj)
+            obj.json()
+                .then(mediadata => {
+                    //console.log(mediadata)
+                    mediadata.forEach(media => {
+                        //console.log(media)
+                        all_movies.innerHTML +=
+                            '<div class="media_container">' +
+                            '<div class="m_c_mask">' +
+                            '<div class="m_c_star" onclick="addUserMedia(' + media.mediaId + ')" title="Add ' + media.title + ' to your list">⭐</div></div>' +
+                            '<div class="m_c_pic"><img src="' + media.poster + '"></div>' +
+                            '<div class="m_c_title" title="' + media.title + '">' + media.title + '</div>' +
+                            '</div>';
+                    });
+                })
+        })
+        .catch((err) => message(`Klaida: ${err}`));
+}
+
+
+////////////////////////////////////////// addUserMedia //////////////////////////////////////////
+
+
+const addUserMedia = (mediaId) => {
+    let newObject_AddUserMedia = {};
+    newObject_AddUserMedia['userId'] = user.userId;
+    newObject_AddUserMedia['mediaId'] = mediaId;
+
+    fetch('https://localhost:' + user.localhost + '/AddUserMedia',
+        {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + user.token
+            },
+            body: JSON.stringify(newObject_AddUserMedia)
+        })
+        .then(res => {
+            //console.log(res)
+            if (res.ok) {
+                message('Media added to my list successfully')
+            }
+            else {
+                res.text()
+                    .then(text => {
+                        message(text);
+                    })
+            }
+        })
+        .catch((err) => message(`Klaida: ${err}`));
+}
 
 
 
