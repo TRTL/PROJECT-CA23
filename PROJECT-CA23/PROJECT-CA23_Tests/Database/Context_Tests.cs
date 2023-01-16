@@ -24,22 +24,24 @@ namespace PROJECT_CA23_Tests.Database
                                 .Options;
 
             _context = new CA23Context(options);
-            _context.Add(new User() {
-                                        UserId = 1,
-                                        Username = "pertras3000",
-                                        FirstName = "Petras",
-                                        LastName = "Petraitis",
-                                        Role = ERole.user,
-                                        PasswordHash = new byte[8],
-                                        PasswordSalt = new byte[8],
-                                        Created = DateTime.Now,
-                                        Updated = DateTime.Now,
-                                        LastLogin = DateTime.Now,
-                                        IsDeleted = false
-                                    });
+            _context.Add(new User()
+            {
+                UserId = 1,
+                Username = "pertras3000",
+                FirstName = "Petras",
+                LastName = "Petraitis",
+                Role = ERole.user,
+                PasswordHash = new byte[8],
+                PasswordSalt = new byte[8],
+                Created = DateTime.Now,
+                Updated = DateTime.Now,
+                LastLogin = DateTime.Now,
+                IsDeleted = false
+            });
             _context.Add(new Media()
             {
-                MediaId = 1, Type = "movie",
+                MediaId = 1,
+                Type = "movie",
                 Title = "Blade Runner",
                 Year = "2013",
                 Runtime = "117 min",
@@ -76,7 +78,7 @@ namespace PROJECT_CA23_Tests.Database
         }
 
 
-            [TestMethod()]
+        [TestMethod()]
         public void Context_Test1()
         {
             var userMedia1 = new UserMedia()
@@ -94,8 +96,10 @@ namespace PROJECT_CA23_Tests.Database
             _context.SaveChanges();
 
 
+            Assert.IsTrue(_context.UserMedias.Any(m => m.User.FirstName == "Petras" && ));
             Assert.AreEqual(_context.UserMedias.Where(m => m.UserId == 1).Count(), 2);
-            Assert.IsTrue(_context.UserMedias.Any(m => m.User.FirstName == "Petras"));
         }
+
+
     }
 }
