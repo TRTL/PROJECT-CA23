@@ -65,8 +65,6 @@ namespace PROJECT_CA23.Services.Adapters
                 userMedia.Review.UserRating = Enum.Parse<EUserRating>(req.UserRating);
             }
 
-
-
             return userMedia;
         }
     }

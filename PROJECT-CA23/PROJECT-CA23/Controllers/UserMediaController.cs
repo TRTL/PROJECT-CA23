@@ -24,24 +24,24 @@ namespace PROJECT_CA23.Controllers
         private readonly IUserMediaRepository _userMediaRepo;
         private readonly IUserRepository _userRepo;
         private readonly IMediaRepository _mediaRepo;
-        //private readonly IReviewRepoService _reviewRepoService;
-        private readonly IReviewRepository _reviewRepo; // VIETOJE _reviewRepoService
+        private readonly IReviewRepoService _reviewRepoService;
+        //private readonly IReviewRepository _reviewRepo; // VIETOJE _reviewRepoService
         private readonly IUserMediaAdapter _userMediaAdapter;
         private readonly ILogger<UserMediaController> _logger;
 
         public UserMediaController(IUserMediaRepository userMediaRepo,
                                    IUserRepository userRepo,
                                    IMediaRepository mediaRepo,
-                                   //IReviewRepoService reviewRepoService,
-                                   IReviewRepository reviewRepo, // VIETOJE _reviewRepoService
+                                   IReviewRepoService reviewRepoService,
+                                   //IReviewRepository reviewRepo, // VIETOJE _reviewRepoService
                                    IUserMediaAdapter userMediaAdapter,
                                    ILogger<UserMediaController> logger)
         {
             _userMediaRepo = userMediaRepo;
             _userRepo = userRepo;
             _mediaRepo = mediaRepo;
-            //_reviewRepoService = reviewRepoService;
-            _reviewRepo=reviewRepo; // VIETOJE _reviewRepoService
+            _reviewRepoService = reviewRepoService;
+            //_reviewRepo=reviewRepo; // VIETOJE _reviewRepoService
             _userMediaAdapter = userMediaAdapter;
             _logger = logger;
         }
@@ -189,16 +189,16 @@ namespace PROJECT_CA23.Controllers
                 }
 
                 // NEVEIKIA !!! META KLAIDA -> (InvalidOperationException: Error while validating the service descriptor) !!!
-                //var userMedia = await _userMediaRepo.GetAsync(a => a.UserMediaId == req.UserMediaId, new List<string> { "Review" });
-                //userMedia = await _reviewRepoService.AddReviewIfNeeded(userMedia, req);
-                //userMedia = _userMediaAdapter.Bind(userMedia, req);
-                //await _userMediaRepo.UpdateAsync(userMedia);
-
-                var userMedia = await _userMediaRepo.GetAsync(a => a.UserMediaId == req.UserMediaId, new List<string> { "User", "Media", "Review" });
-
-                userMedia = await _reviewRepo.AddReviewIfNeeded(userMedia, req);
+                var userMedia = await _userMediaRepo.GetAsync(a => a.UserMediaId == req.UserMediaId, new List<string> { "Review" });
+                userMedia = await _reviewRepoService.AddReviewIfNeeded(userMedia, req);
                 userMedia = _userMediaAdapter.Bind(userMedia, req);
                 await _userMediaRepo.UpdateAsync(userMedia);
+
+                //var userMedia = await _userMediaRepo.GetAsync(a => a.UserMediaId == req.UserMediaId, new List<string> { "User", "Media", "Review" });
+
+                //userMedia = await _reviewRepo.AddReviewIfNeeded(userMedia, req);
+                //userMedia = _userMediaAdapter.Bind(userMedia, req);
+                //await _userMediaRepo.UpdateAsync(userMedia);
 
                 return NoContent();
             }

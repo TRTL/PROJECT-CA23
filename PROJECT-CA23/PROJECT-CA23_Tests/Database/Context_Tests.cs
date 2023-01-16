@@ -89,15 +89,13 @@ namespace PROJECT_CA23_Tests.Database
                 UserId = 1,
                 MediaId = 2
             };
+
             _context.Add(userMedia1);
             _context.Add(userMedia2);
             _context.SaveChanges();
 
-
             Assert.IsTrue(_context.UserMedias.Any(m => m.User.FirstName == "Petras"));
             Assert.AreEqual(_context.UserMedias.Where(m => m.UserId == 1).Count(), 2);
         }
-
-
     }
 }

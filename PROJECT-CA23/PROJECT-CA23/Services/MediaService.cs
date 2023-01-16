@@ -26,22 +26,12 @@ namespace PROJECT_CA23.Services
         public async Task<OmdbApiMedia?> SearchForMediaAtOmdbApiAsync(string mediaTitle)
         {
             var httpClient = _httpClientFactory.CreateClient("OmdbApiComServiceApi");
-            //var endpoint = "";    // no custom endpoint, just base address
 
             var reponse = await httpClient.GetAsync("?apikey=" + _mykey + "&t=" + mediaTitle);
             if (reponse.IsSuccessStatusCode)
             {
                 var content = await reponse.Content.ReadAsStringAsync();
-                var omdbApiMedia = JsonConvert.DeserializeObject<OmdbApiMedia>(content); // 1
-
-                // 2 OmdbApiMedia.Genres >> issaugo trukstamus i mano db
-
-                // 3 adapteriui OmdbApiMedia ir visa list<mano db esanciu Genres>
-
-                // 4 repo issaugo atiduota Media
-
-                //Media media = _mediaAdapter.Bind(res);
-                //return media;
+                var omdbApiMedia = JsonConvert.DeserializeObject<OmdbApiMedia>(content);
                 return omdbApiMedia;
             }
             return null;

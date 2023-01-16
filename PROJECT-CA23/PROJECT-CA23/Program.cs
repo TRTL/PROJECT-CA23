@@ -39,7 +39,7 @@ namespace PROJECT_CA23
             builder.Services.AddTransient<IUserAdapter, UserAdapter>();
             builder.Services.AddTransient<IUserMediaAdapter, UserMediaAdapter>();
 
-            //builder.Services.AddScoped<IReviewRepoService, ReviewRepoService>();
+            builder.Services.AddScoped<IReviewRepoService, ReviewRepoService>();
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IAddressRepository, AddressRepository>();

@@ -18,15 +18,15 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting.Logging;
 using Microsoft.AspNetCore.Http;
 
-namespace PROJECT_CA23.Repositories_Tests
+namespace PROJECT_CA23.Controller_Tests
 {
     [TestClass()]
-    public class UserRepository_Tests
+    public class LoginController_Tests
     {
         Mock<IConfiguration> mockConfiguration = new Mock<IConfiguration>();
 
         [TestInitialize]
-        public void OnInicialize()
+        public void OnInit()
         {
             Mock<IConfigurationSection> mockSection = new Mock<IConfigurationSection>();
             mockSection.Setup(x => x.Value).Returns(Guid.NewGuid().ToString());
@@ -34,7 +34,7 @@ namespace PROJECT_CA23.Repositories_Tests
         }
 
         [TestMethod()]
-        public void TryLogin_Test()
+        public void TryLogin_ShouldReturnOkObjectResult_Successfully()
         {
             // Arrange
             var fake_username = "test_username";
@@ -42,7 +42,7 @@ namespace PROJECT_CA23.Repositories_Tests
             var fake_user = new Models.User { UserId = 1, Username = fake_username, Role = ERole.admin };
 
             Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
-            mockUserRepository.Setup(x => x.TryLogin(fake_username, fake_password, out fake_user)).Returns(true); //grazinamas kazkoks useris ir nekvieciama db
+            mockUserRepository.Setup(x => x.TryLogin(fake_username, fake_password, out fake_user)).Returns(true); // grazinamas kazkoks useris ir nekvieciama db
 
             IUserService userService = new UserService();
 

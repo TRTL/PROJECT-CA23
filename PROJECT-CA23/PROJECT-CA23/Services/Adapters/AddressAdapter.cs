@@ -15,7 +15,7 @@ namespace PROJECT_CA23.Services.Adapters
                 AddressId = address.AddressId,
                 UserId = address.UserId,
                 FirstName = address.User.FirstName,
-                LastName = address.User.FirstName,
+                LastName = address.User.LastName,
                 Country = address.Country,
                 City = address.City,
                 AddressText = address.AddressText,

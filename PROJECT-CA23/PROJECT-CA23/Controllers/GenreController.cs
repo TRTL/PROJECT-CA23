@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PROJECT_CA23.Models.Dto.AddressDto;
+using PROJECT_CA23.Models.Dto.MediaDtos;
 using PROJECT_CA23.Repositories.IRepositories;
 using PROJECT_CA23.Services.Adapters.IAdapters;
 
@@ -22,8 +23,9 @@ namespace PROJECT_CA23.Controllers
         }
 
         /// <summary>
-        /// Get all media with specific genre
+        /// Get all media with specific genre id
         /// </summary>
+        /// <param name="id">Genre Id</param>
         /// <returns></returns>
         /// <response code="200">OK</response>
         /// <response code="400">Bad request</response>
@@ -31,7 +33,7 @@ namespace PROJECT_CA23.Controllers
         /// <response code="500">Internal server error</response>
         [Authorize(Roles = "admin,user")]
         [HttpGet("/GetAllMediaByGenreId/{id:int}")]
-        [ProducesResponseType(StatusCodes.Status200OK)] // , Type = typeof(AddressDto)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<MediaDto>))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
