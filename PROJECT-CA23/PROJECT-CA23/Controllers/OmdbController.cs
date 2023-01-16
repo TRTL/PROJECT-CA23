@@ -8,6 +8,7 @@ using System.Net.Mime;
 using PROJECT_CA23.Repositories.IRepositories;
 using PROJECT_CA23.Services.Adapters.IAdapters;
 using PROJECT_CA23.Services.IServices;
+using Microsoft.IdentityModel.Tokens;
 
 namespace PROJECT_CA23.Controllers
 {
@@ -93,8 +94,7 @@ namespace PROJECT_CA23.Controllers
             _logger.LogInformation("AddMediaFromOmdb atempt with data: {req}", JsonConvert.SerializeObject(req));
             try
             {
-                //if (req.Type.IsNullOrEmpty() || req.Title.IsNullOrEmpty())
-                if (req.Type == "" || req.Title == "")
+                if (req.Type.IsNullOrEmpty() || req.Title.IsNullOrEmpty())
                 {
                     _logger.LogInformation($"{DateTime.Now} AddMediaFromOmdb required fields are missing.");
                     return BadRequest("Type and title are required fields");

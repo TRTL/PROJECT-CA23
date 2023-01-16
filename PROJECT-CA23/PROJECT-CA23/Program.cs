@@ -3,16 +3,18 @@ using Microsoft.EntityFrameworkCore;
 using PROJECT_CA23.Database;
 using PROJECT_CA23.Services.IServices;
 using PROJECT_CA23.Services;
-using PROJECT_CA23.Repositories;
 using PROJECT_CA23.Repositories.IRepositories;
+using PROJECT_CA23.Repositories;
+using PROJECT_CA23.Services.Adapters.IAdapters;
+using PROJECT_CA23.Services.Adapters;
+using PROJECT_CA23.Repositories.RepositoryServices.IRepositoryServices;
+using PROJECT_CA23.Repositories.RepositoryServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text.Json.Serialization;
-using PROJECT_CA23.Services.Adapters.IAdapters;
-using PROJECT_CA23.Services.Adapters;
 
 namespace PROJECT_CA23
 {
@@ -28,20 +30,23 @@ namespace PROJECT_CA23
                 options.UseSqlite(builder.Configuration.GetConnectionString("ProjectCA23ConnectionString"));
             });
 
-            builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<IJwtService, JwtService>();
-            builder.Services.AddScoped<IMediaService, MediaService>();
+            builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddTransient<IJwtService, JwtService>();
+            builder.Services.AddTransient<IMediaService, MediaService>();
                         
-            builder.Services.AddScoped<IAddressAdapter, AddressAdapter>(); 
-            builder.Services.AddScoped<IMediaAdapter, MediaAdapter>();
-            builder.Services.AddScoped<IUserAdapter, UserAdapter>();
-            builder.Services.AddScoped<IUserMediaAdapter, UserMediaAdapter>();
+            builder.Services.AddTransient<IAddressAdapter, AddressAdapter>(); 
+            builder.Services.AddTransient<IMediaAdapter, MediaAdapter>();
+            builder.Services.AddTransient<IUserAdapter, UserAdapter>();
+            builder.Services.AddTransient<IUserMediaAdapter, UserMediaAdapter>();
+
+            //builder.Services.AddScoped<IReviewRepoService, ReviewRepoService>();
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IAddressRepository, AddressRepository>();
             builder.Services.AddScoped<IGenreRepository, GenreRepository>();
-            builder.Services.AddScoped<IMediaRepository, MediaRepository>(); 
+            builder.Services.AddScoped<IMediaRepository, MediaRepository>();
             builder.Services.AddScoped<IUserMediaRepository, UserMediaRepository>();
+            builder.Services.AddScoped<IReviewRepository, ReviewRepository>(); 
 
             builder.Services.AddHttpContextAccessor();
 

@@ -7,7 +7,10 @@ using PROJECT_CA23.Models;
 using PROJECT_CA23.Models.Dto.AddressDtos;
 using PROJECT_CA23.Models.Dto.MediaDtos;
 using PROJECT_CA23.Models.Dto.UserMediaDtos;
+using PROJECT_CA23.Models.Enums;
 using PROJECT_CA23.Repositories.IRepositories;
+using PROJECT_CA23.Repositories.RepositoryServices;
+using PROJECT_CA23.Repositories.RepositoryServices.IRepositoryServices;
 using PROJECT_CA23.Services.Adapters;
 using PROJECT_CA23.Services.Adapters.IAdapters;
 using System.Net.Mime;
@@ -21,18 +24,24 @@ namespace PROJECT_CA23.Controllers
         private readonly IUserMediaRepository _userMediaRepo;
         private readonly IUserRepository _userRepo;
         private readonly IMediaRepository _mediaRepo;
+        //private readonly IReviewRepoService _reviewRepoService;
+        private readonly IReviewRepository _reviewRepo; // VIETOJE _reviewRepoService
         private readonly IUserMediaAdapter _userMediaAdapter;
         private readonly ILogger<UserMediaController> _logger;
 
         public UserMediaController(IUserMediaRepository userMediaRepo,
                                    IUserRepository userRepo,
                                    IMediaRepository mediaRepo,
+                                   //IReviewRepoService reviewRepoService,
+                                   IReviewRepository reviewRepo, // VIETOJE _reviewRepoService
                                    IUserMediaAdapter userMediaAdapter,
                                    ILogger<UserMediaController> logger)
         {
             _userMediaRepo = userMediaRepo;
             _userRepo = userRepo;
             _mediaRepo = mediaRepo;
+            //_reviewRepoService = reviewRepoService;
+            _reviewRepo=reviewRepo; // VIETOJE _reviewRepoService
             _userMediaAdapter = userMediaAdapter;
             _logger = logger;
         }
@@ -127,16 +136,16 @@ namespace PROJECT_CA23.Controllers
 
 
         /// <summary>
-        /// Update address by addressId
+        /// Update User Media and it's review by UserMediaId
         /// </summary>
-        /// <param name="req">Updatable fields</param>
+        /// <param name="req">UserMediaId and updatable fields</param>
         /// <returns></returns>
         /// <response code="204">Updated</response>
         /// <response code="400">Bad request</response>
         /// <response code="401">Client could not authenticate a request</response>
         /// <response code="404">Not found</response>
         /// <response code="500">Internal server error</response>
-        [HttpPut("/UpdateUserMedia")]
+        [HttpPut("/UpdateUserMediaAndReview")]
         [Authorize(Roles = "admin,user")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -144,39 +153,102 @@ namespace PROJECT_CA23.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Consumes(MediaTypeNames.Application.Json)]
-        public async Task<IActionResult> UpdateUserMedia([FromBody] UpdateUserMediaRequest req)
+        public async Task<IActionResult> UpdateUserMediaAndReview([FromBody] UpdateUserMediaRequest req)
         {
-            _logger.LogInformation($"UpdateUserMedia atempt for UserMediaId - {req.UserMediaId}");
+            _logger.LogInformation($"UpdateUserMediaAndReview atempt for UserMediaId - {req.UserMediaId}");
             try
             {
                 if (req.UserMediaId <= 0)
                 {
-                    _logger.LogInformation($"{DateTime.Now} Failed UpdateUserMedia attempt for UserMediaId - {req.UserMediaId}. UpdateUserMedia request data is invalid.");
-                    return BadRequest("UpdateUserMedia request data is invalid.");
+                    _logger.LogInformation($"{DateTime.Now} Failed UpdateUserMediaAndReview attempt for UserMediaId - {req.UserMediaId}. UpdateUserMedia request data is invalid.");
+                    return BadRequest("UpdateUserMediaAndReview request data is invalid.");
                 }
 
                 if (!await _userMediaRepo.ExistAsync(m => m.UserMediaId == req.UserMediaId))
                 {
-                    _logger.LogInformation($"{DateTime.Now} Failed UpdateUserMedia attempt with AddressId - {req.UserMediaId}. UserMediaId not found.");
+                    _logger.LogInformation($"{DateTime.Now} Failed UpdateUserMediaAndReview attempt with UserMediaId - {req.UserMediaId}. UserMediaId not found.");
                     return NotFound("UserMediaId not found");
                 }
 
-                // PATIKRINTI AR REVIEW TURI? NEI NETURI O REVIEW DATA ATEJO, TAI REIKI SUKURTI NAUJ REVIEW IR JAM TA DATA PRISKIRTI!
-                // PATIKRINTI AR REVIEW TURI? NEI NETURI O REVIEW DATA ATEJO, TAI REIKI SUKURTI NAUJ REVIEW IR JAM TA DATA PRISKIRTI!
-                // PATIKRINTI AR REVIEW TURI? NEI NETURI O REVIEW DATA ATEJO, TAI REIKI SUKURTI NAUJ REVIEW IR JAM TA DATA PRISKIRTI!
-                // PATIKRINTI AR REVIEW TURI? NEI NETURI O REVIEW DATA ATEJO, TAI REIKI SUKURTI NAUJ REVIEW IR JAM TA DATA PRISKIRTI!
+                if (!Enum.TryParse<EUserMediaStatus>(req.UserMediaStatus, out _))
+                {
+                    _logger.LogInformation($"{DateTime.Now} Failed UpdateUserMediaAndReview attempt with UserMediaStatus - {req.UserMediaStatus}. Selected UserMediaStatus is invalid.");
+                    return BadRequest("Selected UserMediaStatus is invalid");
+                }
 
-                var userMedia = await _userMediaRepo.GetAsync(a => a.UserMediaId == req.UserMediaId, new List<string> { "Review" });
+                if (!Enum.TryParse<EUserRating>(req.UserRating, out _))
+                {
+                    _logger.LogInformation($"{DateTime.Now} Failed UpdateUserMediaAndReview attempt with UserRating - {req.UserRating}. Selected UserRating is invalid.");
+                    return BadRequest("Selected UserRating is invalid");
+                }
+
+                // NEVEIKIA !!! META KLAIDA -> (InvalidOperationException: Error while validating the service descriptor) !!!
+                //var userMedia = await _userMediaRepo.GetAsync(a => a.UserMediaId == req.UserMediaId, new List<string> { "Review" });
+                //userMedia = await _reviewRepoService.AddReviewIfNeeded(userMedia, req);
+                //userMedia = _userMediaAdapter.Bind(userMedia, req);
+                //await _userMediaRepo.UpdateAsync(userMedia);
+
+                var userMedia = await _userMediaRepo.GetAsync(a => a.UserMediaId == req.UserMediaId, new List<string> { "User", "Media", "Review" });
+
+                userMedia = await _reviewRepo.AddReviewIfNeeded(userMedia, req);
                 userMedia = _userMediaAdapter.Bind(userMedia, req);
                 await _userMediaRepo.UpdateAsync(userMedia);
+
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{DateTime.Now} UpdateUserMedia exception error.");
+                _logger.LogError(ex, $"{DateTime.Now} UpdateUserMediaAndReview exception error.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+
+        /// <summary>
+        /// Delete address by user id
+        /// </summary>
+        /// <param name="id">User id whos address will be deleted</param>
+        /// <returns></returns>
+        /// <response code="204">Updated</response>
+        /// <response code="400">Bad request</response>
+        /// <response code="401">Client could not authenticate a request</response>
+        /// <response code="404">Not found</response>
+        /// <response code="500">Internal server error</response>
+        [HttpDelete("{id:int}/Delete")]
+        [Authorize(Roles = "admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> DeleteUserMediaAndReview(int id)
+        {
+            _logger.LogInformation($"DeleteUserMediaAndReview atempt for UserMediaId - {id}");
+            try
+            {
+                if (id <= 0)
+                {
+                    _logger.LogInformation($"{DateTime.Now} Failed DeleteUserMediaAndReview attempt for UserMediaId - {id}. UserMediaId is incorrect.");
+                    return BadRequest("UserMediaId is incorrect.");
+                }
+
+                var userMedia = await _userMediaRepo.GetAsync(m => m.UserMediaId == id);
+                if (userMedia == null)
+                {
+                    _logger.LogInformation($"{DateTime.Now} Failed DeleteUserMediaAndReview attempt with UserMediaId - {id}. UserMediaId not found.");
+                    return NotFound("UserMediaId not found");
+                }
+
+                await _userMediaRepo.RemoveAsync(userMedia);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{DateTime.Now} DeleteUserMediaAndReview exception error.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
 
     }
 }

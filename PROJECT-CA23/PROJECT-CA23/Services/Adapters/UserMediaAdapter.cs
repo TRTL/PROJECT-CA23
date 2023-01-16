@@ -56,19 +56,18 @@ namespace PROJECT_CA23.Services.Adapters
 
         public UserMedia Bind(UserMedia userMedia, UpdateUserMediaRequest req)
         {
-            if (Enum.TryParse(req.UserMediaStatus, out EUserMediaStatus userMediaStatus)) userMedia.UserMediaStatus = userMediaStatus;
+            userMedia.UserMediaStatus = Enum.Parse<EUserMediaStatus>(req.UserMediaStatus);
             userMedia.Note = req.Note;
 
             if (userMedia.Review != null)
             {
                 userMedia.Review.ReviewText = req.ReviewText;
-                if (Enum.TryParse(req.UserRating, out EUserRating userRating)) userMedia.Review.UserRating = userRating;
+                userMedia.Review.UserRating = Enum.Parse<EUserRating>(req.UserRating);
             }
+
+
 
             return userMedia;
         }
-
-
-
     }
 }
