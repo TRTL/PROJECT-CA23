@@ -5,7 +5,9 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PROJECT-CA23", "PROJECT-CA23\PROJECT-CA23.csproj", "{32E4F31C-2747-4E18-8127-AAE9388610BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PROJECT-CA23_Tests", "PROJECT-CA23_Tests\PROJECT-CA23_Tests.csproj", "{942042A8-7CC6-4141-9BB7-57B882A9D534}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PROJECT-CA23_Tests", "PROJECT-CA23_Tests\PROJECT-CA23_Tests.csproj", "{942042A8-7CC6-4141-9BB7-57B882A9D534}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TESTS", "TESTS", "{B86EF7BB-2377-4E9D-9AE0-55BF27D6149D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +26,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{942042A8-7CC6-4141-9BB7-57B882A9D534} = {B86EF7BB-2377-4E9D-9AE0-55BF27D6149D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B85C51FD-875E-4368-A940-F11EFC25D8D5}

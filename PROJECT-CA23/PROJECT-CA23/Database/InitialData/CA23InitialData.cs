@@ -94,32 +94,14 @@ namespace PROJECT_CA23.Database.InitialData
                 Runtime = "117 min",
                 Director = "Ridley Scott",
                 Writer = "Hampton Fancher, David Webb Peoples, Philip K. Dick",
-                Actors = "Stephen Root, Sarah Goldberg, Anthony Carrigan",
-                Plot = "Harrison Ford, Rutger Hauer, Sean Young",
+                Actors = "Harrison Ford, Rutger Hauer, Sean Young",
+                Plot = "A blade runner must pursue and terminate four replicants who stole a ship in space and have returned to Earth to find their creator.",
                 Language = "English",
-                Country = "A blade runner must pursue and terminate four replicants who stole a ship in space and have returned to Earth to find their creator.",
+                Country = "United States",
                 Poster = "https://m.media-amazon.com/images/M/MV5BNzQzMzJhZTEtOWM4NS00MTdhLTg0YjgtMjM4MDRkZjUwZDBlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
                 imdbId = "tt0083658",
                 imdbRating = 8.1,
-                imdbVotes = 771_646,
-                //Genres = new List<Genre>()
-                //{
-                //    new Genre()
-                //    {
-                //        GenreId = 1,
-                //        Name = "Action"
-                //    },
-                //    new Genre()
-                //    {
-                //        GenreId = 2,
-                //        Name = "Drama"
-                //    },
-                //    new Genre()
-                //    {
-                //        GenreId = 3,
-                //        Name = "Sci-Fi"
-                //    }
-                //}
+                imdbVotes = 771_646
             },
             new Media()
             {
@@ -137,25 +119,7 @@ namespace PROJECT_CA23.Database.InitialData
                 Poster = "https://m.media-amazon.com/images/M/MV5BYTU3NWI5OGMtZmZhNy00MjVmLTk1YzAtZjA3ZDA3NzcyNDUxXkEyXkFqcGdeQXVyODY5Njk4Njc@._V1_SX300.jpg",
                 imdbId = "tt0903747",
                 imdbRating = 9.5,
-                imdbVotes = 1_880_303,
-                 //Genres = new List<Genre>()
-                 //{
-                 //   new Genre()
-                 //   {
-                 //       GenreId = 4,
-                 //       Name = "Crime"
-                 //   },
-                 //   new Genre()
-                 //   {
-                 //       GenreId = 2,
-                 //       Name = "Drama"
-                 //   },
-                 //   new Genre()
-                 //   {
-                 //       GenreId = 5,
-                 //       Name = "Thriller"
-                 //   }
-                 //}
+                imdbVotes = 1_880_303
             }
         };
 
