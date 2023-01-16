@@ -64,6 +64,7 @@ namespace PROJECT_CA23.Database
 
             var userMedia = modelBuilder.Entity<UserMedia>();
             userMedia.HasKey(usrMed => usrMed.UserMediaId);
+            userMedia.HasAlternateKey(usrMed => new { usrMed.UserId , usrMed.MediaId });
             userMedia.Property(usrMed => usrMed.UserMediaStatus)
                      .HasConversion<string>()
                      .HasMaxLength(50);

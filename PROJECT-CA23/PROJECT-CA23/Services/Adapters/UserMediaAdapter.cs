@@ -38,6 +38,7 @@ namespace PROJECT_CA23.Services.Adapters
             };
         }
 
+
         public UserMedia Bind(User user, Media media)
         {
             return new UserMedia()
@@ -50,6 +51,23 @@ namespace PROJECT_CA23.Services.Adapters
                 ReviewId = null,
                 Review = null
             };
+        }
+
+
+        public UserMedia Bind(UserMedia userMedia, UpdateUserMediaRequest req)
+        {
+            userMedia.UserMediaStatus = Enum.Parse<EUserMediaStatus>(req.UserMediaStatus);
+            userMedia.Note = req.Note;
+
+            if (userMedia.Review != null)
+            {
+                userMedia.Review.ReviewText = req.ReviewText;
+                userMedia.Review.UserRating = Enum.Parse<EUserRating>(req.UserRating);
+            }
+
+
+
+            return userMedia;
         }
     }
 }

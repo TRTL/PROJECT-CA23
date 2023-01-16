@@ -7,5 +7,6 @@ namespace PROJECT_CA23.Services.Adapters.IAdapters
     {
         UserMediaDto Bind(UserMedia userMedia);
         UserMedia Bind(User user, Media media);
+        UserMedia Bind(UserMedia userMedia, UpdateUserMediaRequest req);
     }
 }

@@ -2,10 +2,11 @@
 {
     public enum EUserRating
     {
-        Bad,
-        Meh,
-        Ok,
-        Good,
-        Wow
+        NoRating,
+        OneStar,
+        TwoStars,
+        ThreeStars,
+        FourStars,
+        FiveStars
     }
 }
