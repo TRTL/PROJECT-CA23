@@ -188,17 +188,10 @@ namespace PROJECT_CA23.Controllers
                     return BadRequest("Selected UserRating is invalid");
                 }
 
-                // NEVEIKIA !!! META KLAIDA -> (InvalidOperationException: Error while validating the service descriptor) !!!
                 var userMedia = await _userMediaRepo.GetAsync(a => a.UserMediaId == req.UserMediaId, new List<string> { "Review" });
                 userMedia = await _reviewRepoService.AddReviewIfNeeded(userMedia, req);
                 userMedia = _userMediaAdapter.Bind(userMedia, req);
                 await _userMediaRepo.UpdateAsync(userMedia);
-
-                //var userMedia = await _userMediaRepo.GetAsync(a => a.UserMediaId == req.UserMediaId, new List<string> { "User", "Media", "Review" });
-
-                //userMedia = await _reviewRepo.AddReviewIfNeeded(userMedia, req);
-                //userMedia = _userMediaAdapter.Bind(userMedia, req);
-                //await _userMediaRepo.UpdateAsync(userMedia);
 
                 return NoContent();
             }
