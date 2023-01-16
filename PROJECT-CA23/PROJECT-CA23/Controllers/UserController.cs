@@ -39,6 +39,7 @@ namespace PROJECT_CA23.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+
         /// <summary>
         /// Get user information
         /// </summary>
@@ -85,6 +86,7 @@ namespace PROJECT_CA23.Controllers
             }
         }
 
+
         /// <summary>
         /// Get information all users
         /// </summary>
@@ -115,6 +117,7 @@ namespace PROJECT_CA23.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
 
         /// <summary>
         /// Update user information
@@ -165,6 +168,51 @@ namespace PROJECT_CA23.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Delete address by user id
+        /// </summary>
+        /// <param name="id">User id whos address will be deleted</param>
+        /// <returns></returns>
+        /// <response code="204">Updated</response>
+        /// <response code="400">Bad request</response>
+        /// <response code="401">Client could not authenticate a request</response>
+        /// <response code="404">Not found</response>
+        /// <response code="500">Internal server error</response>
+        [HttpDelete("{id:int}/Delete")]
+        [Authorize(Roles = "admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult DeleteUser(int id)
+        {
+            _logger.LogInformation($"DeleteUser atempt for UserId - {id}");
+            try
+            {
+                if (id <= 0)
+                {
+                    _logger.LogInformation($"{DateTime.Now} Failed DeleteUser attempt for UserId - {id}. User id is incorrect.");
+                    return BadRequest("User id is incorrect.");
+                }
+
+                var user = _userRepo.Get(id);
+                if (user == null)
+                {
+                    _logger.LogInformation($"{DateTime.Now} Failed DeleteUser attempt with AddressId - {id}. User id not found.");
+                    return NotFound("User id not found");
+                }
+
+                _userRepo.Remove(user);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{DateTime.Now} DeleteUser exception error.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
 
 
 

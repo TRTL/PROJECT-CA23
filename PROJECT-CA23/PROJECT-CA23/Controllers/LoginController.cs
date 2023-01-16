@@ -116,9 +116,7 @@ namespace PROJECT_CA23.Controllers
                     PasswordHash = passwordHash,
                     PasswordSalt = passwordSalt,
                     Created = DateTime.UtcNow,
-                    Updated = DateTime.UtcNow,
-                    LastLogin = DateTime.UtcNow,
-                    IsDeleted = false
+                    Updated = DateTime.UtcNow
                 };
 
                 var id = _userRepository.Register(user);

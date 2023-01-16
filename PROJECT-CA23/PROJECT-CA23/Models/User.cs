@@ -32,12 +32,6 @@ namespace PROJECT_CA23.Models
         [Required]
         public DateTime Updated { get; set; }
 
-        [Required]
-        public DateTime LastLogin { get; set; }
-
-        [Required]
-        public bool IsDeleted { get; set; } = false;
-
         public virtual Address? Address { get; set; }
         public virtual List<UserMedia>? UserMedias { get; set; }
         public virtual List<Notification>? Notifications { get; set; }

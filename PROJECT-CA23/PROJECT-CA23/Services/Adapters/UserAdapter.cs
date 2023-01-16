@@ -23,9 +23,7 @@ namespace PROJECT_CA23.Services.Adapters
                 Username = user.Username,
                 Role = user.Role.ToString(),
                 Created = user.Created,
-                Updated = user.Updated,
-                LastLogin = user.LastLogin,
-                IsDeleted = user.IsDeleted
+                Updated = DateTime.Now
             };
         }
     }

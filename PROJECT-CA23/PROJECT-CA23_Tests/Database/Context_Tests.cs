@@ -34,9 +34,7 @@ namespace PROJECT_CA23_Tests.Database
                 PasswordHash = new byte[8],
                 PasswordSalt = new byte[8],
                 Created = DateTime.Now,
-                Updated = DateTime.Now,
-                LastLogin = DateTime.Now,
-                IsDeleted = false
+                Updated = DateTime.Now
             });
             _context.Add(new Media()
             {
@@ -96,7 +94,7 @@ namespace PROJECT_CA23_Tests.Database
             _context.SaveChanges();
 
 
-            Assert.IsTrue(_context.UserMedias.Any(m => m.User.FirstName == "Petras" && ));
+            Assert.IsTrue(_context.UserMedias.Any(m => m.User.FirstName == "Petras"));
             Assert.AreEqual(_context.UserMedias.Where(m => m.UserId == 1).Count(), 2);
         }
 

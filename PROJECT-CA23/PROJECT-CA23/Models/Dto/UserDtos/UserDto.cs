@@ -37,15 +37,5 @@
         /// </summary>
         public DateTime Updated { get; set; }
 
-        /// <summary>
-        /// Last login of user
-        /// </summary>
-        public DateTime LastLogin { get; set; }
-
-        /// <summary>
-        /// Is this user deleted?
-        /// </summary>
-        public bool IsDeleted { get; set; }
-
     }
 }
