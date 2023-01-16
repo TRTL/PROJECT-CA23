@@ -59,6 +59,12 @@ namespace PROJECT_CA23.Repositories
             _context.SaveChanges();
         }
 
+        public void Remove(User user)
+        {
+            _context.Users.Remove(user);
+            _context.SaveChanges();
+        }
+
 
     }
 }
