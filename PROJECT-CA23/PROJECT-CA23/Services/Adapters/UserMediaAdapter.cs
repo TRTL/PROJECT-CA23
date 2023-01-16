@@ -22,7 +22,7 @@ namespace PROJECT_CA23.Services.Adapters
 
             return new UserMediaDto()
             {
-                UserMediaId = userMedia.MediaId,
+                UserMediaId = userMedia.UserMediaId,
                 UserId= userMedia.UserId,
                 MediaId = userMedia.Media.MediaId,
                 Type  = userMedia.Media.Type,

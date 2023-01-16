@@ -55,11 +55,11 @@ const getMyInfo = () => {
             }
         })
         .then(obj => {
-            console.log(obj)
+            //console.log(obj)
 
             obj.json()
                 .then(userdata => {
-                    console.log(userdata)
+                    //console.log(userdata)
                     footer_userid_label.innerHTML = "ID: " + userdata.userId;
                     footer_role_label.innerHTML = "Role: " + userdata.role;
                     footer_username_label.innerHTML = "Username: " + userdata.username;
@@ -88,7 +88,7 @@ const getUserInfo = () => {
             }
         })
         .then(obj => {
-            console.log(obj)
+            //console.log(obj)
 
             obj.json()
                 .then(userdata => {
@@ -122,7 +122,7 @@ const getAddress = () => {
             }
         })
         .then(res => {
-            console.log(res)
+            //console.log(res)
             if (res.ok) {
                 message(res);
                 res.json()
@@ -135,10 +135,9 @@ const getAddress = () => {
                     })
             }
             else {
-                //message('Klaida: ' + res.status + ' ' + res.statusText);
                 res.text()
                     .then(text => {
-                        message('Klaida: ' + res.status + ' ' + res.statusText + ' ' + text);
+                        message(text);
                     })
             }
         })
@@ -168,7 +167,7 @@ const updateAddress = () => {
             body: JSON.stringify(newObject_UpdateAddress)
         })
         .then(res => {
-            console.log(res)
+            //console.log(res)
             if (res.ok) {
                 message('Address updated successfully')
             }
