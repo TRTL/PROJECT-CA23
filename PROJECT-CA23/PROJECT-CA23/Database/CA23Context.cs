@@ -14,8 +14,7 @@ namespace PROJECT_CA23.Database
         public DbSet<Media> Medias { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<UserMedia> UserMedias { get; set; }
-        public DbSet<Review> Reviews { get; set; }
-        public DbSet<Notification> Notifications { get; set; }        
+        public DbSet<Review> Reviews { get; set; }    
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,9 +30,6 @@ namespace PROJECT_CA23.Database
             user.HasMany(user => user.UserMedias)
                 .WithOne(medi => medi.User)
                 .HasForeignKey(media => media.UserId); // User 1 - 100 UserMedias
-            user.HasMany(user => user.Notifications)
-                .WithOne(noti => noti.User)
-                .HasForeignKey(noti => noti.UserId); // User 1 - 100 Notifications
             user.HasData(CA23InitialData.userInitialDataSeed);
 
 
@@ -79,12 +75,6 @@ namespace PROJECT_CA23.Database
                   .HasConversion<string>()
                   .HasMaxLength(50); 
 
-
-            var notification = modelBuilder.Entity<Notification>();
-            notification.HasKey(noti => noti.NotificationId);
-            notification.HasOne(noti => noti.User)
-                        .WithMany(user => user.Notifications)
-                        .HasForeignKey(noti => noti.UserId); // User 1 - 100 Notifications
         }
     }
 }

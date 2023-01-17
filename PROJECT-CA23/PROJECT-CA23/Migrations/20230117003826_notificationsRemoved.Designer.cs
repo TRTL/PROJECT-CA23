@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PROJECT_CA23.Database;
 
@@ -10,9 +11,11 @@ using PROJECT_CA23.Database;
 namespace PROJECTCA23.Migrations
 {
     [DbContext(typeof(CA23Context))]
-    partial class CA23ContextModelSnapshot : ModelSnapshot
+    [Migration("20230117003826_notificationsRemoved")]
+    partial class notificationsRemoved
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.1");

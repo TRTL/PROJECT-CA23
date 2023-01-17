@@ -34,6 +34,5 @@ namespace PROJECT_CA23.Models
 
         public virtual Address? Address { get; set; }
         public virtual List<UserMedia>? UserMedias { get; set; }
-        public virtual List<Notification>? Notifications { get; set; }
     }
 }
