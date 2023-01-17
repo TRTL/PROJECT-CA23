@@ -8,6 +8,9 @@ using PROJECT_CA23.Services.Adapters.IAdapters;
 
 namespace PROJECT_CA23.Controllers
 {
+    /// <summary>
+    /// Get genres of media that are saved on our db
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class GenreController : ControllerBase
@@ -27,10 +30,10 @@ namespace PROJECT_CA23.Controllers
         /// </summary>
         /// <param name="id">Genre Id</param>
         /// <returns></returns>
-        /// <response code="200">OK</response>
-        /// <response code="400">Bad request</response>
-        /// <response code="401">Client could not authenticate a request</response>
-        /// <response code="500">Internal server error</response>
+        /// <response code="200">Indicates that the request has succeeded</response>
+        /// <response code="400">Server cannot or will not process the request</response>
+        /// <response code="401">Client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
+        /// <response code="500">Server encountered an unexpected condition that prevented it from fulfilling the request</response>
         [Authorize(Roles = "admin,user")]
         [HttpGet("/GetAllMediaByGenreId/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<MediaDto>))]

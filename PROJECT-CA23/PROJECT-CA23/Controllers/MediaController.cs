@@ -19,6 +19,9 @@ using System.Security.Claims;
 
 namespace PROJECT_CA23.Controllers
 {
+    /// <summary>
+    /// Read, add or delete of media 
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class MediaController : ControllerBase
@@ -41,13 +44,13 @@ namespace PROJECT_CA23.Controllers
         /// </summary>
         /// <param name="id">Media Id</param>
         /// <returns></returns>
-        /// <response code="200">OK</response>
-        /// <response code="400">Bad request</response>
-        /// <response code="401">Client could not authenticate a request</response>
-        /// <response code="500">Internal server error</response>
+        /// <response code="200">Indicates that the request has succeeded</response>
+        /// <response code="400">Server cannot or will not process the request</response>
+        /// <response code="401">Client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
+        /// <response code="500">Server encountered an unexpected condition that prevented it from fulfilling the request</response>
         [Authorize(Roles = "admin,user")]
         [HttpGet("/GetMediaById/{id:int}", Name = "GetMediaById")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Media>))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -78,15 +81,15 @@ namespace PROJECT_CA23.Controllers
         /// <summary>
         /// Get list of all medias
         /// </summary>
-        /// <param name="tyte">Media type: movie or series</param>
+        /// <param name="type">Media type: movie or series</param>
         /// <returns></returns>
-        /// <response code="200">OK</response>
-        /// <response code="400">Bad request</response>
-        /// <response code="401">Client could not authenticate a request</response>
-        /// <response code="500">Internal server error</response>
+        /// <response code="200">Indicates that the request has succeeded</response>
+        /// <response code="400">Server cannot or will not process the request</response>
+        /// <response code="401">Client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
+        /// <response code="500">Server encountered an unexpected condition that prevented it from fulfilling the request</response>
         [Authorize(Roles = "admin,user")]
         [HttpGet("/GetAllMedias")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<MediaDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<MediaDto>))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Produces(MediaTypeNames.Application.Json)]
@@ -118,10 +121,10 @@ namespace PROJECT_CA23.Controllers
         /// </summary>
         /// <param name="req">Media fields. Type and title are required</param>
         /// <returns></returns>
-        /// <response code="200">OK</response>
-        /// <response code="400">Bad request</response>
-        /// <response code="401">Client could not authenticate a request</response>
-        /// <response code="500">Internal server error</response>
+        /// <response code="201">Indicates that the request has succeeded and has led to the creation of a resource</response>
+        /// <response code="400">Server cannot or will not process the request</response>
+        /// <response code="401">Client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
+        /// <response code="500">Server encountered an unexpected condition that prevented it from fulfilling the request</response>
         [Authorize(Roles = "admin")]
         [HttpPost("/AddMediaManually")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Media))]
@@ -158,27 +161,38 @@ namespace PROJECT_CA23.Controllers
         /// </summary>
         /// <param name="id">Media Id</param>
         /// <returns></returns>
+        /// <response code="204">Server has successfully fulfilled the request and there is no content returned</response>
+        /// <response code="400">Server cannot or will not process the request</response>
+        /// <response code="401">Client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
+        /// <response code="404">Server cannot find the requested resource</response>
+        /// <response code="500">Server encountered an unexpected condition that prevented it from fulfilling the request</response>
         [Authorize(Roles = "admin")]
         [HttpDelete("/DeleteMedia/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteMedia(int id)
         {
             _logger.LogInformation($"DeleteMedia atempt with id - {id}");
-
             try
             {
+                if (id <= 0)
+                {
+                    _logger.LogInformation("DeleteMedia request id - {id} is incorrect", id);
+                    return BadRequest("DeleteMedia request id is incorrect.");
+                }
+
                 var mediaExist = await _mediaRepo.ExistAsync(m => m.MediaId == id);
                 if (!mediaExist)
                 {
-                    _logger.LogInformation("Media with id - {id} not found", id);
-                    return NotFound();
+                    _logger.LogInformation("DeleteMedia request with MediaId - {id} not found", id);
+                    return NotFound("Media not found");
                 }
+
                 var entity = await _mediaRepo.GetAsync(m => m.MediaId == id);
                 await _mediaRepo.RemoveAsync(entity);
-
                 return NoContent();
             }
             catch (Exception ex)

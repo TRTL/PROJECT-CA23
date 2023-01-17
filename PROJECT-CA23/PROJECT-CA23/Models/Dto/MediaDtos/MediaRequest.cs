@@ -5,14 +5,14 @@ namespace PROJECT_CA23.Models.Dto.MediaDtos
     public class MediaRequest
     {
         /// <summary>
-        /// Select a type for new media. Passible types: movie or series
+        /// Select a type for new media. Passible types: movie or series. Required field.
         /// </summary>
         [Required]
         [MaxLength(30, ErrorMessage = "Type text cannot be longer than 30 symbols")]
         public string Type { get; set; }
 
         /// <summary>
-        /// Title of new media
+        /// Title of new media.  Required field.
         /// </summary>
         [Required]
         [MaxLength(1000, ErrorMessage = "Title text cannot be longer than 1000 symbols")]
@@ -31,17 +31,17 @@ namespace PROJECT_CA23.Models.Dto.MediaDtos
         public string? Runtime { get; set; }
 
         /// <summary>
-        /// Directors
+        /// Directors name
         /// </summary>
         public string? Director { get; set; }
 
         /// <summary>
-        /// Writers
+        /// Writers name
         /// </summary>
         public string? Writer { get; set; }
 
         /// <summary>
-        /// Actors
+        /// Actors name
         /// </summary>
         public string? Actors { get; set; }
 

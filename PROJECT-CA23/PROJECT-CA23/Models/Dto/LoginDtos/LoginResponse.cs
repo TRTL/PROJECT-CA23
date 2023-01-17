@@ -3,7 +3,7 @@
     public class LoginResponse
     {
         /// <summary>
-        /// Username of logged in user
+        /// Id of user that successfully logged in
         /// </summary>
         public int UserId { get; set; }
 

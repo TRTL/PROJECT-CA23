@@ -23,7 +23,7 @@
         public string Username { get; set; }
 
         /// <summary>
-        /// Role assigned for user
+        /// Role assigned for user. Passible roles: admin or user
         /// </summary>
         public string Role { get; set; }
 

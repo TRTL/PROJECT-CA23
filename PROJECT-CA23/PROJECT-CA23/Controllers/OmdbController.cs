@@ -14,7 +14,7 @@ using PROJECT_CA23.Repositories.RepositoryServices.IRepositoryServices;
 namespace PROJECT_CA23.Controllers
 {
     /// <summary>
-    /// Hi mom!
+    /// Get media object from external OMDB API or save that media object to our db
     /// </summary>
     [Route("[controller]")]
     [ApiController]
@@ -46,20 +46,18 @@ namespace PROJECT_CA23.Controllers
         /// </summary>
         /// <param name="mediaTitle">title to search for</param>
         /// <returns></returns>
-        /// <response code="200">OK</response>
-        /// <response code="400">Bad request</response>
-        /// <response code="401">Client could not authenticate a request</response>
-        /// <response code="500">Internal server error</response>
+        /// <response code="200">Indicates that the request has succeeded</response>
+        /// <response code="401">Client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
+        /// <response code="500">Server encountered an unexpected condition that prevented it from fulfilling the request</response>
         [Authorize(Roles = "admin")]
         [HttpGet("/SearchForMediaAtOmdb")]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(OmdbApiMedia))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OmdbApiMedia))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Produces(MediaTypeNames.Application.Json)]
         public async Task<IActionResult> SearchForMediaAtOmdb([FromQuery] string mediaTitle)
         {
             _logger.LogInformation($"SearchForMediaAtOmdb atempt with mediaTitle: {mediaTitle}");
-
             try
             {
                 var omdbApiMedia = await _mediaService.SearchForMediaAtOmdbApiAsync(mediaTitle);
@@ -76,12 +74,12 @@ namespace PROJECT_CA23.Controllers
         /// <summary>
         /// Add media from Omdb Api
         /// </summary>
-        /// <param name="req">Media fields. Type and title are required</param>
+        /// <param name="req">Media fields. One object as we get it from OMDB API. Type and title are required</param>
         /// <returns></returns>
-        /// <response code="200">OK</response>
-        /// <response code="400">Bad request</response>
-        /// <response code="401">Client could not authenticate a request</response>
-        /// <response code="500">Internal server error</response>
+        /// <response code="201">Indicates that the request has succeeded and has led to the creation of a resource</response>
+        /// <response code="400">Server cannot or will not process the request</response>
+        /// <response code="401">Client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
+        /// <response code="500">Server encountered an unexpected condition that prevented it from fulfilling the request</response>
         [Authorize(Roles = "admin")]
         [HttpPost("/AddMediaFromOmdb")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(OmdbApiMedia))]

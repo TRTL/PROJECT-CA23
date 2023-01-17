@@ -19,6 +19,9 @@ using System.Net.Mime;
 
 namespace PROJECT_CA23.Controllers
 {
+    /// <summary>
+    /// Read, update or delete user 
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -45,11 +48,11 @@ namespace PROJECT_CA23.Controllers
         /// </summary>
         /// <param name="id">Id of user</param>
         /// <returns></returns>
-        /// <response code="200">OK</response>
-        /// <response code="400">Bad request</response>
-        /// <response code="401">Client could not authenticate a request</response>
+        /// <response code="200">Indicates that the request has succeeded</response>
+        /// <response code="400">Server cannot or will not process the request</response>
+        /// <response code="401">Client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
         /// <response code="404">Not found</response>
-        /// <response code="500">Internal server error</response>
+        /// <response code="500">Server encountered an unexpected condition that prevented it from fulfilling the request</response>
         [Authorize(Roles = "admin,user")]
         [HttpGet("/GetUser/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
@@ -91,10 +94,10 @@ namespace PROJECT_CA23.Controllers
         /// Get information all users
         /// </summary>
         /// <returns></returns>
-        /// <response code="200">OK</response>
-        /// <response code="400">Bad request</response>
-        /// <response code="401">Client could not authenticate a request</response>
-        /// <response code="500">Internal server error</response>
+        /// <response code="200">Indicates that the request has succeeded</response>
+        /// <response code="400">Server cannot or will not process the request</response>
+        /// <response code="401">Client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
+        /// <response code="500">Server encountered an unexpected condition that prevented it from fulfilling the request</response>
         [Authorize(Roles = "admin")]
         [HttpGet("/GetAllUsers")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserDto>))]
@@ -125,11 +128,11 @@ namespace PROJECT_CA23.Controllers
         /// <param name="id">User id that will be updated</param>
         /// <param name="updateUserDto">Updatable fields: first and last name</param>
         /// <returns></returns>
-        /// <response code="204">Updated</response>
-        /// <response code="400">Bad request</response>
-        /// <response code="401">Client could not authenticate a request</response>
+        /// <response code="204">Server has successfully fulfilled the request and there is no content returned</response>
+        /// <response code="400">Server cannot or will not process the request</response>
+        /// <response code="401">Client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
         /// <response code="404">Not found</response>
-        /// <response code="500">Internal server error</response>
+        /// <response code="500">Server encountered an unexpected condition that prevented it from fulfilling the request</response>
         [HttpPut("{id:int}/Update/")]
         [Authorize(Roles = "admin,user")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -174,11 +177,11 @@ namespace PROJECT_CA23.Controllers
         /// </summary>
         /// <param name="id">User id whos address will be deleted</param>
         /// <returns></returns>
-        /// <response code="204">Updated</response>
-        /// <response code="400">Bad request</response>
-        /// <response code="401">Client could not authenticate a request</response>
+        /// <response code="204">Server has successfully fulfilled the request and there is no content returned</response>
+        /// <response code="400">Server cannot or will not process the request</response>
+        /// <response code="401">Client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
         /// <response code="404">Not found</response>
-        /// <response code="500">Internal server error</response>
+        /// <response code="500">Server encountered an unexpected condition that prevented it from fulfilling the request</response>
         [HttpDelete("{id:int}/Delete")]
         [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

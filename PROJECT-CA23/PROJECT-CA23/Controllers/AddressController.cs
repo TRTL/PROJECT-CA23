@@ -15,6 +15,9 @@ using System.Security.Claims;
 
 namespace PROJECT_CA23.Controllers
 {
+    /// <summary>
+    /// Read, create, update or delete addresses 
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class AddressController : ControllerBase
@@ -44,14 +47,16 @@ namespace PROJECT_CA23.Controllers
         /// </summary>
         /// <param name="id">User Id</param>
         /// <returns></returns>
-        /// <response code="200">OK</response>
-        /// <response code="400">Bad request</response>
-        /// <response code="401">Client could not authenticate a request</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Internal server error</response>
+        /// <response code="200">Indicates that the request has succeeded</response>
+        /// <response code="400">Server cannot or will not process the request</response>
+        /// <response code="401">Client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
+        /// <response code="403">Server understands the request but refuses to authorize it</response>
+        /// <response code="404">Server cannot find the requested resource</response>
+        /// <response code="500">Server encountered an unexpected condition that prevented it from fulfilling the request</response>
         [Authorize(Roles = "admin,user")]
         [HttpGet("/GetAddress/{id:int}", Name = "GetAddress")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AddressDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -67,12 +72,16 @@ namespace PROJECT_CA23.Controllers
                 var currentUserId = int.Parse(_httpContextAccessor.HttpContext.User.Identity.Name);
                 if (currentUserRole != "admin" && currentUserId != id)
                 {
-                    _logger.LogWarning("User {currentUserId} tried to access user {id} info", currentUserId, id);
+                    _logger.LogWarning($"{DateTime.Now} user {currentUserId} tried to access user {id} info");
                     return Forbid();
                 }
 
                 var address = _addressRepo.GetAsync(a => a.UserId == id, new List<string>() { "User" }).Result;
-                if (address == null) return NotFound("User does not have an address");
+                if (address == null) 
+                {
+                    _logger.LogWarning($"{DateTime.Now} user {currentUserId} does not have an address");
+                    return NotFound("User does not have an address");
+                }
 
                 var addressDto = _addressAdapter.Bind(address);
                 return Ok(addressDto);
@@ -89,10 +98,10 @@ namespace PROJECT_CA23.Controllers
         /// Get list of all addresses
         /// </summary>
         /// <returns></returns>
-        /// <response code="200">OK</response>
-        /// <response code="400">Bad request</response>
-        /// <response code="401">Client could not authenticate a request</response>
-        /// <response code="500">Internal server error</response>
+        /// <response code="200">Indicates that the request has succeeded</response>
+        /// <response code="400">Server cannot or will not process the request</response>
+        /// <response code="401">Client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
+        /// <response code="500">Server encountered an unexpected condition that prevented it from fulfilling the request</response>
         [Authorize(Roles = "admin")]
         [HttpGet("/GetAllAddresses")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<AddressDto>))]
@@ -132,17 +141,16 @@ namespace PROJECT_CA23.Controllers
         /// </summary>
         /// <param name="req">UserId, Country, City, AddressText and PostCode</param>
         /// <returns></returns>
-        /// <response code="200">OK</response>
-        /// <response code="400">Bad request</response>
-        /// <response code="401">Client could not authenticate a request</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Internal server error</response>
+        /// <response code="201">Indicates that the request has succeeded and has led to the creation of a resource</response>
+        /// <response code="400">Server cannot or will not process the request</response>
+        /// <response code="401">Client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
+        /// <response code="500">Server encountered an unexpected condition that prevented it from fulfilling the request</response>
         [Authorize(Roles = "admin,user")]
         [HttpPost("/AddAddress")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(AddressDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
@@ -161,7 +169,10 @@ namespace PROJECT_CA23.Controllers
                 }
                 
                 var user = _userRepo.Get(req.UserId);
-                if (user.Address != null) return NotFound("User already has an address");
+                {
+                    _logger.LogWarning("User {currentUserId} tried to access user {id} info", currentUserId, req.UserId);
+                    if (user.Address != null) return NotFound("User already has an address");
+                }
 
                 var newAddress = _addressAdapter.Bind(req, user);
                 await _addressRepo.CreateAsync(newAddress);
@@ -180,11 +191,11 @@ namespace PROJECT_CA23.Controllers
         /// </summary>
         /// <param name="req">Updatable fields</param>
         /// <returns></returns>
-        /// <response code="204">Updated</response>
-        /// <response code="400">Bad request</response>
-        /// <response code="401">Client could not authenticate a request</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Internal server error</response>
+        /// <response code="204">Server has successfully fulfilled the request and there is no content returned</response>
+        /// <response code="400">Server cannot or will not process the request</response>
+        /// <response code="401">Client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
+        /// <response code="404">Server cannot find the requested resource</response>
+        /// <response code="500">Server encountered an unexpected condition that prevented it from fulfilling the request</response>
         [HttpPut("/UpdateAddress")]
         [Authorize(Roles = "admin,user")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -227,11 +238,11 @@ namespace PROJECT_CA23.Controllers
         /// </summary>
         /// <param name="id">User id whos address will be deleted</param>
         /// <returns></returns>
-        /// <response code="204">Updated</response>
-        /// <response code="400">Bad request</response>
-        /// <response code="401">Client could not authenticate a request</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Internal server error</response>
+        /// <response code="204">Server has successfully fulfilled the request and there is no content returned</response>
+        /// <response code="400">Server cannot or will not process the request</response>
+        /// <response code="401">Client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
+        /// <response code="404">Server cannot find the requested resource</response>
+        /// <response code="500">Server encountered an unexpected condition that prevented it from fulfilling the request</response>
         [HttpDelete("{id:int}/Delete")]
         [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

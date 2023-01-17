@@ -3,12 +3,12 @@
     public class AddUserMediaRequest
     {
         /// <summary>
-        /// User Id
+        /// User by user id to whom media will added
         /// </summary>
         public int UserId { get; set; }
 
         /// <summary>
-        /// Media Id
+        /// Media Id of a media that will be added
         /// </summary>
         public int MediaId { get; set; }        
     }

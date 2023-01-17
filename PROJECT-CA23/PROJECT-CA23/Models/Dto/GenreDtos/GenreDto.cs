@@ -16,7 +16,7 @@ namespace PROJECT_CA23.Models.Dto.GenreDtos
         public int GenreId { get; set; }
 
         /// <summary>
-        /// Name of media genre
+        /// Name of media genre. Available options are: "movie" or "serias".
         /// </summary>
         public string Name { get; set; }
     }

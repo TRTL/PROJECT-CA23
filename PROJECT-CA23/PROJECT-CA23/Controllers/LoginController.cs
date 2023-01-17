@@ -5,9 +5,13 @@ using PROJECT_CA23.Models.Enums;
 using PROJECT_CA23.Models;
 using PROJECT_CA23.Repositories.IRepositories;
 using PROJECT_CA23.Services.IServices;
+using System.Net.Mime;
 
 namespace PROJECT_CA23.Controllers
 {
+    /// <summary>
+    /// New user registration or existing user login
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class LoginController : ControllerBase
@@ -34,16 +38,16 @@ namespace PROJECT_CA23.Controllers
         /// </summary>
         /// <param name="model">username and password</param>
         /// <returns></returns>
-        /// <response code="200">OK</response>
-        /// <response code="400">Bad request</response>
-        /// <response code="401">Client could not authenticate a request</response>
-        /// <response code="500">Internal server error</response>
+        /// <response code="200">Indicates that the request has succeeded</response>
+        /// <response code="400">Server cannot or will not process the request</response>
+        /// <response code="401">Client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
+        /// <response code="500">Server encountered an unexpected condition that prevented it from fulfilling the request</response>
         [HttpPost("/Login")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Produces("application/json")]
+        [Produces(MediaTypeNames.Application.Json)]
         public IActionResult Login([FromBody] LoginRequest model)
         {
             _logger.LogInformation($"Login atempt with username - {model.Username}");
@@ -78,16 +82,16 @@ namespace PROJECT_CA23.Controllers
         /// </summary>
         /// <param name="model">First name, last name, role, username and password</param>
         /// <returns></returns>
-        /// <response code="200">OK</response>
-        /// <response code="400">Bad request</response>
-        /// <response code="401">Client could not authenticate a request</response>
-        /// <response code="500">Internal server error</response>
+        /// <response code="201">Indicates that the request has succeeded and has led to the creation of a resource</response>
+        /// <response code="400">Server cannot or will not process the request</response>
+        /// <response code="401">Client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
+        /// <response code="500">Server encountered an unexpected condition that prevented it from fulfilling the request</response>
         [HttpPost("/Register")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Produces("application/json")]
+        [Consumes(MediaTypeNames.Application.Json)]
         public IActionResult Register([FromBody] RegisterUserRequest model)
         {
             try
@@ -121,7 +125,7 @@ namespace PROJECT_CA23.Controllers
 
                 var id = _userRepository.Register(user);
 
-                return Created(nameof(Login), new { id = id });
+                return Created("", new { id = id });
             }
             catch (Exception ex)
             {

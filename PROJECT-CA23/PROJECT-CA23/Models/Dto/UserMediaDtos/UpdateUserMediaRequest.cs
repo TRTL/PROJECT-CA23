@@ -12,24 +12,26 @@ namespace PROJECT_CA23.Models.Dto.UserMediaDtos
         public int? UserMediaId { get; set; }
 
         /// <summary>
-        /// UserMediaStatus
+        /// User Media Status. Available options are: "Wishlist", "Watching", "Finished".
         /// </summary>
         [Required]
         public string UserMediaStatus { get; set; }
 
         /// <summary>
-        /// User Rating
+        /// User Rating. Available options are: "NoRating", "OneStar", "TwoStars", "ThreeStars", "FourStars", "FiveStars".
         /// </summary>
         public string? UserRating { get; set; }
 
         /// <summary>
-        /// Review Text
+        /// Review Text for the media
         /// </summary>
+        [MaxLength(1000, ErrorMessage = "Review text cannot be longer than 1000 characters")]
         public string? ReviewText { get; set; }
 
         /// <summary>
-        /// Note
+        /// Personal user note
         /// </summary>
+        [MaxLength(1000, ErrorMessage = "Note cannot be longer than 1000 characters")]
         public string? Note { get; set; }
     }
 }
