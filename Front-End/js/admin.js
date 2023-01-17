@@ -117,7 +117,9 @@ const getAllUsers = () => {
 
 get_all_users_button.addEventListener('click', getAllUsers);
 
+
 ////////////////////////////////////////// deleteUser //////////////////////////////////////////
+
 
 const deleteUser = (id) => {
     if (confirm("Do you really want to delete this record?") == true) {
@@ -150,17 +152,6 @@ const confirmDeleteUser = (id) => {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
 ////////////////////////////////////////// getAllAddresses //////////////////////////////////////////
 
 
@@ -180,15 +171,15 @@ const getAllAddresses = () => {
                 .then(addressesdata => {
                     //console.log(addressesdata)
                     addressesdata.forEach(a => {
-                        all_addresses_table_body.innerHTML +=
-                            '<tr id="all_addresses_table_user_"' + a.userId + '>' +
+                        all_addresses_table_body.innerHTML =
+                            '<tr id="all_addresses_table_user_' + a.userId + '">' +
                             '<td>' + a.userId + '</td>' +
                             '<td>' + a.firstName + ' ' + a.lastName + '</td>' +
                             '<td>' + a.country + '</td>' +
                             '<td>' + a.city + '</td>' +
                             '<td>' + a.addressText + '</td>' +
                             '<td>' + a.postCode + '</td>' +
-                            '<td></td>' +
+                            '<td class="actions"><div onclick="deleteAddress(' + a.userId + ')" title="Delete">️🗑️</div></td>' +
                             '</tr>';
                     });
                 })
@@ -199,11 +190,45 @@ const getAllAddresses = () => {
 get_all_addresses_button.addEventListener('click', getAllAddresses);
 
 
+////////////////////////////////////////// deleteAddress //////////////////////////////////////////
+
+
+const deleteAddress = (id) => {
+    if (confirm("Do you really want to delete this record?") == true) {
+        confirmDeleteAddress(id);
+    }
+};
+
+const confirmDeleteAddress = (id) => {
+    fetch('https://localhost:' + user.localhost + '/Address/' + id + '/Delete',
+        {
+            method: 'delete',
+            headers: {
+                'Authorization': "Bearer " + user.token
+            }
+        })
+        .then(deleteResponse => {
+            console.log(deleteResponse)
+            if (deleteResponse.ok) {
+                document.getElementById('all_addresses_table_user_' + id).remove();
+                message(`Address deleted successfully`);
+            }
+            else {
+                deleteResponse.text()
+                    .then(text => {
+                        message(text);
+                    })
+            }
+        })
+        .catch((error) => message(`Klaida: ${error}`))
+}
+
+
 ////////////////////////////////////////// getAllMedias //////////////////////////////////////////
 
 
-const getAllMedias = () => {
-    fetch('https://localhost:' + user.localhost + '/GetAllMedias',
+const getAllMedias = (type) => {
+    fetch('https://localhost:' + user.localhost + '/GetAllMedias?type=' + type,
         {
             method: 'get',
             headers: {
@@ -223,15 +248,14 @@ const getAllMedias = () => {
                             allGenres += g.name + ' ';
                         });
                         all_media_table_body.innerHTML +=
-                            '<tr id="all_addresses_table_user_"' + m.mediaId + '>' +
-                            '<td>' + m.mediaId + '</td>' +
+                            '<tr id="all_media_table_media_' + m.mediaId + '">' +
                             '<td>' + m.type + '</td>' +
                             '<td>' + m.title + '</td>' +
                             '<td>' + m.year + '</td>' +
                             '<td>' + allGenres + '</td>' +
-                            '<td>' + m.imdbId + '</td>' +
+                            '<td><a href="https://www.imdb.com/title/' + m.imdbId + '/" target="_blank">IMDB</a></td>' +
                             '<td>⭐' + m.imdbRating + '</td>' +
-                            '<td></td>' +
+                            '<td class="actions"><div onclick="deleteMedia(' + m.mediaId + ')" title="Delete">️🗑️</div></td>' +
                             '</tr>';
                     });
                 })
@@ -239,7 +263,45 @@ const getAllMedias = () => {
         .catch((err) => message(`Klaida: ${err}`));
 }
 
-get_all_media_button.addEventListener('click', getAllMedias);
+get_all_media_button.addEventListener('click', () => {
+    all_media_table_body.innerHTML = "";
+    getAllMedias("movie");
+    getAllMedias("series");
+});
+
+////////////////////////////////////////// deleteMedia //////////////////////////////////////////
+
+
+const deleteMedia = (id) => {
+    if (confirm("Do you really want to delete this record?") == true) {
+        confirmDeleteMedia(id);
+    }
+};
+
+const confirmDeleteMedia = (id) => {
+    fetch('https://localhost:' + user.localhost + '/DeleteMedia/' + id,
+        {
+            method: 'delete',
+            headers: {
+                'Authorization': "Bearer " + user.token
+            }
+        })
+        .then(deleteResponse => {
+            console.log(deleteResponse)
+            if (deleteResponse.ok) {
+                document.getElementById('all_media_table_media_' + id).remove();
+                message(`Media deleted successfully`);
+            }
+            else {
+                deleteResponse.text()
+                    .then(text => {
+                        message(text);
+                    })
+            }
+        })
+        .catch((error) => message(`Klaida: ${error}`))
+}
+
 
 
 ////////////////////////////////////////// SearchForMediaAtOmdb //////////////////////////////////////////

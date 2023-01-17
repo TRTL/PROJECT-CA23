@@ -23,7 +23,7 @@ namespace PROJECT_CA23.Services.Adapters
                 Username = user.Username,
                 Role = user.Role.ToString(),
                 Created = user.Created,
-                Updated = DateTime.Now
+                Updated = user.Updated
             };
         }
     }

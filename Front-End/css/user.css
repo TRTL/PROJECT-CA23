@@ -1,13 +1,25 @@
 #container_user_info,
-#container_update_user_info,
-#container_address,
-#container_add_address,
-#container_update_address,
-#container_delete_address {
+#container_update_user_info {
     padding: 50px;
     display: flex;
     flex-flow: column;
     align-items: flex-start;
+}
+
+.flex {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+}
+
+#container_address,
+#container_add_address,
+#container_update_address,
+#container_delete_address {
+    display: inline-block;
+    width: 350px;
+    height: 350px;
+    padding: 0 0 0 50px;
 }
 
 #add_address_form,
@@ -21,7 +33,8 @@
 }
 
 #container_user_info div,
-#container_update_user_info form div {
+#container_update_user_info form div,
+#container_address div {
     margin: 5px 0px;
 }
 

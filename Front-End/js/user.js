@@ -107,6 +107,44 @@ const getUserInfo = () => {
 get_user_info_button.addEventListener('click', getUserInfo);
 
 
+////////////////////////////////////////// updateUserInfo //////////////////////////////////////////
+
+
+const updateUserInfo = () => {
+
+    let form_UpdateUser = new FormData(update_user_info_form);
+    let newObject_UpdateUser = {};
+    form_UpdateUser.forEach((value, key) => { newObject_UpdateUser[key] = value });
+
+    fetch('https://localhost:' + user.localhost + '/User/' + user.userId + '/Update',
+        {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + user.token
+            },
+            body: JSON.stringify(newObject_UpdateUser)
+        })
+        .then(res => {
+            //console.log(res)
+            if (res.ok) {
+                message('User updated successfully');
+                getUserInfo();
+            }
+            else {
+                res.text()
+                    .then(text => {
+                        message(text);
+                    })
+            }
+        })
+        .catch((err) => message(`Klaida: ${err}`));
+}
+
+update_user_info_button.addEventListener('click', updateUserInfo);
+
+
 ////////////////////////////////////////// getAddress //////////////////////////////////////////
 
 
@@ -136,6 +174,9 @@ const getAddress = () => {
                 res.text()
                     .then(text => {
                         message(text);
+                        if (text === "User does not have an address") {
+
+                        }
                     })
             }
         })
@@ -143,6 +184,43 @@ const getAddress = () => {
 }
 
 get_address_button.addEventListener('click', getAddress);
+
+
+////////////////////////////////////////// addAddress //////////////////////////////////////////
+
+
+const addAddress = (mediaId) => {
+    let form_AddAddress = new FormData(add_address_form);
+    let newObject_AddAddress = {};
+    newObject_AddAddress['userId'] = user.userId;
+    form_AddAddress.forEach((value, key) => { newObject_AddAddress[key] = value });
+
+    fetch('https://localhost:' + user.localhost + '/AddAddress',
+        {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + user.token
+            },
+            body: JSON.stringify(newObject_AddAddress)
+        })
+        .then(res => {
+            //console.log(res)
+            if (res.ok) {
+                message('Address added successfully')
+            }
+            else {
+                res.text()
+                    .then(text => {
+                        message(text);
+                    })
+            }
+        })
+        .catch((err) => message(`Klaida: ${err}`));
+}
+
+add_address_button.addEventListener('click', addAddress);
 
 
 ////////////////////////////////////////// updateAddress //////////////////////////////////////////
@@ -169,7 +247,12 @@ const updateAddress = () => {
             if (res.ok) {
                 message('Address updated successfully')
             }
-            else message('Klaida: ' + res.status + ' ' + res.statusText);
+            else {
+                res.text()
+                    .then(text => {
+                        message(text);
+                    })
+            }
         })
         .catch((err) => message(`Klaida: ${err}`));
 }
@@ -177,5 +260,36 @@ const updateAddress = () => {
 update_address_button.addEventListener('click', updateAddress);
 
 
+////////////////////////////////////////// deleteAddress //////////////////////////////////////////
 
 
+const deleteAddress = () => {
+    if (confirm("Do you really want to delete address?") == true) {
+        confirmDeleteAddress();
+    }
+};
+
+const confirmDeleteAddress = () => {
+    fetch('https://localhost:' + user.localhost + '/Address/' + user.userId + '/Delete',
+        {
+            method: 'delete',
+            headers: {
+                'Authorization': "Bearer " + user.token
+            }
+        })
+        .then(deleteResponse => {
+            console.log(deleteResponse)
+            if (deleteResponse.ok) {
+                message(`Address deleted successfully`);
+            }
+            else {
+                deleteResponse.text()
+                    .then(text => {
+                        message(text);
+                    })
+            }
+        })
+        .catch((error) => message(`Klaida: ${error}`))
+}
+
+delete_address_button.addEventListener('click', deleteAddress);

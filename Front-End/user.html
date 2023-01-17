@@ -27,18 +27,11 @@
     </header>
     <section id="sub-menu">
         <a href="#" class="tab_link" data-div="1">User info</a>
-        <a href="#" class="tab_link" data-div="2">Update user info</a>
-        <a href="#" class="tab_link" data-div="3">Address</a>
-        <a href="#" class="tab_link" data-div="4">Add address</a>
-        <a href="#" class="tab_link" data-div="5">Update address</a>
-        <a href="#" class="tab_link" data-div="6">Delete address</a>
+        <a href="#" class="tab_link" data-div="2">Address</a>
     </section>
     <section id="main-container">
         <div class="hidable 1" style="display: none;">
             <div id="container_user_info">
-                <div>
-                    <input id="get_user_info_button" type="submit" value="Get my user info">
-                </div>
                 <div>
                     <label>User Id:</label>
                     <label id="get_user_info_userId"></label>
@@ -67,29 +60,27 @@
                     <label>Updated:</label>
                     <label id="get_user_info_updated"></label>
                 </div>
+                <div>
+                    <input id="get_user_info_button" type="submit" value="Get my user info">
+                </div>
             </div>
-        </div>
-        <div class="hidable 2" style="display: none;">
             <div id="container_update_user_info">
                 <form id="update_user_info_form">
                     <div>
                         <label for="Username">First Name:</label>
-                        <input type="text" id="update_user_info_firstname" name="Username">
+                        <input type="text" id="update_user_info_firstname" name="FirstName">
                     </div>
                     <div>
                         <label for="LastName">Last Name:</label>
                         <input type="text" id="update_user_info_lastName" name="LastName">
                     </div>
-                    <input id="update_user_info_button" type="submit" value="Update your user info">
+                    <input id="update_user_info_button" type="button" value="Update your user info">
                 </form>
             </div>
         </div>
-        <div class="hidable 3" style="display: none;">
+        <div class="hidable flex 2" style="display: none;">
             <div id="container_address">
                 <h3>Your address:</h3>
-                <div>
-                    <input id="get_address_button" type="button" value="Get your address">
-                </div>
                 <div>
                     <label>Addres Id:</label>
                     <label id="get_address_address_id"></label>
@@ -110,11 +101,12 @@
                     <label>Post Code:</label>
                     <label id="get_address_postcode"></label>
                 </div>
+                <div>
+                    <input id="get_address_button" type="button" value="Get your address">
+                </div>
             </div>
-        </div>
-        <div class="hidable 4" style="display: none;">
             <div id="container_add_address">
-                Add new address:
+                <h3>Add new address:</h3>
                 <form id="add_address_form">
                     <label for="country">Country:</label>
                     <input type="text" name="country">
@@ -127,8 +119,6 @@
                     <input id="add_address_button" type="button" value="Add">
                 </form>
             </div>
-        </div>
-        <div class="hidable 5" style="display: none;">
             <div id="container_update_address">
                 <h3>Update your address:</h3>
                 <form id="update_address_form">
@@ -143,12 +133,11 @@
                     <input id="update_address_button" type="button" value="Update">
                 </form>
             </div>
-        </div>
-        <div class="hidable 6" style="display: none;">
             <div id="container_delete_address">
-                Delete your address:
-                <input id="delete_address_button" type="submit" value="Delete">
+                <h3>Delete your address:</h3>
+                <input id="delete_address_button" type="button" value="Delete">
             </div>
+
         </div>
 
 

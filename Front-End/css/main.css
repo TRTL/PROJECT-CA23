@@ -203,6 +203,10 @@ td {
     padding: 5px 0 5px 5px;
 }
 
+th {
+    text-align: left;
+}
+
 
 .actions div {
     display: inline-block;
@@ -211,4 +215,8 @@ td {
 
 .actions div:hover {
     cursor: pointer;
+}
+
+.hidable {
+    width: 100%;
 }
