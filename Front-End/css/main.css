@@ -204,11 +204,11 @@ td {
 }
 
 
-.table-actions div {
+.actions div {
     display: inline-block;
     margin: 0 8px 0 0;
 }
 
-.table-actions div:hover {
+.actions div:hover {
     cursor: pointer;
 }

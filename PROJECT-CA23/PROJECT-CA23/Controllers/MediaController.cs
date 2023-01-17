@@ -84,7 +84,7 @@ namespace PROJECT_CA23.Controllers
         /// <response code="400">Bad request</response>
         /// <response code="401">Client could not authenticate a request</response>
         /// <response code="500">Internal server error</response>
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,user")]
         [HttpGet("/GetAllMedias")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<MediaDto>))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

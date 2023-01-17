@@ -39,6 +39,7 @@ namespace PROJECT_CA23
             builder.Services.AddTransient<IUserAdapter, UserAdapter>();
             builder.Services.AddTransient<IUserMediaAdapter, UserMediaAdapter>();
 
+            builder.Services.AddScoped<IGenreRepoService, GenreRepoService>();
             builder.Services.AddScoped<IReviewRepoService, ReviewRepoService>();
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -130,7 +131,7 @@ namespace PROJECT_CA23
 
             app.UseHttpsRedirection();
 
-            app.UseAuthentication();    // ORDER MATTERS
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();

@@ -9,6 +9,7 @@ using PROJECT_CA23.Repositories.IRepositories;
 using PROJECT_CA23.Services.Adapters.IAdapters;
 using PROJECT_CA23.Services.IServices;
 using Microsoft.IdentityModel.Tokens;
+using PROJECT_CA23.Repositories.RepositoryServices.IRepositoryServices;
 
 namespace PROJECT_CA23.Controllers
 {
@@ -23,19 +24,19 @@ namespace PROJECT_CA23.Controllers
         private readonly ILogger<OmdbController> _logger;
         private readonly IMediaAdapter _mediaAdapter;
         private readonly IMediaService _mediaService;
-        private readonly IGenreRepository _genreRepo;
+        private readonly IGenreRepoService _genreRepoService;
 
         public OmdbController(IMediaRepository mediaRepo,
                               ILogger<OmdbController> logger,
                               IMediaAdapter mediaAdapter,
                               IMediaService mediaService,
-                              IGenreRepository genreRepo)
+                              IGenreRepoService genreRepoService)
         {
             _mediaRepo = mediaRepo;
             _logger = logger;
             _mediaAdapter = mediaAdapter;
             _mediaService = mediaService;
-            _genreRepo = genreRepo;
+            _genreRepoService = genreRepoService;
         }
 
 
@@ -102,7 +103,7 @@ namespace PROJECT_CA23.Controllers
 
                 if (await _mediaRepo.ExistAsync(m => m.Title== req.Title)) return BadRequest("Media with same title already exists in DB.");
 
-                List<Genre>? mediaGenres = await _genreRepo.AddNewAndGetExistingGenresOfThisMedia(req.Genre);
+                List<Genre>? mediaGenres = await _genreRepoService.AddNewAndGetExistingGenres(req.Genre);
 
                 var newMedia = _mediaAdapter.Bind(req, mediaGenres);
 

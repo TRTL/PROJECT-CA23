@@ -58,13 +58,6 @@ namespace PROJECT_CA23.Services.Adapters
         {
             userMedia.UserMediaStatus = Enum.Parse<EUserMediaStatus>(req.UserMediaStatus);
             userMedia.Note = req.Note;
-
-            if (userMedia.Review != null)
-            {
-                userMedia.Review.ReviewText = req.ReviewText;
-                userMedia.Review.UserRating = Enum.Parse<EUserRating>(req.UserRating);
-            }
-
             return userMedia;
         }
     }

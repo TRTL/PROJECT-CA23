@@ -16,35 +16,9 @@ namespace PROJECT_CA23.Repositories
             _db = db;
         }
 
-        public async Task<List<Genre>?> AddNewAndGetExistingGenresOfThisMedia(string genreString)
+        public async Task<Genre?> FindByName(string genreName)
         {
-            if (genreString.IsNullOrEmpty()) return null;
-
-            var genreArr = genreString.Split(", ");
-
-            List<Genre> listOfGenres = new List<Genre>();
-
-            foreach (var genre in genreArr)
-            {
-                var foundGenre = await _db.Genres.FirstOrDefaultAsync(g => g.Name == genre);
-                if (foundGenre != null)
-                {
-                    listOfGenres.Add(foundGenre);
-                }
-                else
-                {
-                    var newGenre = new Genre()
-                    {
-                        Name = genre
-                    };
-                    _db.Genres.Add(newGenre);
-                    await _db.SaveChangesAsync();
-                    listOfGenres.Add(newGenre);
-                }
-            }
-            return listOfGenres;
+            return await _db.Genres.FirstOrDefaultAsync(g => g.Name == genreName);
         }
-
-
     }
 }

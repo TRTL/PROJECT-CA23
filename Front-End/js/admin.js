@@ -99,7 +99,7 @@ const getAllUsers = () => {
                     //console.log(usersdata)
                     usersdata.forEach(u => {
                         all_users_table_body.innerHTML +=
-                            '<tr id="all_users_table_user_"' + u.userId + '>' +
+                            '<tr id="all_users_table_user_' + u.userId + '">' +
                             '<td>' + u.userId + '</td>' +
                             '<td>' + u.firstName + '</td>' +
                             '<td>' + u.lastName + '</td>' +
@@ -107,9 +107,7 @@ const getAllUsers = () => {
                             '<td>' + u.role + '</td>' +
                             '<td>' + u.created + '</td>' +
                             '<td>' + u.updated + '</td>' +
-                            '<td>' + u.lastLogin + '</td>' +
-                            '<td>' + u.isDeleted + '</td>' +
-                            '<td></td>' +
+                            '<td class="actions"><div onclick="deleteUser(' + u.userId + ')" title="Delete">️🗑️</div></td>' +
                             '</tr>';
                     });
                 })
@@ -118,6 +116,49 @@ const getAllUsers = () => {
 }
 
 get_all_users_button.addEventListener('click', getAllUsers);
+
+////////////////////////////////////////// deleteUser //////////////////////////////////////////
+
+const deleteUser = (id) => {
+    if (confirm("Do you really want to delete this record?") == true) {
+        confirmDeleteUser(id);
+    }
+};
+
+const confirmDeleteUser = (id) => {
+    fetch('https://localhost:' + user.localhost + '/User/' + id + '/Delete',
+        {
+            method: 'delete',
+            headers: {
+                'Authorization': "Bearer " + user.token
+            }
+        })
+        .then(deleteResponse => {
+            console.log(deleteResponse)
+            if (deleteResponse.ok) {
+                document.getElementById('all_users_table_user_' + id).remove();
+                message(`User (ID:${id}) deleted successfully`);
+            }
+            else {
+                deleteResponse.text()
+                    .then(text => {
+                        message(text);
+                    })
+            }
+        })
+        .catch((error) => message(`Klaida: ${error}`))
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 ////////////////////////////////////////// getAllAddresses //////////////////////////////////////////
@@ -274,7 +315,12 @@ const addMediaFromOmdb = () => {
                     localStorage.removeItem('OmdbApiMedia');
                     message(`Media added to the library successfully`);
                 }
-                else message('Klaida: ' + res.status + ' ' + res.statusText);
+                else {
+                    res.text()
+                        .then(text => {
+                            message(text);
+                        })
+                }
             })
             .catch((err) => message(`Klaida: ${err}`));
     }

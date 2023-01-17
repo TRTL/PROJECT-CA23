@@ -108,7 +108,7 @@ const getAllUserMedias = () => {
                             '<td>' + (media.note ?? '') + '</td>' +
                             '<td>' + (media.userRating ?? '') + '</td>' +
                             '<td>' + (media.reviewText ?? '') + '</td>' +
-                            '<td class="table-actions">' +
+                            '<td class="actions">' +
                             '<div id="u_m_edit_' + media.userMediaId + '" onclick="editUserMediaReview(' + media.userMediaId + ')" title="Edit">✏️</div>' +
                             '<div id="u_m_delete_' + media.userMediaId + '" onclick="deleteUserMediaReview(' + media.userMediaId + ')" title="Delete">️🗑️</div>' +
                             '<div id="u_m_confirm_' + media.userMediaId + '" onclick="updateUserMediaReview(' + media.userMediaId + ')" title="Confirm" style="display:none;">✔️</div>' +
@@ -150,7 +150,7 @@ const deleteUserMediaReview = (id) => {
 };
 
 const confirmDeleteUserMediaReview = (id) => {
-    fetch('https://localhost:7012/UserMedia/' + id + '/Delete',
+    fetch('https://localhost:' + user.localhost + '/UserMedia/' + id + '/Delete',
         {
             method: 'delete',
             headers: {
@@ -161,7 +161,7 @@ const confirmDeleteUserMediaReview = (id) => {
             console.log(deleteResponse)
             if (deleteResponse.ok) {
                 document.getElementById('all_users_table_user_media_id_' + id).remove();
-                message(`UserMedia (ID:${id}) Deleted successfully`);
+                message(`UserMedia (ID:${id}) deleted successfully`);
             }
             else {
                 deleteResponse.text()

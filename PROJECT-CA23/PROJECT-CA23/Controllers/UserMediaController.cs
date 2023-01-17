@@ -25,7 +25,6 @@ namespace PROJECT_CA23.Controllers
         private readonly IUserRepository _userRepo;
         private readonly IMediaRepository _mediaRepo;
         private readonly IReviewRepoService _reviewRepoService;
-        //private readonly IReviewRepository _reviewRepo; // VIETOJE _reviewRepoService
         private readonly IUserMediaAdapter _userMediaAdapter;
         private readonly ILogger<UserMediaController> _logger;
 
@@ -33,7 +32,6 @@ namespace PROJECT_CA23.Controllers
                                    IUserRepository userRepo,
                                    IMediaRepository mediaRepo,
                                    IReviewRepoService reviewRepoService,
-                                   //IReviewRepository reviewRepo, // VIETOJE _reviewRepoService
                                    IUserMediaAdapter userMediaAdapter,
                                    ILogger<UserMediaController> logger)
         {
@@ -41,7 +39,6 @@ namespace PROJECT_CA23.Controllers
             _userRepo = userRepo;
             _mediaRepo = mediaRepo;
             _reviewRepoService = reviewRepoService;
-            //_reviewRepo=reviewRepo; // VIETOJE _reviewRepoService
             _userMediaAdapter = userMediaAdapter;
             _logger = logger;
         }

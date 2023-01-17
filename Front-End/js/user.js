@@ -99,7 +99,6 @@ const getUserInfo = () => {
                     get_user_info_lastname.innerHTML = userdata.lastName;
                     get_user_info_created.innerHTML = userdata.created;
                     get_user_info_updated.innerHTML = userdata.updated;
-                    get_user_info_lastlogin.innerHTML = userdata.lastLogin;
                 })
         })
         .catch((err) => message(`Klaida: ${err}`));
@@ -124,7 +123,6 @@ const getAddress = () => {
         .then(res => {
             //console.log(res)
             if (res.ok) {
-                message(res);
                 res.json()
                     .then(addressdata => {
                         get_address_address_id.innerHTML = addressdata.addressId;
