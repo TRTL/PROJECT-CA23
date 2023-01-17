@@ -121,7 +121,15 @@ namespace PROJECT_CA23.Controllers
             _logger.LogInformation("AddUserMedia atempt with data: {req}", JsonConvert.SerializeObject(req));
             try
             {
-                if (req.UserId == 0 || req.MediaId == 0)
+                var currentUserRole = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
+                var currentUserId = int.Parse(_httpContextAccessor.HttpContext.User.Identity.Name);
+                if (currentUserRole != "admin" && currentUserId != req.UserId)
+                {
+                    _logger.LogWarning($"{DateTime.Now} user {currentUserId} tried to access user {req.UserId} data");
+                    return Forbid("You are not authorized to acces requested data");
+                }
+
+                if (req.UserId <= 0 || req.MediaId <= 0)
                 {
                     _logger.LogInformation($"{DateTime.Now} AddUserMedia required fields are invalid.");
                     return BadRequest("Required fields are invalid");
