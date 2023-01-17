@@ -21,10 +21,9 @@ const clearMessage = (id) => {
 }
 
 const message = (text) => {
-    alert(text);
-    //messenger.innerHTML += `<div id="message_${messageID}">${text}</div>`;
-    //clearMessage(messageID);
-    //messageID++;
+    messenger.innerHTML += `<div id="message_${messageID}">${text}</div>`;
+    clearMessage(messageID);
+    messageID++;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -67,24 +66,18 @@ const register = () => {
         body: JSON.stringify(newObject)
     })
         .then(res => {
-            //console.log(res);
-            //console.log(res.json());
             if (res.ok) {
                 clearForm();
-                return res.json()
-                // .then(u => {
-                //     const userObj = {
-                //         ID: u.id,
-                //         FirstName: u.FirstName,
-                //         LastName: u.LastName
-                //     }
-                //     saveToLocalStorage(userObj);
-                //     //goToHomePage();
-                // });
+                message("Registration successful. You may now Login.");
             }
-            else message('Klaida 1: ' + res.status);
+            else {
+                res.text()
+                    .then(text => {
+                        message(text);
+                    })
+            }
         })
-        .catch((err) => message('Klaida 2: ' + err));
+        .catch((err) => message(err));
 }
 
 const register_button = document.querySelector('#register_button');

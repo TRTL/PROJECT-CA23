@@ -25,24 +25,28 @@
         </nav>
     </header>
     <section id="sub-menu">
-
-
+        <a href="#" class="tab_link" data-div="" id="sub_memu_wishlist"
+            onclick="all_movies_table_body.innerHTML = '', getAllUserMedias('Wishlist')">Wishlist</a>
+        <a href="#" class="tab_link" data-div="" id="sub_memu_watching"
+            onclick="all_movies_table_body.innerHTML = '', getAllUserMedias('Watching')">Watching</a>
+        <a href="#" class="tab_link" data-div="" id="sub_memu_finished"
+            onclick="all_movies_table_body.innerHTML = '', getAllUserMedias('Finished')">Finished</a>
 
     </section>
     <section id="main-container">
         <div id="all_movies">
             <table>
                 <thead>
-                    <th><!-- Type --></th>
-                    <th>Title</th>
-                    <th>Year</th>
+                    <th width="200px">Status</th>
+                    <th width="40px"><!-- Type --></th>
+                    <th width="35%">Title</th>
+                    <th width="120px">Year</th>
                     <th><!-- IMDB --></th>
                     <th><!-- imdbR --></th>
-                    <th>Status</th>
-                    <th>Note</th>
-                    <th>userR</th>
+                    <th>My rating</th>
                     <th>Review</th>
-                    <th><!-- Actions --></th>
+                    <th>Note</th>
+                    <th width="160px"><!-- Actions --></th>
                 </thead>
                 <tbody id="all_movies_table_body">
                 </tbody>

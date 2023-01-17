@@ -8,7 +8,7 @@
         public int UserId { get; set; }
 
         /// <summary>
-        /// Optional filter: "Wishlisth", "Watching" or "Finished"
+        /// Required filter: "Wishlist", "Watching" or "Finished"
         /// </summary>
         public string? Filter { get; set; }
     }

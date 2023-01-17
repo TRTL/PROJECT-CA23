@@ -67,13 +67,18 @@ namespace PROJECT_CA23.Controllers
             _logger.LogInformation($"GetAddress atempt for userId - {id}");
             try
             {
-                // ISKELTI I ATSKIRA SERVISIUKA (su ten pakrautu _httpContextAccessor) ???
+                if (id <= 0)
+                {
+                    _logger.LogInformation($"{DateTime.Now} Failed GetAddress attempt for userId - {id}. UserId is incorrect.");
+                    return BadRequest("UserId is incorrect.");
+                }
+
                 var currentUserRole = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
                 var currentUserId = int.Parse(_httpContextAccessor.HttpContext.User.Identity.Name);
                 if (currentUserRole != "admin" && currentUserId != id)
                 {
-                    _logger.LogWarning($"{DateTime.Now} user {currentUserId} tried to access user {id} info");
-                    return Forbid();
+                    _logger.LogWarning($"{DateTime.Now} user {currentUserId} tried to access user {id} data");
+                    return Forbid("You are not authorized to acces requested data");
                 }
 
                 var address = _addressRepo.GetAsync(a => a.UserId == id, new List<string>() { "User" }).Result;
@@ -114,13 +119,12 @@ namespace PROJECT_CA23.Controllers
             _logger.LogInformation($"GetAllAddresses atempt");
             try
             {
-                // ISKELTI I ATSKIRA SERVISIUKA (su ten pakrautu _httpContextAccessor) ???
                 var currentUserRole = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
                 var currentUserId = int.Parse(_httpContextAccessor.HttpContext.User.Identity.Name);
                 if (currentUserRole != "admin")
                 {
-                    _logger.LogWarning("User Id:{currentUserId}, with Role:{role} tried to access info that requares Admin role", currentUserId, currentUserRole);
-                    return Forbid();
+                    _logger.LogWarning("User Id:{currentUserId}, with Role:{role} tried to access data that requares Admin role", currentUserId, currentUserRole);
+                    return Forbid("You are not authorized to acces requested data");
                 }
 
                 var allAddresses = await _addressRepo.GetAllAsync(includeTables: new List<string>() { "User" });
@@ -159,19 +163,18 @@ namespace PROJECT_CA23.Controllers
             _logger.LogInformation($"AddAddress atempt for userId - {req.UserId}");
             try
             {
-                // ISKELTI I ATSKIRA SERVISIUKA (su ten pakrautu _httpContextAccessor) ???
                 var currentUserRole = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
                 var currentUserId = int.Parse(_httpContextAccessor.HttpContext.User.Identity.Name);
                 if (currentUserRole != "admin" && currentUserId != req.UserId)
                 {
-                    _logger.LogWarning("User {currentUserId} tried to access user {id} info", currentUserId, req.UserId);
-                    return Forbid();
+                    _logger.LogWarning("User {currentUserId} tried to access user {id} data", currentUserId, req.UserId);
+                    return Forbid("You are not authorized to acces requested data");
                 }
                 
                 var user = _userRepo.Get(req.UserId);
                 {
-                    _logger.LogWarning("User {currentUserId} tried to access user {id} info", currentUserId, req.UserId);
-                    if (user.Address != null) return NotFound("User already has an address");
+                    _logger.LogInformation("User {currentUserId} already has an address", req.UserId);
+                    if (user.Address != null) return BadRequest("User already has an address");
                 }
 
                 var newAddress = _addressAdapter.Bind(req, user);
@@ -255,7 +258,7 @@ namespace PROJECT_CA23.Controllers
             _logger.LogInformation($"DeleteAddress atempt for AddressId - {id}");
             try
             {
-                if (id == 0)
+                if (id <= 0)
                 {
                     _logger.LogInformation($"{DateTime.Now} Failed DeleteAddress attempt for AddressId - {id}. DeleteAddress id is incorrect.");
                     return BadRequest("DeleteAddress id is incorrect.");

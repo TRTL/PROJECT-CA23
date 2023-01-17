@@ -14,6 +14,7 @@ using PROJECT_CA23.Repositories.RepositoryServices.IRepositoryServices;
 using PROJECT_CA23.Services.Adapters;
 using PROJECT_CA23.Services.Adapters.IAdapters;
 using System.Net.Mime;
+using System.Security.Claims;
 
 namespace PROJECT_CA23.Controllers
 {
@@ -30,13 +31,15 @@ namespace PROJECT_CA23.Controllers
         private readonly IReviewRepoService _reviewRepoService;
         private readonly IUserMediaAdapter _userMediaAdapter;
         private readonly ILogger<UserMediaController> _logger;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UserMediaController(IUserMediaRepository userMediaRepo,
                                    IUserRepository userRepo,
                                    IMediaRepository mediaRepo,
                                    IReviewRepoService reviewRepoService,
                                    IUserMediaAdapter userMediaAdapter,
-                                   ILogger<UserMediaController> logger)
+                                   ILogger<UserMediaController> logger,
+                                   IHttpContextAccessor httpContextAccessor)
         {
             _userMediaRepo = userMediaRepo;
             _userRepo = userRepo;
@@ -44,13 +47,14 @@ namespace PROJECT_CA23.Controllers
             _reviewRepoService = reviewRepoService;
             _userMediaAdapter = userMediaAdapter;
             _logger = logger;
+            _httpContextAccessor = httpContextAccessor;
         }
 
 
         /// <summary>
         /// Get list of all specific user medias
         /// </summary>
-        /// <param name="req">User id and filter.</param>
+        /// <param name="req">User id and filter. Filter is required. Filter options: "Wishlist", "Watching" or "Finished"</param>
         /// <returns></returns>
         /// <response code="200">Indicates that the request has succeeded</response>
         /// <response code="401">Client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
@@ -66,7 +70,22 @@ namespace PROJECT_CA23.Controllers
             _logger.LogInformation($"GetAllUserMedias atempt for userId: {req.UserId}");
             try
             {
-                var allMedia = await _userMediaRepo.GetAllAsync(filter: um => um.UserId == req.UserId, includeTables: new List<string>() { "Media", "Review" });
+                var currentUserRole = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
+                var currentUserId = int.Parse(_httpContextAccessor.HttpContext.User.Identity.Name);
+                if (currentUserRole != "admin" && currentUserId != req.UserId)
+                {
+                    _logger.LogWarning($"{DateTime.Now} user {currentUserId} tried to access user {req.UserId} data");
+                    return Forbid("You are not authorized to acces requested data");
+                }
+
+                EUserMediaStatus userMediaStatus = EUserMediaStatus.Wishlist;
+                if (!Enum.TryParse<EUserMediaStatus>(req.Filter, out userMediaStatus))
+                {
+                    _logger.LogInformation($"{DateTime.Now} Failed GetAllUserMedias attempt with UserMediaStatus - {req.Filter}. Selected filter is invalid.");
+                    return BadRequest("Selected filter is invalid");
+                }
+
+                var allMedia = await _userMediaRepo.GetAllAsync(filter: um => um.UserId == req.UserId && um.UserMediaStatus == userMediaStatus, includeTables: new List<string>() { "Media", "Review" });
                 var userMediaDtoList = allMedia.Select(userMedia => _userMediaAdapter.Bind(userMedia)).ToList();
                 return Ok(userMediaDtoList);
             }
@@ -210,10 +229,11 @@ namespace PROJECT_CA23.Controllers
         /// <response code="204">Server has successfully fulfilled the request and there is no content returned</response>
         /// <response code="400">Server cannot or will not process the request</response>
         /// <response code="401">Client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
+        /// <response code="403">Server understands the request but refuses to authorize it</response>
         /// <response code="404">Server cannot find the requested resource</response>
         /// <response code="500">Server encountered an unexpected condition that prevented it from fulfilling the request</response>
         [HttpDelete("{id:int}/Delete")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,user")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -228,6 +248,14 @@ namespace PROJECT_CA23.Controllers
                 {
                     _logger.LogInformation($"{DateTime.Now} Failed DeleteUserMediaAndReview attempt for UserMediaId - {id}. UserMediaId is incorrect.");
                     return BadRequest("UserMediaId is incorrect.");
+                }
+
+                var currentUserRole = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
+                var currentUserId = int.Parse(_httpContextAccessor.HttpContext.User.Identity.Name);
+                if (currentUserRole != "admin" && currentUserId != id)
+                {
+                    _logger.LogWarning($"{DateTime.Now} user {currentUserId} tried to access user {id} data");
+                    return Forbid("You are not authorized to acces requested data");
                 }
 
                 var userMedia = await _userMediaRepo.GetAsync(m => m.UserMediaId == id);

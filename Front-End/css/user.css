@@ -17,9 +17,9 @@
 #container_update_address,
 #container_delete_address {
     display: inline-block;
-    width: 350px;
-    height: 350px;
-    padding: 0 0 0 50px;
+    width: 550px;
+    height: 300px;
+    padding: 50px 0 0 50px;
 }
 
 #add_address_form,

@@ -29,14 +29,17 @@ namespace PROJECT_CA23.Controllers
         private readonly IMediaRepository _mediaRepo;
         private readonly ILogger<MediaController> _logger;
         private readonly IMediaAdapter _mediaAdapter;
+        private readonly IReviewRepository _reviewRepo;
 
         public MediaController(IMediaRepository mediaRepo,
                                ILogger<MediaController> logger,
-                               IMediaAdapter mediaAdapter)
+                               IMediaAdapter mediaAdapter,
+                               IReviewRepository reviewRepo)
         {
             _mediaRepo = mediaRepo;
             _logger = logger;
             _mediaAdapter = mediaAdapter;
+            _reviewRepo = reviewRepo;
         }
 
         /// <summary>
@@ -60,13 +63,23 @@ namespace PROJECT_CA23.Controllers
             _logger.LogInformation($"GetMediaById atempt with MediaId - {id}");
             try
             {
+                if (id <= 0)
+                {
+                    _logger.LogInformation($"{DateTime.Now} Failed GetMediaById attempt for MediaId - {id}. MediaId is incorrect.");
+                    return BadRequest("MediaId is incorrect.");
+                }
+
                 var mediaExist = await _mediaRepo.ExistAsync(m => m.MediaId == id);
                 if (!mediaExist)
                 {
                     _logger.LogInformation($"{DateTime.Now} Failed GetMediaById atempt with MediaId - {id}. MediaId does not exists.");
                     return NotFound("MediaId does not exists");
                 }
-                var media = _mediaRepo.GetAsync(m => m.MediaId == id, new List<string>() { "Genres" }).Result;
+
+                var media = await _mediaRepo.GetAsync(m => m.MediaId == id, new List<string>() { "Genres" });
+                var reviews = await _reviewRepo.GetAllAsync(m => m.MediaId == id, new List<string>() { "User" });
+                media = _mediaAdapter.Bind(media, reviews);
+
                 return Ok(media);
             }
             catch (Exception ex)

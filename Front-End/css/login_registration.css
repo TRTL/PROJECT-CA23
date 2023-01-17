@@ -109,3 +109,30 @@ a.registration-link {
     padding: 0 0 0 72px;
     color: #831010;
 }
+
+
+/****************************************** MESSENGER ******************************************/
+
+#messenger {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: flex-end;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    z-index: 100;
+}
+
+#messenger>div {
+    display: inline-block;
+    border-radius: 5px;
+    padding: 8px;
+    margin-top: 5px;
+    white-space: nowrap;
+    border: solid 1px #000;
+    color: #000;
+    background-color: #fff;
+}

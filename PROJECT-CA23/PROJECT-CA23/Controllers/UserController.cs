@@ -51,11 +51,14 @@ namespace PROJECT_CA23.Controllers
         /// <response code="200">Indicates that the request has succeeded</response>
         /// <response code="400">Server cannot or will not process the request</response>
         /// <response code="401">Client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
-        /// <response code="404">Not found</response>
+        /// <response code="403">Server understands the request but refuses to authorize it</response>
+        /// <response code="404">Server cannot find the requested resource</response>
         /// <response code="500">Server encountered an unexpected condition that prevented it from fulfilling the request</response>
         [Authorize(Roles = "admin,user")]
         [HttpGet("/GetUser/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -65,12 +68,18 @@ namespace PROJECT_CA23.Controllers
             _logger.LogInformation($"GetUserInfo atempt with UserId - {id}");
             try
             {
+                if (id <= 0)
+                {
+                    _logger.LogInformation($"{DateTime.Now} Failed GetUserInfo attempt for UserId - {id}. UserId is incorrect.");
+                    return BadRequest("UserId is incorrect.");
+                }
+
                 var currentUserRole = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
                 var currentUserId = int.Parse(_httpContextAccessor.HttpContext.User.Identity.Name);
                 if (currentUserRole != "admin" && currentUserId != id)
                 {
-                    _logger.LogWarning("User {currentUserId} tried to access user {id} info", currentUserId, id);
-                    return Forbid();
+                    _logger.LogWarning("User {currentUserId} tried to access user {id} data", currentUserId, id);
+                    return Forbid("You are not authorized to acces requested data");
                 }
 
                 if (!_userRepo.Exist(id, out User? user))

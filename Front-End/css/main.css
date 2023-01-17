@@ -38,7 +38,7 @@ header {
     align-items: center;
     height: 40px;
     margin-top: 95px;
-    width: 1000px;
+    width: 1250px;
     background: #db0000;
     border: 1px solid black;
     border-top-left-radius: 12px;
@@ -51,7 +51,7 @@ header {
     justify-content: center;
     align-items: center;
     height: 25px;
-    width: 1000px;
+    width: 1250px;
     background: #fff;
     border-left: 1px solid black;
     border-right: 1px solid black;
@@ -62,7 +62,7 @@ header {
     flex-flow: row wrap;
     justify-content: start;
     align-items: flex-start;
-    width: 1000px;
+    width: 1250px;
     margin-left: 20px;
     margin-right: 20px;
     height: calc(100% - 200px);
@@ -81,7 +81,7 @@ header {
     justify-content: space-between;
     align-items: center;
     height: 25px;
-    width: 1000px;
+    width: 1250px;
     background: #ffffff;
     border-left: 1px solid black;
     border-bottom: 1px solid black;
@@ -177,7 +177,7 @@ nav a.active {
     padding: 8px;
     margin-top: 5px;
     white-space: nowrap;
-    border: solid 1px #db0000;
+    border: solid 1px #000;
     color: #000;
     background-color: #fff;
 }
@@ -219,4 +219,24 @@ th {
 
 .hidable {
     width: 100%;
+}
+
+.table-media-link {
+    color: #770000 !important;
+    text-decoration: none;
+}
+
+.table-media-link:hover {
+    color: #ff0000 !important;
+    text-decoration: underline;
+}
+
+.table-imdb-link {
+    color: #deb522 !important;
+    text-decoration: none;
+}
+
+.table-imdb-link:hover {
+    color: #deb522 !important;
+    text-decoration: underline;
 }

@@ -83,6 +83,7 @@ const getUser = () => {
 
 
 const getAllUsers = () => {
+    all_users_table_body.innerHTML = '';
     fetch('https://localhost:' + user.localhost + '/GetAllUsers',
         {
             method: 'get',
@@ -156,6 +157,7 @@ const confirmDeleteUser = (id) => {
 
 
 const getAllAddresses = () => {
+    all_addresses_table_body.innerHTML = '';
     fetch('https://localhost:' + user.localhost + '/GetAllAddresses',
         {
             method: 'get',
@@ -171,7 +173,7 @@ const getAllAddresses = () => {
                 .then(addressesdata => {
                     //console.log(addressesdata)
                     addressesdata.forEach(a => {
-                        all_addresses_table_body.innerHTML =
+                        all_addresses_table_body.innerHTML +=
                             '<tr id="all_addresses_table_user_' + a.userId + '">' +
                             '<td>' + a.userId + '</td>' +
                             '<td>' + a.firstName + ' ' + a.lastName + '</td>' +

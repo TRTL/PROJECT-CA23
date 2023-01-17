@@ -9,5 +9,6 @@ namespace PROJECT_CA23.Services.Adapters.IAdapters
         Media Bind(MediaRequest req);
         MediaDto Bind(Media media);
         Media Bind(OmdbApiMedia api, List<Genre>? genres);
+        Media Bind(Media media, List<Review>? reviews);
     }
 }
