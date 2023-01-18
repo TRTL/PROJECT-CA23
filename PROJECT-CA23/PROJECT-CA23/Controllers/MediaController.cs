@@ -66,14 +66,6 @@ namespace PROJECT_CA23.Controllers
             _logger.LogInformation($"GetMediaById atempt with MediaId - {id}");
             try
             {
-                var currentUserRole = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
-                var currentUserId = int.Parse(_httpContextAccessor.HttpContext.User.Identity.Name);
-                if (currentUserRole != "admin" && currentUserId != id)
-                {
-                    _logger.LogWarning($"{DateTime.Now} user {currentUserId} tried to access user {id} data");
-                    return Forbid("You are not authorized to acces requested data");
-                }
-
                 if (id <= 0)
                 {
                     _logger.LogInformation($"{DateTime.Now} Failed GetMediaById attempt for MediaId - {id}. MediaId is incorrect.");
