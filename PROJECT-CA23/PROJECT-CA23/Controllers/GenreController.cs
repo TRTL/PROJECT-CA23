@@ -47,7 +47,11 @@ namespace PROJECT_CA23.Controllers
 
             try
             {
-                if (id == 0) { }
+                if (id <= 0)
+                {
+                    _logger.LogInformation($"{DateTime.Now} Failed GetAllMediaByGenreId attempt for GenreId - {id}. GenreId is incorrect.");
+                    return BadRequest("GenreId is incorrect.");
+                }
 
                 var genre = _genreRepo.GetAsync(g => g.GenreId == id, new List<string>() { "Medias" }).Result;
                 return Ok(genre);

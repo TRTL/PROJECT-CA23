@@ -190,9 +190,9 @@ namespace PROJECT_CA23.Controllers
 
 
         /// <summary>
-        /// Delete address by user id
+        /// Delete User by user id
         /// </summary>
-        /// <param name="id">User id whos address will be deleted</param>
+        /// <param name="id">User id of user which will be deleted</param>
         /// <returns></returns>
         /// <response code="204">Server has successfully fulfilled the request and there is no content returned</response>
         /// <response code="400">Server cannot or will not process the request</response>

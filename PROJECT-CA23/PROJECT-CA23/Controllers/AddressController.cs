@@ -22,13 +22,13 @@ namespace PROJECT_CA23.Controllers
     [ApiController]
     public class AddressController : ControllerBase
     {
-        private readonly IAddressRepository _addressRepo;
+        public readonly IAddressRepository _addressRepo;
         private readonly IUserRepository _userRepo;
         private readonly IAddressAdapter _addressAdapter;
         private readonly ILogger<UserController> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AddressController(IAddressRepository addressRepository,
+        private AddressController(IAddressRepository addressRepository,
                                  IUserRepository userRepo,
                                  IAddressAdapter addressAdapter,
                                  ILogger<UserController> logger,
@@ -262,6 +262,14 @@ namespace PROJECT_CA23.Controllers
                 {
                     _logger.LogInformation($"{DateTime.Now} Failed DeleteAddress attempt for AddressId - {id}. DeleteAddress id is incorrect.");
                     return BadRequest("DeleteAddress id is incorrect.");
+                }
+
+                var currentUserRole = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
+                var currentUserId = int.Parse(_httpContextAccessor.HttpContext.User.Identity.Name);
+                if (currentUserRole != "admin" && currentUserId != id)
+                {
+                    _logger.LogWarning("User {currentUserId} tried to access user {id} data", currentUserId, id);
+                    return Forbid("You are not authorized to acces requested data");
                 }
 
                 var address = await _addressRepo.GetAsync(a => a.UserId == id);

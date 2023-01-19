@@ -230,9 +230,9 @@ namespace PROJECT_CA23.Controllers
 
 
         /// <summary>
-        /// Delete address by user id
+        /// Delete user's media by usermediaid
         /// </summary>
-        /// <param name="id">User id whos address will be deleted</param>
+        /// <param name="id">UserMediaIid that will be deleted</param>
         /// <returns></returns>
         /// <response code="204">Server has successfully fulfilled the request and there is no content returned</response>
         /// <response code="400">Server cannot or will not process the request</response>
@@ -256,14 +256,6 @@ namespace PROJECT_CA23.Controllers
                 {
                     _logger.LogInformation($"{DateTime.Now} Failed DeleteUserMediaAndReview attempt for UserMediaId - {id}. UserMediaId is incorrect.");
                     return BadRequest("UserMediaId is incorrect.");
-                }
-
-                var currentUserRole = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
-                var currentUserId = int.Parse(_httpContextAccessor.HttpContext.User.Identity.Name);
-                if (currentUserRole != "admin" && currentUserId != id)
-                {
-                    _logger.LogWarning($"{DateTime.Now} user {currentUserId} tried to access user {id} data");
-                    return Forbid("You are not authorized to acces requested data");
                 }
 
                 var userMedia = await _userMediaRepo.GetAsync(m => m.UserMediaId == id);
